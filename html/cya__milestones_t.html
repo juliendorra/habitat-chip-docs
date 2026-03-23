@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milestones - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/milestones.t" style="font-size:0.85em;">View source</a></div>
+<h1>Milestones/deliverables for MicroCosm project</h1>
+<p>Milestones/deliverables for MicroCosm project</p>
+<p>Note: the notation &quot;(L-&gt;Q)&quot; means a deliverable that Lucasfilm delivers to Quantum; the notation &quot;(Q-&gt;L)&quot; means a deliverable that Quantum delivers to Lucasfilm; the notation &quot;(joint)&quot; means a deliverable that consists of two interdependent components that Lucasfilm and Quantum exchange with each other; the notation &quot;C64&quot; refers to the Commodore 64 computer.</p>
+<p>Dec 15	Graphics tools -- completion of software to enable an artist/animator</p>
+<pre>				to design and compose imagery and animation of
+				avatars and objects.
+		(L-&gt;Q): videotape demonstration of the graphics tools in
+			action, showing what the software does and how it is
+			used.
+	Graphics driver -- software to render imagery and animate avatars and
+				objects complete as a package of &#x27;standalone&#x27;
+				routines that are fully functional but not
+				integrated into any finished system.
+		(L-&gt;Q): videotape demonstration of the animation driver in
+			action, showing its speed and approximate capabilities
+			in isolation.
+	Communications routines -- existing C64 software for communications
+				with the Q-Link host is available for
+				incorporation into LFL generated systems.
+		(Q-&gt;L): source code for C64 routines with accompanying</pre>
+<h3>documentation (in machine-readable form).</h3>
+<p>Jan 15	Primitive communications -- C64 able to exchange trivial messages with</p>
+<pre>				the host system.
+		(joint): LFL C64 system is able to call up Q-Link and initiate
+			communications under program control; the C64 can send
+			messages to the host which the host echoes; the host
+			can in turn send messages to the C64 which the C64
+			echoes.
+	Host development system -- Host system is available to LFL programmers
+				for programming, testing and installation of
+				object modeling software in the developmental
+				host database.
+		(Q-&gt;L): login id&#x27;s, phone numbers, and any other information
+			and measures necessary so that LFL programmers can
+			remotely access Quantum&#x27;s development system for
+			software development use.
+	Object definitions -- the basic set of objects which constitutes the
+				MicroCosm fantasy experience is defined.
+		(L-&gt;Q): definition document listing the contents of the basic
+			object set including a description of the name,
+			appearance, purpose and behavior of each object that
+			Lucasfilm intends to implement as part of this</pre>
+<h3>project.</h3>
+<p>Feb 15	Primitive host database processor -- the object-oriented behavior</p>
+<pre>				invocation mechanism in the host is
+				functional.
+		(Q-&gt;L): LFL C64 is able to call up Q-Link and initiate
+			communications with the MicroCosm host database
+			processor; it is further able to send requests to
+			dummy test objects and receive appropriate responses
+			via the object/message protocols defined in the system
+			specifications; the database is made available on the
+			Quantum development system for LFL programmers to
+			install and test object modeling software.
+	Partial object artwork -- the first batch of imagery for displaying
+				objects and scenes on the C64 screen.
+		(L-&gt;Q):	videotape and possibly screen photographs of artwork
+			and animation on the screen of the C64 portraying
+			avatars and many of the objects in the basic object</pre>
+<h3>set.</h3>
+<p>Mar 15	Graphics and animation -- the graphics and animation subsystem of the</p>
+<pre>				C64 MicroCosm implementation is finished to a
+				first approximation (i.e., it works though
+				there may still be a few bugs in the system).
+		(L-&gt;Q): videotape of graphics and animation routines being put
+			through their paces on the C64.
+	More artwork -- further imagery for objects and scenes on the C64
+				screen.
+		(L-&gt;Q): videotape and/or screen photographs of artwork and
+			animation on the C64 screen.
+	Some functional objects -- the first batch of objects (including both
+				C64 and host resident components) is working.
+		(L-&gt;Q): videotape demonstrating player interaction with
+			objects involving the C64 acting in concert with the</pre>
+<h3>host.</h3>
+<p>Apr 15	Finished host database processor -- the baseline host system software</p>
+<pre>				is completed.
+		(Q-&gt;L): complete host database system is available to LFL
+			programmers for final testing.
+	Rest of objects -- more or less complete object set is working.
+		(L-&gt;Q): videotape demonstrating player interaction with the
+			MicroCosm system; bootable C64 diskette containing
+			complete pre-release C64 portion of system; complete
+			pre-release host database installed on Quantum&#x27;s</pre>
+<h3>development machine.</h3>
+<p>May 15	System integration -- complete beta-testable system is finished.</p>
+<pre>		(L-&gt;Q): bootable C64 diskette containing beta-release of C64
+			portion of system; host portion of system installed on
+			host machine.
+	Preliminary player documentation -- documentation necessary for
+				players	to use the beta-release C64 MicroCosm
+				system on Q-Link.
+		(L-&gt;Q): text and illustrations for preliminary MicroCosm
+			player&#x27;s manual.
+	Beta-test release -- release of complete system to a limited and
+				carefully selected set of players for purposes
+				of in situ testing and debugging.
+		(Q-&gt;L): list of players participating in beta-test use of
+			MicroCosm (these players have received diskettes of
+			the beta-release C64 system software, documentation,
+			and access to the beta-release host system); player
+			feedback channels must be provided and LFL programmers
+			should have direct access to the player feedback
+			information so received in order to proceed with</pre>
+<h3>debugging and tuning.</h3>
+<p>Jun 15	Complete system integration -- complete set of objects entirely</p>
+<pre>				functional and full system operating smoothly.
+		(L-&gt;Q): diskette containing most up-to-date version of C64
+			system and matching host system software installed in
+			host.
+	Avatar customization package -- standalone C64 program to enable a
+				player to interactively customize the
+				appearance and properties of his MicroCosm
+				avatar.
+		(L-&gt;Q): diskette containing C64 program.
+	Turf customization package -- standalone C64 program to enable a
+				player to interactively customize the content
+				and layout of his turf region(s) in the
+				MicroCosm world.
+		(L-&gt;Q): diskette containing C64 program.</pre>
+<p>Jul 15	Final player documentation -- documentation necessary for players to</p>
+<pre>				use the final release of the C64 MicroCosm
+				system on Q-Link.
+		(L-&gt;Q): text and illustrations for the release edition of the
+			MicroCosm player&#x27;s manual.
+	Final system software -- the absolute last (until the next rev) most
+				up to date, most debugged and most finely
+				tuned version of the software.
+		(L-&gt;Q): C64 diskette containing full C64 software package plus
+			final release object set installed on Q-Link host.
+	Public release --
+		(Q-&gt;L): system made available to paying customers on Q-Link.</pre>
+<p>Aug 15	Final reports and documentation -- the last bit of paperwork and</p>
+<pre>				documentation before the system can truly
+				said to be finished.
+		(joint): Quantum and LFL each provide a final report detailing</pre>
+<h3>the final disposition of the project.</h3>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/milestones.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

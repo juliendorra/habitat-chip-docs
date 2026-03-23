@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmer Telecomm Notes - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/farmerComm.t" style="font-size:0.85em;">View source</a></div>
+<h1>The Microcosm OBJECT Message Packet:</h1>
+<p>The Microcosm OBJECT Message Packet:</p>
+<p>How it is built:</p>
+<pre>       byte	Value	Purpose
+	+0	&#x27;Z&#x27;	(sync)		\
+	+1		Hammed CRC	 |
+	+2		    &#x27;&#x27;		 |
+	+3		    &#x27;&#x27;		  \	Standard Packet Header
+	+4		    &#x27;&#x27;		  /	all msgs use this design
+	+5		TX sequence #	 |
+	+6		RX sequence #	 |
+	+7	0x20 	data type	/
+	+8	&#x27;M&#x27;	Microcosm ID byte
+	+9		Sequence/Continuation byte
+	+10 *		Object # (noid)
+	+11 *		Request #
+	+12 - 127 *	Parameters</pre>
+<p>* = All messages are encoded starting at byte 10, so these offsets refer</p>
+<pre>	to AFTER decoding (as both the OBJECT # and the REQUEST # could
+	be forbidden values).</pre>
+<p>The encoding scheme used is: When a forbidden character needs to be sent, send an ESCAPE, exclusive-or the character with $55 and send it. The forbidden characters are: $0d,$0e,ESCAPE,$8d,$8e,$ff. ESCAPE here means $5d. AGAIN, encoding/decoding starts at byte +10.</p>
+<p>BYTE	+8:	Microcosm ID Byte</p>
+<pre>	This byte will ALWAYS remain constant for Microcosm OBJECT messages.</pre>
+<p>Of course, Qlink messages like &#x27;LO&#x27; (log-off) will put the appropriate value here. &#x27;M&#x27; is the current working Microcosm ID byte, if this is already being used by another application, plsease assign us a character.</p>
+<p>BYTE	+9:	Sequence/Continuation Byte</p>
+<pre>	This byte supplies 2 pieces of information, what Microcosm message</pre>
+<p>number this is &amp; &#x27;is there more to follow?&#x27;. It looks like this:</p>
+<p>01c0xxxx</p>
+<p>Where:</p>
+<pre>	xxxx	is the Sequence Number 0-15 (wraps around)
+	c	is the &#x27;continued&#x27; flag bit. 1 = more coming</pre>
+<p>Resulting codes are printable Ascii:</p>
+<pre>	@ABCDEFGHIJKLMNO	for &#x27;not continued&#x27;
+	`abcdefghijklmno	for &#x27;continued&#x27;</pre>
+<p>There is a SPECIAL Sequence/Continuation value: &#x27;Z&#x27; (or &#x27;z&#x27; for continued)</p>
+<p>&#x27;Z&#x27; is used for the &#x27;Phantom Request&#x27;. If the host needs to send an OBJECT message to a user, and the user has not issued a request. The seq/cont byte will be &#x27;Z&#x27; (an avatar talking to the user is a good example).</p>
+<p>BYTE	+10:	Object Number *</p>
+<p>This is the NOID (see document &#x27;Looi&#x27;). Range 0-255. Encoded.</p>
+<p>BYTE	+11:	Request Number *</p>
+<p>Range 0-255. 0-127 for general messages. 128-255 for object specific. Encoded.</p>
+<p>BYTES	+12 up:	Parameters/Data	*</p>
+<h3>Encoded. Object knows what to do with these.</h3>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/farmerComm.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

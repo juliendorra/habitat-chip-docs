@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghu Specs Aug 6 - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/ghu.itr.aug6" style="font-size:0.85em;">View source</a></div>
+<p class="author">by (God&#x27;s Handy Utility), Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">August 6, 1986</p>
+<p class="doc-number">Habitat Document # 23</p>
+<p>Functional specs</p>
+<p>for Ghu</p>
+<h2>Introduction</h2>
+<p>This document describes the preliminary specifications for <b>Ghu</b>, a utility for Habitat operators on the host system.</p>
+<p>Many of these functions are redundant with <b>Twiddle</b>; in fact, the starting point for this definition is the <b>Twiddle</b> command set.  The main distinction between <b>Ghu</b> and <b>Twiddle</b> is that <b>Ghu</b> must be capable of dealing with active regions.  The command specifications below are intended to convey the set of required functions.  As actual commands, in terms of both syntax and in the way the function set is spread over various commands, they are advisory only.  In other words, if it is convenient, for purposes of easing implementation or improving the user interface, feel free to redefine them, so long as the set of capabilities is maintained.</p>
+<h2>Types and Values</h2>
+<p>In a number of commands below, you must provide a global id number for some entity in one of the databases.  Since the key spaces for the three databases overlap (potentially if not in fact), it is necessary to indicate with the global id number what sort of entity it is that you are referring to.  Many of the command definitions refer to something called an <em>obspec</em>, which is an object specifier.  It has the following form:</p>
+<ul class="bullet">
+<li> <em>type</em>  <em>value</em></li>
+</ul>
+<p>Where <em>type</em> is one of the four letters <code>a</code> (for Avatar), <code>o</code> (for Object), <code>r</code> (for Region) or <code>u</code> (for Undefined, i.e., no particular type is intended).  If <em>type</em> is omitted or is <code>u</code>, a default is chosen that is based on the particular type of command begin executed.  In the definitions below, this default is indicated by a letter after a dash (<code>-</code>) character in the particularly syntactic entity in question.  For example, <em>obspec-r</em> refers to an <em>obspec</em> whose default type is Region.</p>
+<p><em>value</em> is either a decimal number, a symbolic name (defined using the <code>name</code> command, which is described below), or a simple expression.  In general, anyplace where a <em>value</em> is called for a name or simple expression my be given.  The expression syntax is:</p>
+<pre>	<em>decimal number</em>
+	<em>name</em>
+	<code>- </code><em>expression</em>
+	<code>^ </code><em>expression</em>
+	<code>( </code><em>expression</em><code> )</code>
+	<em>expression</em><code> + </code><em>expression</em>
+	<em>expression</em><code> - </code><em>expression</em>
+	<em>expression</em><code> * </code><em>expression</em>
+	<em>expression</em><code> / </code><em>expression</em>
+	<em>expression</em><code> &amp; </code><em>expression</em>
+	<em>expression</em><code> | </code><em>expression</em></pre>
+<p>The operators all have their usual meanings and precedences.  Each term has a type.  The type of a <em>decimal number</em> is <code>u</code>.  The type of a <em>name</em> is assigned when the name is defined.  The type of unary operator term or of a parenthesized sub-expression is simply the type of the <em>expression</em> being operated upon.  The type of a binary operator term is chosen from the types of the two sub-expressions as follows: if the two sub-expressions have the same type, then the result has this type; else if one of the two sub-expressions has type <code>u</code>, then the result has the type of the other (non-<code>u</code>) sub-expression; otherwise an error results from trying to combine two incompatible types.</p>
+<h2>The Commands</h2>
+<p>Here are the commands.  The command names have been chosen so that they are unique in the first character, thus 1 letter abbreviations are possible.  In general, commands are terminated by the end of the line, but it should be possible to put multiple commands on a line separated by semicolons (<code>;</code>).</p>
+<br>
+<p><code>help </code> <em>command</em> </p>
+<p>If no <em>command</em> is given, print out a list of the available commands along with a quick one-liner description of each.  If a <em>command</em> *is* given, print out a screen worth of explanation of that command.</p>
+<br>
+<p><code>name </code><em>name</em> <code> =  </code>  <em>type-u</em>  <em>value</em></p>
+<p>Assigns the symbolic name <em>name</em> the type and value specified by <em>type</em> and <em>value</em>.  If <em>type</em> is omitted, the type of <em>name</em> becomes whatever the type of <em>value</em> happens to be.  If <em>type</em> is given, <em>value</em> had better have type <code>u</code>.</p>
+<br>
+<p><code>evaluate </code><em>value</em></p>
+<p>Simply prints out the type and value of <em>value</em>.  This is mostly to refresh one&#x27;s memory as to the values of symbolic names, though it can also be used as a simple calculator.</p>
+<br>
+<p><code>quit</code></p>
+<p>Exit <b>Ghu</b> and return to the system command level.</p>
+<br>
+<p><code>list </code> <em>regionid1</em>   <code>--  </code>  <em>regionid2</em>   <code>active</code> </p>
+<p>Print a list of the regions in the range from <em>regionid1</em> to <em>regionid2</em> (inclusive).  The <em>regionid</em> values must have type <code>r</code> or <code>u</code>.  If <em>regionid1</em> is omitted, it defaults to 0, i.e., the beginning of the database.  If <em>regionid2</em> is omitted, it defaults to <b>MAXINT</b>, i.e., the end of the database.  If only one <em>regionid</em> is given and the <code>--</code> is omitted, only the one region specified is listed. If both <em>regionid</em>s are omitted the <code>--</code> may be omitted as well. Omitting both means that the entire region database is to be listed.  If the keyword <code>active</code> is given, only regions which are currently active (i.e., memory resident) are listed.  For each region, the list command prints a line containing the region id number, those of its four neighbors (-1 if there is no neighbor in a particular direction), and a flag (a <code>*</code>) if the region is active.  For example,</p>
+<pre>	<code>list 5		</code>lists region number 5
+	<code>list 5--10	</code>lists regions 5 through 10
+	<code>list 5--		</code>lists from region 5 to the end of the database
+	<code>list --10	</code>lists from the start of the database to region 10
+	<code>list --		</code>lists all regions
+	<code>list			</code>also lists all regions
+	<code>list active	</code>lists all active regions</pre>
+<br>
+<p><code>contents </code><em>obspec-r</em></p>
+<p>Prints out a list of the entities contained by the entity specified by <em>obspec</em> (a region by default).  Each entity is listed on a line with its global id and the values of its fundamental properties (x-y position, orientation, etc.).</p>
+<br>
+<p><code>find </code><em>obspec-o</em></p>
+<p>Print out the chain of containership from the entity <em>obspec</em> (an object by default) to the outermost containing region, listing the global id of each entity in the chain.</p>
+<br>
+<p><code>get </code><em>obspec-o</em></p>
+<p>Makes the entity indicated by <em>obspec</em> the “working” entity.  By default it is an object.</p>
+<br>
+<p><code>display </code> <em>obspec-o</em> </p>
+<p>Makes the entity indicated by <em>obspec</em> (an object by default) the “working” entity and then prints out the values of its fields.</p>
+<br>
+<p><code>set </code> <em>obspec-o</em><code> . </code> <em>field</em> <code> =  </code> <em>value</em></p>
+<p>Set the value of the property named by <em>field</em> in the “working” entity to the value specified by <em>value</em>.  <em>value</em> must have type <code>u</code>. If <em>field</em> is preceded by <em>obspec</em> <code>.</code>, the entity specified by <em>obspec</em> (an object by default) is first made the “working” entity.</p>
+<br>
+<p><code>update</code></p>
+<p>Write the “working” entity out to its associated database.  If the entity is in an active region, broadcast an <code><b>UPDATE</b></code> request to all the players in the region informing them of the change.</p>
+<br>
+<p><code>add </code> <em>type-o</em>   <em>class</em>  <em>value</em> <code> , </code><em>value</em>   </p>
+<p>Create a new entity of the given type (an object by default).  You can specify its class (if it is an object) and the values of its property fields (in order) on the command line.  The entity becomes the “working” entity.  Any that you omit you will be prompted for.  If the entity is placed into an active region, broadcast a <code><b>HEREIS</b></code> request to all the players in the region informing them of the new item.</p>
+<br>
+<p><code>remove </code><em>obspec-o</em></p>
+<p>Effectively delete the specified entity (an object by default) from the database by moving it to a “limbo” region.  If the entity is an avatar its associated player must not be online.  If the entity is in an active region, broadcast a <code><b>GOAWAY</b></code> request to all the players in the region informing them of the disappearance.</p>
+<br>
+<p><code>zap </code><em>obspec-a</em></p>
+<p><code>zap</code> is like remove, only more dramatic.  It may also (and usually will) be applied to an online avatar.  If the specified target (an avatar by default) is in an active region, broadcast a hand-of-god <code><b>ZAP</b></code> message to all the players in that region.  This will cause the hand-of-god animation to appear on their screen and blast the target with a lightning bolt.  If the target is an avatar, kill it (i.e., start it going through the normal avatar death-and-reincarnation cycle), otherwise remove it to “limbo”.</p>
+<p>In order for <code>zap</code> to work, the must be a hand-of-god object in the region, so the command will complain at you and not do anything if this condition is not fulfilled.  Ultimately there ought to be some sort of command macro facility so that you can create a hand-of-god object in a region, <code>zap</code> somebody there, and then <code>remove</code> the hand-of-god object, all with a single command invocation.  Such a feature is for the future, however, due to the amount of effort involved.</p>
+<br>
+<p><code>players</code></p>
+<p>Print a list of the currently online players in the Habitat, together with appropriate information (global id&#x27;s, location, etc.).</p>
+<br>
+<p><code>voice </code> <em>obspec-r</em>  <code> &quot;</code><em>text</em><code>&quot;  </code></p>
+<p>Broadcast to the indicated entity (a region by default) a <code><b>SPEAK</b></code> message from God containing the given text.  If <em>text</em> is omitted it will be prompted for.  The <em>text</em> should be short enought to fit in a packet. If <em>obspec</em> is omitted and some entity is currently being <code>watch</code>d (see below), the text is sent to that entity.  Otherwise an error results.</p>
+<br>
+<p><code>watch </code><code> </code><em>obspec-r</em>  | <code>off </code></p>
+<p>If an <em>obspec</em> is given (a region by default), monitor message traffic associated with the indicated entity.  If <em>obspec</em> is a region, display all requests sent to or from that region.  If <em>obspec</em> is an avatar, display all messages sent by or to the associated player.  <em>obspec</em> may not be an ordinary object.  Once a <code>watch</code> command is issued, you may continue issuing other commands.  The messages will simply be printed as they arrive.  Entering another <code>watch</code> command supercedes the previous one (you can only <code>watch</code> one entity at a time).  Giving the keyword <code>off</code> in place of the <em>obspec</em> turns <code>watch</code>ing off.</p>
+<br>
+<p><code>oracle </code> <em>obspec-o</em>  | <code>off</code>  | <code>old</code> </p>
+<p>Attach the operator to the given oracle.  <em>obspec</em> must refer to an oracular object.  Henceforth any messages sent to that oracle will be printed along with their player of origin.  Entering another <code>oracle</code> command supercedes the previous one (you can only listen to one oracle at a time). <code>oracle</code> is a special form of <code>watch</code>, and <code>watch</code> commands and <code>oracle</code> commands also supercede each other.  The object indicated in an <code>oracle</code> command becomes the <code>watch</code>ed entity for purposes of sending <code>voice</code> messages, etc.  Entering the keyword <code>off</code> instead of an <em>obspec</em> turns oracle monitoring off.  Entering the keyword <code>old</code> instead of an <em>obspec</em> gets you a printout of old, unattended messages to that oracle that have been written to the oracle log file.</p>
+<br>
+<p><code>text </code> <em>obspec-o</em> </p>
+<p>Prints out the text of the indicated document.  If <em>obspec</em> has type <code>o</code> it must refer to a paper or book object, and that object&#x27;s text entry is printed.  If it has type <code>u</code> it is used directly as the text id number.</p>
+<br>
+<p><code>mail </code><em>username</em></p>
+<p>Send a Habitat mail letter to the indicated user.  You will be prompted for the text.  There is a limitation of 16 lines of no more than 40 characters per line.</p>
+<br>
+<p><code>input </code><em>filename</em></p>
+<p>Read <b>Ghu</b> commands from the indicated file, returning to terminal input upon reaching the end of the file.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/ghu.itr.aug6" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

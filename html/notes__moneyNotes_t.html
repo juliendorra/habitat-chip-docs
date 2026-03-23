@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Money in Vendos - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/moneyNotes.t" style="font-size:0.85em;">View source</a></div>
+<h1>I&#x27;ve been thinking about coinop things and money in general.  Boy have I!  I</h1>
+<p>I&#x27;ve been thinking about coinop things and money in general.  Boy have I!  I decided to look at the entire way we handle money.  Here are the protocols that we currently support on the host:</p>
+<h3>TELEPORT:</h3>
+<pre>	request: &lt;teleport&gt; &lt;PAY&gt;</pre>
+<pre>	  r_msg: &lt;teleport&gt; &lt;PAY&gt; &lt;FAIL&gt;
+		--or--
+	  r_msg: &lt;teleport&gt; &lt;PAY&gt; &lt;SUCCESS&gt;</pre>
+<h3>n_msg: &lt;teleport&gt; &lt;PAY$&gt;</h3>
+<h3>FORTUNE MACHINE:</h3>
+<pre>	request: &lt;fortune machine&gt; &lt;PAY&gt;</pre>
+<pre>	  r_msg: &lt;fortune machine&gt; &lt;PAY&gt; &lt;FAIL&gt;
+		--or--
+	  r_msg: &lt;fortune machine&gt; &lt;PAY&gt; &lt;SUCCESS&gt; &lt;text&gt;</pre>
+<h3>n_msg: &lt;fortune machine&gt; &lt;SPEAKFORTUNE$&gt; &lt;text&gt;</h3>
+<h3>JUKEBOX:</h3>
+<pre>	request: &lt;jukebox&gt; &lt;PAY&gt;</pre>
+<pre>	  r_msg: &lt;jukebox&gt; &lt;PAY&gt; &lt;FAIL&gt;
+		--or--</pre>
+<h3>r_msg: &lt;jukebox&gt; &lt;PAY&gt; &lt;SUCCESS&gt;</h3>
+<h3>VENDO:</h3>
+<pre>	request: &lt;vendo&gt; &lt;PAY&gt;</pre>
+<pre>	  r_msg: &lt;vendo&gt; &lt;PAY&gt; &lt;FAIL&gt;
+		--or--
+	  r_msg: &lt;vendo&gt; &lt;PAY&gt; &lt;SUCCESS&gt; &lt;obvec&gt;</pre>
+<h2>n_msg: &lt;vendo&gt; &lt;SELL$&gt; &lt;whonoid&gt; &lt;obvec&gt;</h2>
+<p>ATM:</p>
+<pre>	request: &lt;atm&gt; &lt;DEPOSIT&gt; &lt;tokenid&gt;</pre>
+<pre>	  r_msg: none</pre>
+<h3>n_msg: &lt;region&gt; &lt;GOAWAY_$&gt; &lt;tokenid&gt;</h3>
+<pre>	request: &lt;atm&gt; &lt;WITHDRAW&gt; &lt;amount&gt;</pre>
+<pre>	  r_msg: &lt;atm&gt; &lt;WITHDRAW&gt; &lt;actual amount&gt;
+		--or--
+	  r_msg: &lt;atm&gt; &lt;WITHDRAW&gt; &lt;actual amount&gt;</pre>
+<h3>n_msg: &lt;region&gt; &lt;HEREIS_$&gt; &lt;obvec&gt;</h3>
+<h3>TOKENS:</h3>
+<pre>	request: &lt;token&gt; &lt;PAY&gt; &lt;whotarget&gt; &lt;amount&gt;</pre>
+<pre>	  r_msg: &lt;token&gt; &lt;PAY&gt; &lt;FAIL&gt;
+		--or--
+	  r_msg: &lt;token&gt; &lt;PAY&gt; &lt;SUCCESS&gt; &lt;amount&gt;
+	  n_msg: &lt;whotarget&gt; &lt;PAID$&gt; &lt;amount&gt;
+		--or--
+	  r_msg: &lt;token&gt; &lt;PAY&gt; &lt;SUCCESS&gt; &lt;amount&gt; &lt;obvec&gt;
+	  n_msg: &lt;whotarget&gt; &lt;PAID$&gt; &lt;amount&gt; &lt;obvect&gt;
+		--or--
+	  r_msg: &lt;token&gt; &lt;PAY&gt; &lt;SUCCESS&gt; &lt;amount&gt; &lt;obvec&gt;</pre>
+<h3>n_msg: &lt;region&gt; &lt;HEREIS_$&gt; &lt;obvec&gt;</h3>
+<h3>CREDIT CARD:</h3>
+<pre>	request: &lt;card&gt; &lt;PAYTO&gt; &lt;whotarget&gt; &lt;amount&gt;</pre>
+<pre>	  r_msg: &lt;card&gt; &lt;FAIL&gt;
+		--or--
+	  r_msg: &lt;card&gt; &lt;SUCCESS&gt;</pre>
+<h3>p_msg: &lt;whotarget&gt; &lt;PAYTO$&gt; &lt;amount&gt;</h3>
+<p>If you look you&#x27;ll see that there&#x27;s a pattern, but it isn&#x27;t followed consistently.  I&#x27;d like to adopt the following model for coin operated devices then:</p>
+<pre>	request: &lt;obj&gt; &lt;PAY&gt;</pre>
+<pre>	  r_msg: &lt;obj&gt; &lt;PAY&gt; &lt;FAIL&gt;			; for failure
+		--or--
+	  r_msg: &lt;obj&gt; &lt;PAY&gt; &lt;SUCCESS&gt; &lt;amount&gt;	&lt;params&gt;; for success</pre>
+<h3>n_msg: &lt;obj&gt; &lt;PAY$&gt; &lt;whonoid&gt; &lt;amount&gt; &lt;params&gt;</h3>
+<p>The host passes back the amount paid.  This lets us change the cost of coin operated devices from the host.  In the asynchronous case, the host also tells who did the paying.  We do *not* send a GOAWAY message deleting depleted tokens.  Instead, we keep each token&#x27;s denomination correctly and delete the token when it reaches 0.  I realized that we MUST keep each token&#x27;s denomination correctly, not just the ones you are holding, since someone could put a token down on the ground and then you could pick it up, thus transferring the token from somebody else to you without ever requiring the host to inform you of the correct denomination...</p>
+<p>&lt;params&gt; refers to any additional parameters that the host behavior might wish to pass back, such as the &lt;text&gt; provided by the fortune machine or the &lt;obvec&gt; provided by the vendo.  Tacking these on the end allows a single uniform routine to handle every coinop machine&#x27;s monetary transaction part and then lets a special behavior pick off the rest for class-dependent processing.</p>
+<p>Also, ATM &lt;WITHDRAW&gt; needs an additional asynchronous behavior to handle the case where money is withdrawn but a new token object does not need to be created (this goes along with keeping each token&#x27;s denomination correct).</p>
+<p>Oddly enough, the protocol for token object itself seems to be correct already.  Credit card is also OK, since it only deals with the bank account. The interface for using the credit card to pay for things is a little messy though and needs further thought.</p>
+<p>And one other thing: we will need to go through and make sure all the message numbers are assigned consistently.  Fortunately, we don&#x27;t need to have the same asynchronous message number across objects, since each asynchronous behavior is looked up independently.</p>
+<p>Whew!  Does this all make sense?</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/moneyNotes.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

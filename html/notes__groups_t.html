@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Object Class Groups - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/groups.t" style="font-size:0.85em;">View source</a></div>
+<h1>Major Functional Object Groups</h1>
+<pre>		Major Functional Object Groups
+		    MicroCosm Document #21</pre>
+<h3>April 28, 1986</h3>
+<pre>	Most of the various objects can be categorized using a small number of</pre>
+<p>functional groups.  All of the classes in a particular group share a common set of behavior protocols for accomplishing a particular sort of task.  Many objects belong to more than one group because they support more than one set of functions.  Not all of the functionality of the complete object set is accounted for by this group structure.  There are many one-of-a-kind functions that are not dealt with here.  In approximate order of implementation:</p>
+<p>Avatar</p>
+<pre>	avatar</pre>
+<pre>	The avatar group consists of one class, the avatar class itself.  This</pre>
+<p>could be thought of as a sort of one-of-a-kind thing, but it is so important I decided not to.</p>
+<p>Inert</p>
+<pre>	bush		sign		streetlamp	tree
+	window</pre>
+<pre>	The inert group consists of objects which simply sit there and do</pre>
+<p>nothing.  They are only there to be seen.</p>
+<p>Scenic</p>
+<pre>	bridge		fence		gate		ground
+	pond		river		roof		sidewalk
+	sky		street		wall</pre>
+<pre>	The scenic group consists of objects that are used to construct the</pre>
+<p>background.  They are mostly just seen, though they can interact with movement.  Scenic objects are generally not rendered as cels but are specified directly in terms of other graphics primitives.</p>
+<p>Door</p>
+<pre>	door		gate</pre>
+<pre>	The door group consists of scenic obstructions which may be opened to</pre>
+<p>allow passage or closed to block it.  Like containers, the all have the &#x27;open&#x27;, &#x27;key&#x27; and &#x27;unlocked&#x27; properties.</p>
+<p>GPT</p>
+<pre>	amulet		answering machine		aquarium
+	backpack	bag		ball		beeper	
+	book/newspaper	boomerang	bottle		box
+	club		compass		credit card	crystal ball
+	die		drugs		escape device	fake gun
+	flag		flashlight	frisbee		gemstone
+	grenade		gun		instant object pill
+	key		knick knack	knife		magic lamp
+	magic staff	magic wand	matchbook	microphone
+	movie camera	paper		pencil		picture
+	plant		radio		ring		road pizza
+	rock		rubber ducky	security device	sensor
+	stereo		tape		teddy bear	ticket
+	tokens		towel		walkie talkie	windup-doll</pre>
+<pre>	GPT stands for Get/Put/Throw.  The GPT group contains all objects</pre>
+<p>which can be picked up and carried.  Doing this requires manipulation of the &#x27;container&#x27; and &#x27;x&#x27; and &#x27;y&#x27; position properties of the objects.  It also must be possible to show the avatar carrying these objects.</p>
+<p>Container</p>
+<pre>	backpack	bag		boat		box
+	car		chest		countertop	display case
+	garbage can	jacket		pants		safe
+	skirt		table		truck</pre>
+<pre>	The container group consists of objects which may contain other</pre>
+<p>objects.  All containers may be opened and closed and have a lock that requires a key to open.  They thus all have the &#x27;open&#x27;, &#x27;key&#x27; and &#x27;unlocked&#x27; properties.  For some objects it is inappropriate to open and close, so their &#x27;open&#x27; property is permanently TRUE and they don&#x27;t respond to the open/close container protocol.  For some objects it is inappropriate to have locks, so their &#x27;unlocked&#x27; property is permanently TRUE and their &#x27;key&#x27; property is set to NULL so that they can never be locked.  All containers have a &#x27;contents&#x27; property which is an array of object pointers that tells what other objects are contained within them.  All containers have a capacity which is specified by the &#x27;capacity&#x27; class property.  The capacity determines how many objects may be placed inside the container before the container is said to be full (it also tells us how large a space to allocate for the &#x27;contents&#x27; property in the instance descriptor).  Some containers (for example the backpack or the garbage can) are opaque and hide their contents within themselves.  Others (for example the display case or the table) are either transparent or display their contents outside themselves.  Containers have a boolean &#x27;displayContents&#x27; class property that tells the graphics routines whether or not to show what&#x27;s in the container when rendering the container on the screen.</p>
+<p>Pseudo</p>
+<pre>	building	bus		region		water</pre>
+<pre>	The pseudo group consists of objects which don&#x27;t really exist, but are</pre>
+<p>defined anyway for reasons of convenience in system definition.</p>
+<p>Weapon</p>
+<pre>	club		grenade		gun		knife
+	magic staff</pre>
+<pre>	The weapon group consists of all those objects which can be used to</pre>
+<p>inflict mayhem and destruction on other avatars and their property.  The host must understand the nature and extent of the damage caused by each.</p>
+<p>Port</p>
+<pre>	escape device	teleport booth	avatar</pre>
+<pre>	The port group consists of objects which move an avatar from one</pre>
+<p>region to another.  Avatars are included in this group because they can move themselves by walking.  The region-to-region transition triggers a lot of important activity in the system, in both the host and in the C64.</p>
+<p>Magic</p>
+<pre>	amulet		gemstone	knick knack	magic staff
+	magic wand	ring</pre>
+<pre>	The magic group consists of objects with magical powers.  An object&#x27;s</pre>
+<p>magical power is simply invoked.  What happens then depends on what exactly the magical power happends to be.  There is a pool of magical functions available in the host for all magical objects to draw upon.  Magical objects have a host property &#x27;magicType&#x27; that tells which magical function to call.</p>
+<p>Money</p>
+<pre>	atm		coke machine	credit card	fare box
+	fortune machine	jukebox		parking meter	phone booth
+	teleport booth	tokens</pre>
+<pre>	The money group includes all objects that participate in the handling</pre>
+<p>of funds.  Money is represented in two forms: as tokens, which are objective entities that can be passed from person to person or left in a place, and as bank account credits, which can be transferred from one account to another. The atm object converts between the two forms, while the token object and the credit card object embody the interface to the actual money.  All the other objects in this group are &quot;coin operated&quot; devices that require the infusion of funds in order to work.  The coin-op objects all support a pay/refund protocol.</p>
+<p>Sit</p>
+<pre>	bed		boat		car		chair
+	couch		hot tub		motorcycle	truck</pre>
+<pre>	The sit group consists of objects that may be sat in or laid upon.</pre>
+<p>Some of them can hold multiple avatars.  Each sit group object has an &#x27;occupants&#x27; property that is an array of object pointers specifying who is sitting in it.  Each element in this array corresponds to a particular position.  The number of avatars who can sit in an object is given by the &#x27;maxOccupants&#x27; class property.  The graphics routines must worry about displaying the right people in the right places, and the player interface must worry about what seats are filled and what seat a player is pointing at.</p>
+<p>Light</p>
+<pre>	flashlight	floor lamp</pre>
+<pre>	The light group consists of objects which affect the illumination</pre>
+<p>level of the region.  Turning them on or off increments or decrements (respectively) the light level of the region.  When the light level of a region is 0, it is displayed in darkness.</p>
+<p>Edit</p>
+<pre>	paper</pre>
+<pre>	The edit group consists of objects which have a text property that the</pre>
+<p>player must be able to edit.  We pop into a simple editor mode to do this. Currently there is only one class in this group, but that could change.</p>
+<p>Clothing</p>
+<pre>	amulet		backpack	hat		jacket
+	pants		shirt		shoes		skirt</pre>
+<pre>	The clothing group consists of objects which may be worn on some part</pre>
+<p>of the body (they are not all clothing items strictly speaking, e.g., the amulet).  We thus need to have a protocol for putting things on and taking them off again.  Clothing items may be picked up and carried in the hands between being worn and being put down.  Clothing group objects carry the &#x27;location&#x27; class property which specifies where on the body they are to be worn.</p>
+<p>Mail</p>
+<pre>	dropbox		mailbox</pre>
+<pre>	The mail group consists of objects which interface with the mail</pre>
+<p>system.  There are two functions associated with this system: sending mail and receiving mail.</p>
+<p>Phone</p>
+<pre>	answering machine		beeper		phone booth
+	telephone	walkie talkie</pre>
+<pre>	The phone group consists of objects which make up the telephone</pre>
+<p>system.  The answering machine and the beeper have to interact with the phone system, while the rest of the objects in the group do all the work.  Each phone object has an internal state machine that drives it.  Corresponding to this is a &#x27;phoneState&#x27; property that tells whether the phone is ringing, talking, dialing, etc.  The full phone protocol is quite large and complex.</p>
+<p>Interactive</p>
+<pre>	crystal ball	fountain	magic lamp</pre>
+<pre>	The interactive group contains objects that have the potential of</pre>
+<p>putting players into direct dialog with system people.  For example, the fountain functions as oracle and can ask and answer questions live from the gods.</p>
+<p>Vehicle</p>
+<pre>	boat		car		motorcycle	skateboard
+	truck</pre>
+<pre>	The vehicle group contains all the vehicles.  Vehicles carry avatars</pre>
+<p>and their possessions around under the control of one player (the driver). Vehicle movement is a special case of walking: once a player is in the driver&#x27;s seat of a vehicle, he moves around exactly as he would if he were walking.  The vehicle moves and carries all the other passengers along with it.</p>
+<p>Music</p>
+<pre>	jukebox		radio		stereo</pre>
+<pre>	The music group consists of objects which can play music.  Music is</pre>
+<p>represented as a periodic stream of note strings which are sent from the host. Hopefully, they take a lot less time to transmit than they do to play, so that they don&#x27;t eat all the communications bandwidth.</p>
+<p>Idiosyncratic</p>
+<pre>	aquarium	book/newspaper	boomerang	bottle
+	building	bus		compass		countertop
+	crystal ball	die		display case	drugs
+	escape device	fake gun	fare box	flag
+	fortune machine	fountain	frisbee		garbage can
+	hand of god	house cat	instant object pill
+	jukebox		magic lamp	matchbook	movie camera
+	paper		parking meter	region		security device
+	sensor		tape		teleport booth	wind-up toy</pre>
+<pre>	The idiosyncratic group consists of all those objects which possess</pre>
+<p>some behavior that is not accounted for in one of the above groups, i.e., everything else.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/groups.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Requirements - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/databases.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm Host Databases</h1>
+<p class="author">by What we store in the host, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document # 19</p>
+<h2>Introduction</h2>
+<p>This document is a rough requirements list for the <b>MicroCosm</b> host databases.  It describes the various databases and what they must contain.  It is intended to be advisory to Quantum in their preparation of the exact internal data representation.</p>
+<h2>The Databases</h2>
+<p>A very abstract representation of the world could express the entire contents of the <b>MicroCosm</b> in terms of generic objects and containment relationships between them.  This would be the approach to follow in a system built on top of, say, Smalltalk-80.  However, we are using a more prosaic technology and furthermore we need to be quite efficient.  We will therefor recognize a few important special cases and represent the world by having the host maintain four basic databases:</p>
+<ul class="bullet">
+<li>The Region Database</li>
+<li>The Avatar Database</li>
+<li>The Object Class Database</li>
+<li>The Object Database</li>
+</ul>
+<h2>Region Database</h2>
+<p>The Region Database contains one entry for each region in the <b>MicroCosm</b> (see the documents <em>MicroCosm Coordinate Systems and Topology</em> and <em>A Mapmaker&#x27;s Guide to the MicroCosm</em>).  Each region record contains:</p>
+<ul class="bullet">
+<li>Region number (an integer, size currently indeterminate; primary key for region database)</li>
+<li>Name (a string; <b>optional</b>)</li>
+<li>Region X size (a byte)</li>
+<li>Region Y size (a byte)</li>
+<li>Terrain type (a byte)</li>
+<li>West neighbor (a pointer to another region or NIL)</li>
+<li>East neighbor (a pointer to another region or NIL)</li>
+<li>North neighbor (a pointer to another region or NIL)</li>
+<li>South neighbor (a pointer to another region or NIL)</li>
+<li>Owner (a pointer to an avatar or indicator that region is public)</li>
+<li>Contents (a list of pointers to objects)</li>
+</ul>
+<h2>Avatar Database</h2>
+<p>The Avatar Database contains one entry for each avatar currently living in the <b>MicroCosm</b>.  Each Q-Link user name may have an avatar associated with it (or, more to the point, no user name may have more than one avatar).  Each avatar record contains:</p>
+<ul class="bullet">
+<li>Avatar number (an integer, size currently indeterminate; primary key for avatar database)</li>
+<li>Location, consisting of</li>
+<li><b>□</b> Region (a pointer to a region)</li>
+<li><b>□</b> X position (a byte)</li>
+<li><b>□</b> Y position (a byte)</li>
+<li>Customization vector (several bytes, exact number currently undecided)</li>
+<li>Owner (a user name or user account number; another key for the avatar database)</li>
+<li>Contents (a list of pointers to objects)</li>
+<li>Name (a string; <b>optional</b>)</li>
+</ul>
+<h2>Object Class Database</h2>
+<p>The Object Class Database contains one entry for each type of object found in the <b>MicroCosm</b> (see the document <em>MicroCosm Minimal Object Set</em>). Each object is a member of some class of objects all of which have the same behavior protocol.  This database thus contains all object information which is invariant across instances of a given class of objects.  Each object class record contains:</p>
+<ul class="bullet">
+<li>Class number (two bytes: a terrain code and a class code; primary key for object class database).</li>
+<li>Class name (a string; <b>optional</b>)</li>
+<li>Instance property record size (an integer)</li>
+<li>Important instance property record size (an integer)</li>
+<li>Capability vector (an array of procedure entry points)</li>
+<li>Capability routines (a series of executable procedures; probably not stored in the database itself but merely referenced by the capability vector)</li>
+<li>Imagery (a set of animation frames or static images, suitable for downloading ;basically an array of bytes)</li>
+<li>Imagery last changed date (a time stamp of some sort)</li>
+<li>Home system behavior (a collection of C64 code, suitable for downloading ;basically an array of bytes)</li>
+<li>Behavior last changed date (a time stamp of some sort)</li>
+</ul>
+<h2>Object Database</h2>
+<p>The Object Database contains one entry for each object extant in the <b>MicroCosm</b>.  It contains the state-dependent properties of each object. There are a few general properties which all objects contain.  However, the remaining properties depend on the class of the object.  Each object record contains:</p>
+<ul class="bullet">
+<li>Object identifier (an integer, size to be determined; primary key for object database)</li>
+<li>Short identifier (a byte or NIL)</li>
+<li>Class (a class number)</li>
+<li>Location, consisting of</li>
+<li><b>□</b> Container (a pointer to a region or an avatar or an object)</li>
+<li><b>□</b> X position (a byte)</li>
+<li><b>□</b> Y position (a byte)</li>
+<li>Owner (a pointer to an avatar or indicator that object is public)</li>
+<li>Properties (a series of bytes whose length and interpretation depends upon the object&#x27;s class)</li>
+</ul>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/databases.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

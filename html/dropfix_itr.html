@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drop Fix - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/dropfix.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Proposed fix for the “drop behind object problem”</h1>
+<p class="author">by Chip Morningstar, Lucasfilm Ltd. Games Division, \</p>
+<p class="date">December 5, 1986</p>
+<h2>The Problem</h2>
+<p>It is possible, either by throwing or <b>PUT</b>ting, to place one object behind another in such a manner that the rear object become permanently inaccessible to the players (we can extract it with Twiddle if we know it there, but that&#x27;s clearly not acceptable for a running system).  This is due to the way the <b>PUT</b> and throw commands work: you indicate where you want an object to go by pointing at the desired location.  For certain objects, such as the ground, the object is placed at the location indicated.  For other objects, such as the wall, the location&#x27;s Y-coordinate is clamped at the horizon (the rationale being that the object needs to land on a surface, such as the ground, rather than hovering in mid-air).  This means that you can point to the wall above some other object, such as a couch, and throw what the Avatar is holding behind it.  Conceptually, the object flies through the air, hits the wall, and drops down behind the couch.  Similarly, <b>PUT</b>ting or throwing to many free-standing objects causes the <b>PUT</b> or thrown item to wind up at the target object&#x27;s (X,Y) location, rather than the precise position pointed at.  The resulting location, however, may be obscured by a third object.  If an obscuring object is immobile, the object that is behind is left permanently stuck, since there is no way for anyone to point at it in order to indicate that they wish to pick it up.</p>
+<h2>The Solution</h2>
+<p>Only allow <b>PUT</b> and throw to work in circumstances where it makes sense. This means that you can only <b>PUT</b> or throw to objects where the exact (X,Y) location indicated may be used, such as the ground or the road, or to containers that are going to end up holding the object when the operation is done (such containers include Avatars, so you can still play catch).</p>
+<h2>What It Involves</h2>
+<p>This change involves only the removal of capabilities.  Therefore, no Commodore programming is required to implement it.  However, substantial (though simple) changes to the Muddle file that describes the C64 object disk are needed in order to take out the unwanted <b>RDO</b> (throw) and <b>PUT</b> behaviors.  In addition, the host object definitions need to be altered slightly to disallow the now illegal operations.  We estimate that this is about a half day&#x27;s work in total.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/dropfix.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

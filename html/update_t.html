@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Object Disk Version Management - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/update.t" style="font-size:0.85em;">View source</a></div>
+<h1>Habitat Object Disk Version Management and Field Update</h1>
+<pre>	Habitat Object Disk Version Management and Field Update</pre>
+<p>The C64 Habitat software is designed so that the object disk can be updated in the field automatically by the host.  The basic mechanism is a track/sector block write message that allows selected blocks of the object disk to be replaced by new data.  However, to use this update technique efficiently will require some support software on the host to manage version update.  Here is a general overview of the proposed mechanism:</p>
+<p>The host will keep a database that contains the contents of the Habitat object disk image.  There will be one record for each disk block.  Each disk-block record will contain, in addition to the 256 bytes of data in the block, the track/sector number of the block and a version ID number for the block. Whenever a new version of the object disk is released, those blocks (and only those blocks) whose contents have changed will be written into the disk-block database along with the new version number.  Thus, each record in the database is tagged with the version number of the oldest version of the object disk for which that block is up to date.</p>
+<p>Whenever a user enters Habitat, his C64 announces his presence with a message that contains, among other things, the version ID of the object disk that he is using.  The host, before allowing the user to enter the system, sends a series of block-update messages, one for each block in the database that has a version number newer than the version that the user logged on with.  The last block-update transmitted should the one that modifies the block on the object disk which contains the version number itself, so that if the update sequence is interrupted the process can be restarted from the beginning with another login.</p>
+<p>Here are specific details:</p>
+<p>When the user enters Habitat, he announces his presence with the IM_ALIVE message:</p>
+<pre>	&lt;REGION&gt;&lt;IM_ALIVE&gt;&lt;program disk #&gt;&lt;data disk #&gt;&lt;data disk version #&gt;</pre>
+<p>&lt;REGION&gt; is 0, i.e., the message is addressed to the region object on the host.  &lt;IM_ALIVE&gt; is the message number, 3.  The three parameters are the ASCII ID&#x27;s for the disk that is trying to enter.  The current program disk number is &quot;2&quot;; the current data disk number is &quot;0&quot; (note that these are ASCII values, i.e., the program disk number byte is 0x32).  These numbers won&#x27;t vary unless we issue an entirely new product based on the Habitat software.  The data disk version number is the number of interest.  Right now it is &quot;0&quot;, but will change as new versions are released.</p>
+<p>The host version database records should look something like:</p>
+<p>declare 1 disk_block_record based,</p>
+<pre>		2	track		character(1),
+		2	sector		character(1),
+		2	version		character(1),
+		2	data		character(256);</pre>
+<p>where &#x27;track&#x27; and &#x27;sector&#x27; together are the primary key.  &#x27;version&#x27; may also want to be a key so that you can selectively read only those blocks that need to be sent out in an update.</p>
+<p>The update message that the host sends out has this form:</p>
+<pre>	&lt;REGION&gt;&lt;UPDATE&gt;&lt;track&gt;&lt;sector&gt;&lt;data...&gt;</pre>
+<p>where &lt;REGION&gt; is 0, i.e., the message is addressed to the region object on the C64; &lt;UPDATE&gt;, the message number, is 11; &lt;track&gt; and &lt;sector&gt; are the track and sector to update; and &lt;data...&gt; is 256 bytes (exactly) of data to be written to the specified disk block.</p>
+<p>It doesn&#x27;t matter what order the disk blocks to be updated are sent to the C64, as long as the block containing the version ID is sent last.  This is track 0x12, sector 0x0.  The version ID block has a very specific format.  You probably won&#x27;t need to worry about what this is since it will be in the database, but we&#x27;ll describe it anyway, just in case.  It is an ASCII string exactly 256 characters long, that has the form:</p>
+<p>&quot;HI HACKER! DISK 0 VERSION 0 HABITAT (c) ... &lt;credits here out to 256 bytes&gt;&quot;</p>
+<p>The important points are that the &quot;HI&quot; is an ID string that the C64 program looks for on boot, and the disk and version numbers must be located at precisely the offsets in the string that they have here.  The remainder is arbitrary, but of course we like to have a copyright notice in there.</p>
+<p>Here is some PL/1-oid pseudo-code for the update procedure:</p>
+<p>procedure field_update(version);</p>
+<pre>     declare version character(1);
+     declare 1 a_block like disk_block_record;
+     %replace ID_TRACK by 18; /* 0x12 */
+     %replace ID_SECTOR by 0;
+     declare ID_TRACK_SECTOR character(2) init(ID_TRACK, ID_SECTOR);</pre>
+<pre>     if (rank(version) &lt; Current_version_number) then do;
+          position_block_database(version, &#x27;version&#x27;, KEY_GT);
+          do while (read_block_database(a_block) ^= end_of_file);
+	       if (a_block.track^=ID_TRACK &amp; a_block.sector^=ID_SECTOR) then
+               send_block_update(a_block.track, a_block.sector, a_block.data);
+          end;
+          position_block_database(ID_TRACK_SECTOR, &#x27;track_sector&#x27;, KEY_EQ);
+	  read_block_database(a_block);
+	  send_block_update(ID_TRACK, ID_SECTOR, a_block.data);
+     end;</pre>
+<p>end;</p>
+<p>This would be called with the version byte extracted from the IM_ALIVE message.  &#x27;Current_version_number&#x27; is a global that maintains the most up-to-date version number of the object disk.  Actually, you would probably want to perform the check against this value BEFORE you call this routine, so as to save a transaction with the database process in the typical case.  The &#x27;position_block_database&#x27; call positions the block database to read the records as specified.  &#x27;read_block_database&#x27; simply reads a block database record into the given variable and returns an indicator if it has read the last record.  &#x27;send_block_update&#x27; sends an update message in the form specified above.</p>
+<p>At Lucasfilm we have utilities to layout new versions of the object disk. When there is an update to be distributed, we will provide a new disk image in the form that we have been using in our current telecommunications release procedure, i.e., a set of &quot;.dat&quot; files each of which has a predefined track/sector offset location on the image disk.  It will be necessary to do a block-by-block comparison of the new disk data with that in the block database, and update (only) those records which have changed by writing the new data and the new version number.</p>
+<p>Our utilities are designed so we create a new object disk image with the smallest possible number of changes from the old one, so that the number of update messages that must be sent is minimized.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/update.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

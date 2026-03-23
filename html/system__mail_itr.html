@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habitat Mail - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/mail.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Habitat Mail</h1>
+<p class="author">by Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">November 17, 1986</p>
+<p class="doc-number">Habitat Document # 33</p>
+<h2>Introduction</h2>
+<p>This document describes the present design of the <em>Habitat</em> mail system. The mail system provides a means for Avatars to communicate with one another even though they may not be logged in to the system at the same time.  It also provides a means for players to send messages that may be saved away by the receiving Avatars for future reference.</p>
+<h2>How It Works: The Player&#x27;s View</h2>
+<p>Mail is written and sent using pieces of paper.  Any piece of paper can be used to send a letter.  A player composes a letter simply by writing his or her message on a piece of paper using the conventional paper/text editor interface.  The only special actions that the player needs to take are to write “To: <em>whomever</em>” on the top line of the page and then to exit the text editing mode by selecting the <b>MAIL IT</b> option at the bottom of the screen.  The first action provides an address so the <em>Habitat</em> Post Office knows who to deliver the letter to.  The second action is the means by which the player indicates that this is, in fact, a letter that is now to be mailed out.</p>
+<p>When the player selects <b>MAIL IT</b> he exits the text interface and sees his piece of paper turn into a winged letter and go flying away from his hands, through the air and off the screen.  The player is left empty handed.</p>
+<p>Mail is delivered automatically to a special slot in the receiving Avatar&#x27;s pockets.  If the Avatar receiving mail is online when it is delivered, he sees a winged letter come flying in from the edge of the screen that disappears when it reaches the vicinity of his pockets.</p>
+<p>To actually read received mail, the Avatar reaches into his pockets using the <b>GET</b> command, just as he would to extract an ordinary object.  On the “pick-from” screen, the player sees a winged letter object sitting in the reserved slot.  This icon represents all pieces of received but unread mail. Pointing at it and pressing the joystick button selects the letter for reading.  The Avatar winds up with a piece of paper in his hands that is the first unread letter.  This piece of paper can then be read like any other, and either saved for future reference or discarded.  Further <b>GET</b>s retrieve further unread mail, until all pending letters have been retrieved.</p>
+<p>If there is no mail waiting, instead of the winged letter object, the player sees a blank piece of paper in his pockets.  <b>GET</b>ing this retrieves a fresh, blank sheet.  Thus, if there is no unread mail waiting, a player always has immediate access to an unlimited supply of paper.  In order to alleviate the potential litter problem, <b>PUT</b>ing a blank sheet of paper down anywhere causes it to disappear automatically.  (By the way, if there is unread mail waiting and the player feels a desperate need to send a message or leave a note, all he needs to do is read his mail until he finds a letter he doesn&#x27;t need to keep.  Its piece of paper can then immediately be erased and reused.  He need not wait until all mail is read and he can get at the paper supply.)</p>
+<h2>How It Works: The Internal View</h2>
+<p>We create a special graphic style of paper that has two visually distinct graphic states: a blank pad of paper and a winged letter.  These are <em>different graphic states</em> of the <em>same graphic style</em> of object. This means that the appearance of the object can be toggled back and forth between the two forms without the Commodore 64 having to go to disk or rearrange its heap.  A slot is reserved in each Avatar&#x27;s pockets and an instance of this type of object is permanently placed there.  Initially (i.e., when the Avatar is hatched), the piece of paper is in the blank state.</p>
+<p>When an Avatar receives mail, the paper object in his pocket is set to the winged letter state.  When he retrieves the last piece of mail awaiting him at any given time, it is set to the plain paper state.  The object in his pocket is not otherwise touched.</p>
+<p>When an Avatar reaches into his pocket and tries to <b>GET</b> the blank piece of paper, instead of handing the object to the Avatar, the host behavior code for the <b>GET</b> operation treats this as a special case and clones the piece of paper, handing a new object to the Avatar using a HEREIS message.  The Commodore 64 behavior code for this <b>GET</b> operation will need to be modified to recognize a “successful failure” return from the host, so that it doesn&#x27;t beep at the player when it is not allowed to remove the item from the pocket.</p>
+<p>When an Avatar reaches into his pocket and tries to <b>GET</b> the winged letter, the operation is again intercepted as a special case by the host behavior code for the <b>GET</b> operation.  In this case, however, it works virtually identically to the present <b>GET</b> from mailbox operation: a new paper object is generated in the Avatar&#x27;s hand containing the text of the next message in the player&#x27;s mail queue.  The only notable difference between this and the current mailbox <b>GET</b> is that instead of putting down the mailbox flag when all mail has been retrieved (changing the graphic state of the mailbox) the code must turn the winged letter in the player&#x27;s pocket into a blank pad of paper (changing the paper&#x27;s graphic state).  In other words, the only difference is the object whose state is changed when the mail runs out.</p>
+<p>Actually, the <b>GET</b> from pocket behavior for both the winged letter and the blank pad of paper are essentially the same.  The only difference is the text that is on the piece of paper that is generated: in the case of the letter it is the text of a mail message and in the case of the blank pad it is a blank page.</p>
+<p>The send-mail operation is triggered when the player exits the text interface by choosing the <b>MAIL IT</b> button.  The Commodore 64 sends a special message to the paper object on the host that is a request to send mail.  The host behavior code for this request operates like the present mailbox <b>PUT</b> behavior.</p>
+<p>The arrival of new mail requires an asynchronous notification from the host, so that the Commodore 64 can change the state of the paper in pocket and so it can animate the arrival.  This notification will be an asynchronous behavior of the paper object on the Commodore.</p>
+<h2>What Needs To Be Done</h2>
+<p>Building on top of the software we already have, here is what we must do to make this mail system design work:</p>
+<ul class="bullet">
+<li><em>Add </em><b>ERASE</b> button to text interface.  The paper handling routines already have the code to clear the page.  We simply need to bring this function out to the user level.  Time estimate: ??</li>
+<li><em>Add </em><b>MAIL IT</b> button to text interface.  This will drop out of the text interface, send a message to the host similar to that presently sent when dropping a letter in a mailbox and animate the winged letter flying off the screen.  Time estimate: ??</li>
+<li><em>Create graphic of winged letter.</em>  This is a simple piece of artwork. Time estimate: 2 hours.</li>
+<li><em>Add asynchronous behavior code for paper in the Commodore 64 to animate incoming mail.</em> This is similar to the outgoing mail animation, but the travel path is reversed and action is triggered by an asynchronous message from the host.  Time estimate: ??</li>
+<li><em>Augment the pick-from-pocket behavior code in both the host and the Commodore to get mail and clone paper.</em>  Other than the triggering action (pointing at something in the pocket rather than <b>GET</b>ing from a mailbox), the new get-mail function can work just like the present one.</li>
+<li><em>Add a special case in the </em><b>PUT</b> routines so that blank pieces of paper vanish when put down.  This can be handled entirely by the host behavior code.  Time estimate: ??</li>
+<li><em>Alter the present mailer to deliver to the Avatar rather than to the Avatar&#x27;s home mailbox</em>.  This entails updating the graphic state of the special paper object in pocket and the sending of a notification message to the player when new mail arrives.  Time estimate: ??</li>
+</ul>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/mail.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

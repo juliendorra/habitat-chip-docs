@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Long Range Plan 2 - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/long2.itr" style="font-size:0.85em;">View source</a></div>
+<h2>Design</h2>
+<p>Figure 1 (go ahead, look at it now) illustrates the preliminary <b>Distributed Game System Architecture</b>.  This is the underlying support framework for the <b>Universe</b>.  The <b>Universe</b> is distributed between two systems: the <em>Player&#x27;s System</em> on the one hand and the <em>LFL System</em> on the other. Actually, there is only one LFL System, which we&#x27;ll refer to as <em>Universe Central</em>, but there may be any number of independent Players&#x27; Systems (see figure 2).</p>
+<h2>Player&#x27;s System</h2>
+<p>The Player&#x27;s System consists of two major components, called the <em>foundation system</em> and the <em>viewpoint module</em>.  The viewpoint module presents to the player a view into the <b>Universe</b>, corresponding to some role that the player may take or situation that the player may find himself in.  The foundation system acts as a backend for the frontend presented by the viewpoint module, mediating information query and update requests between the local system and Universe Central.  In addition, the viewpoint module encapsulates variations in display and input hardware, while the foundation system encapsulates variations in communications and data storage hardware. These two components are separate products, because there is potentially a large number of different possible viewpoint modules corresponding to the large number of possible viewpoints.</p>
+<p>The viewpoint module consists of two sub-units: the <em>situation simulator</em> and the <em>display handler</em>.  The display handler contains hardware-specific software for dealing with particular display devices, sound generators, and input devices.  There will be a separate display handler tailored to each machine that we wish to support as a player system.  The situation simulator contains interactive software that puts the player into a particular <em>situation</em> in the <b>Universe</b>.  The range of possible situations is infinite, but obvious possibilities include such things as “Merchant Spaceship Captain”, “Planetary Emperor”, “Space Fighter Pilot”, “Pirate Captain”, “Shipping Magnate”, “Interstellar Banker”, “Starship Designer”, “Diplomatic Courier”, and so on.  Each situation simulator would be marketed as a separate product, allowing for a wide variety of separate situations.  This has obvious possibilities for marketing strategies to promote an active and interested long-term aftermarket in add-on modules, possibly some produced by third-party vendors.</p>
+<p>The foundation system has three sub-units: the <em>database server</em>, the <em>resident database</em>, and the <em>communications channel controller</em>. Collectively these pieces form an application independent database backend for use by the viewpoint module.  The database server is the most central of the three.  It provides an interface between the viewpoint module and the <b>Universe</b> distributed database.  It stores and retrieves information according to requests given to it by the viewpoint module.  It speaks sometimes to the resident database, over which it has complete control, and sometimes to Universe Central via the communications channel controller.  The resident database is simply a collection of information stored locally in the player&#x27;s computer.  The database server manages the caching of information in this local database in an effort to minimize the number of transactions with Universe Central, the assumption being that transactions with the local database are quick and inexpensive while transactions with Universe Central are slower and more costly.  The communications channel controller is the gateway to Universe Central.  It handles the arrangements for establishing communications over various possible channels (phone lines, cable TV, etc.) using a specialized communications protocol.  It also performs on-the-fly data compression and expansion procedures to reduce communications bandwidth requirements.</p>
+<h2>LFL System</h2>
+<p>The LFL System, Universe Central, has a slightly more complicated structure as befits its centralized role in the <b>Universe</b>.  At its heart is the <em>non-resident database</em> (which is to say that it is not stored inside the players&#x27; machines and is therefor <em>non-resident from the players&#x27; point of view</em>).  This is a body of information representing the common fabric of the <b>Universe</b> that all players share.  Tapping into the non-resident database are two sorts of <em>access servers</em> which allow various sorts of manipulations of the database&#x27;s contents.  These are the <em>player access server</em> and the <em>GM access server</em>.</p>
+<p>It is through the player access server that the players interact with the central database.  The players&#x27; systems and the player access server do not interact with each other directly.  Rather, their communications are mediated by communications channel controllers at both ends of the communications lines joining them.  Thus there are communications channel controllers at Universe Central which are duals of the ones in the players&#x27; systems.</p>
+<p>The GM access server provides access to the non-resident database for the system administrators and gamemasters (<em>GMs</em> — roles to be described shortly).  Layered on top of the GM access server are one or more <em>design tools</em> that enable the administrators and GMs to construct worlds, create game scenarios, administer player accounts, and so on.</p>
+<p>The main distinction between the two access servers is in the nature of the manipulations that they support.  The player access server only allows operations which are consistent with the established physical laws and existing structure of the <b>Universe</b>, whereas the GM access server allows any sort of wholesale alterations to the database that its users desire.  This dichotomy is primarily a security measure, so that runaway bugs or malfunctions in players&#x27; machines (or malicious hackers attacking the system, for that matter) cannot “rend the fabric of space-time”, so to speak.</p>
+<h2>The Interstellar Metaphor for Distributed Systems</h2>
+<p>Various contemporary office systems, such as Apple&#x27;s Macintosh and Lisa, Xerox&#x27;s Star workstation, and their imitators, make use of what has come to be called the “desktop metaphor”.  The idea is that these systems try to couch the complicated controls of a complicated computer system in terms of the (presumably) more familiar imagery and conceptual structures of the office workplace.  These systems have gained much attention because of their innovative user interfaces, and, perhaps more importantly, inspired many imitators (some capable and most not).  However, the excitement and controversy, publicized by a trade press which, by and large, has no idea what is really going on, has focused on the desktop metaphor itself, rather than on the deeper principles and findings which lead to its development.</p>
+<p>To my mind, there are two ideas that are the essential findings of the Xerox human factors experts who originally gave us the desktop metaphor.  First of all, they tell us, it is helpful, when trying to comprehend a complex system, to have a working model in one&#x27;s head of what the system does and how it works.  Most people find this a reasonable (if not obvious) assertion.  The second idea, however, less intuitive.  This idea is that the actual system design itself — the model that the designers and implementors have in <em>their</em> heads — is often <em>not</em> the best model for a user to have in order to learn and effectively use the system, even though it is, in some sense, the most “accurate” model.</p>
+<p>The lesson to be drawn from this is that in the design of a large, complex system (which is what we are doing here), it can be constructive to have a metaphor or model in mind for the users to think about the system with.  This can be both an aid in building an effective, easy to use user interface and as a frame of reference for assessing the consistency of the design and the behavior of the finished product.</p>
+<p>What relevance, then, does this have to us?  Consider the problems associated with building distributed systems.  State synchronization among multiple networked processors is a major problem because communications, no matter how fast, are never instantaneous.  Most individual processors can be in communication with only a small number of other processors (usually one) at a time, thus any given processor is unable to communicate with most of the network most of the time.  It may, in fact, not even be aware of the presence of most of the network.  Add to this the complication that processors may be appearing on or disappearing from the network at whim, that some may drop out of contact for lengthy periods due to hardware breakdowns or someone&#x27;s failure to pay the phone bill, that the communications channels are often unreliable and may, in fact, fail in the midst of some transaction, and so on, and you have a real mess on your hands.  Now, try explaining all these complications to the typical user.</p>
+<p>The interstellar simulation I am proposing is, in fact, a fairly good, if somewhat ostentatious, model for distributed systems, provided that certain principles from physics and conventions from science fiction are adopted. Think of the isolated processors as worlds, separated by space.  The speed of light and the effects of relativity complicate communications and transport. Of course, there is always hyperdrive to get from place to place, but sometimes weird things happen out in those extra dimensions...  The point of this is that the limitations of the distributed medium can be written into the premise of <b>Universe</b> so that the players have a consistent model of what&#x27;s going on without becoming confused.  The software in the players&#x27; systems can be constructed to fudge the facts convincingly when things don&#x27;t always go as planned.  This metaphor also helps to blur the line between the fantasy (the exciting <b>Universe</b> with its spaceships to fly and exotic worlds to explore) and the underlying reality (your home computer talking to my big computer over the phone) so that the medium becomes more transparent and less obtrusive.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/long2.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

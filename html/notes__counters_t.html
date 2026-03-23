@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counters and Displays - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/counters.t" style="font-size:0.85em;">View source</a></div>
+<h1>Display cases:</h1>
+<p>Display cases:</p>
+<p>We add two properties to the display case struct:</p>
+<pre>	owner				binary(31)
+	locked(DISPLAY_CASE_CAPACITY)	bit(1)</pre>
+<p>&#x27;owner&#x27; is an Avatar ID. &#x27;locked&#x27; is an array of bits, parallel to the contents array.</p>
+<p>Whenever an Avatar PUTs something into the display case, if the Avatar is the owner, we set the &#x27;locked&#x27; bit corresponding to the contents slot that the object is being put into.  If the Avatar is not the owner, we clear the bit.</p>
+<p>Whenever an Avatar tries to GET something out of the display case, if the &#x27;locked&#x27; bit corresponding to that item is set we only allow the GET to succeed if the Avatar is the owner.  Otherwise the GET fails.</p>
+<p>Countertops:</p>
+<p>We add one property to the countertop struct:</p>
+<pre>	whoput(COUNTERTOP_CAPACITY)	binary(31);</pre>
+<p>This is an array of Avatar ID&#x27;s parallel to the contents array.</p>
+<p>Whenever an Avatar tries to PUT something into the countertop, we look to see if the Avatar&#x27;s ID matches any of the entries in &#x27;whoput&#x27;.  If so, the PUT fails.  If not, we set the &#x27;whoput&#x27; entry corresponding to the item slot to the PUTing Avatar&#x27;s ID.</p>
+<p>Whenever an Avatar tries to GET something from the countertop, we look to see if the Avatar&#x27;s ID matches any of the entries in &#x27;whoput&#x27;.  If not, the GET fails.  If so, then the GET succeeds, but there are two cases: 1) it matches the entry for the item being gotten; in this case we simply set the &#x27;whoput&#x27; entry for the item to 0.  2) it matches the entry for some other item; in this case we set the other item&#x27;s &#x27;whoput&#x27; entry to the value in this item&#x27;s &#x27;whoput&#x27; entry, and THEN zero this item&#x27;s entry.</p>
+<p>We garbage collect the contents of all countertops during the nightly garbage collection sweep.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/counters.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

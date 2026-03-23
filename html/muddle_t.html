@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muddle and Puddle - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/muddle.t" style="font-size:0.85em;">View source</a></div>
+<h1>Muddle and Puddle</h1>
+<h3>Muddle and Puddle</h3>
+<p>Muddle is a utility which is used to generate the data files for the Habitat C64 object disk.  It reads a description file written in the Muddle language and from this generates a series of data files plus a textual listing showing what it has done.</p>
+<p>The &#x27;muddle&#x27; command itself has the following from:</p>
+<pre>	muddle &lt; mudfile &gt; listfile</pre>
+<p>I.e., it reads the Muddle input file from the standard input and writes the listing file to the standard output.  It also generates five data files:</p>
+<pre>	class.dat	- object class descriptors
+	image.dat	- object images
+	sound.dat	- sound effects
+	action.dat	- object behaviors
+	head.dat	- head images</pre>
+<p>Collectively, these five &quot;.dat&quot; files define the C64 object database.  Muddle also generates three other output files:</p>
+<pre>	class_equates.m	- a Macross include file defining symbolic constants
+				for the various class names
+	width.incl.pl1	- a PL/1 include file defining width tables for the
+				host&#x27;s collision detection routines
+	capacity.incl.pl1 - a PL/1 include file defining size tables for</pre>
+<h3>the host&#x27;s memory capacity monitor routines</h3>
+<pre>	</pre>
+<h3>The Muddle Language</h3>
+<p>The input to Muddle is a Muddle file in the Muddle language.  This is a very simple language that allows you to lay out class definitions quickly and easily.  A Muddle file consists of a series of class definitions, each of which specifies the elements (image files, sound effects, data bytes, and so on) that go into a particular Habitat object class.  The elements themselves are either specified literally (in the case of byte and word data) or taken from data files whose names you give (in the case of images, sounds and the like).  Since certain class elements, notably some behavior code, are shared among multiple classes, Muddle allows you to define the class elements separately from the classes themselves, and then refer to the elements symbolically in more than one class definition statement.</p>
+<p>There are thus two types of statements in the Muddle language, the &quot;class definition statement&quot; and the &quot;element definition statement&quot;.</p>
+<p>The element definition statement has the form:</p>
+<pre>	&lt;elementType&gt; {
+		&lt;elementSpecifier&gt;
+		&lt;elementSpecifier&gt;
+		...
+	}</pre>
+<p>where &lt;elementType&gt; is one of the element types &#x27;image&#x27;, &#x27;action&#x27;, &#x27;sound&#x27; or &#x27;head&#x27;; an &lt;elementSpecifier&gt; has the form:</p>
+<pre>	&lt;label&gt; : &lt;source&gt;</pre>
+<p>or</p>
+<pre>	&lt;label&gt; : &lt;source&gt; &lt;width&gt;</pre>
+<p>or</p>
+<pre>	&lt;label&gt; : &lt;source&gt; &lt;width&gt; &lt;standoffset&gt;</pre>
+<p>where &lt;label&gt; is a symbolic name to be given to the element; &lt;source&gt; is the source of the element, either the symbolic name of another element or the name of a Unix file, enclosed in quotes; and &lt;width&gt; and &lt;standoffset&gt; are numbers that may be given, for &#x27;image&#x27; elements only, that describe the graphic characteristics of the image.</p>
+<p>The class definition statement has the form:</p>
+<pre>	class &lt;className&gt; &lt;classNumber&gt; {
+		&lt;classElement&gt;
+		&lt;classElement&gt;
+		...
+	}</pre>
+<p>where &lt;className&gt; is a symbolic identifier to be used as the clas name; &lt;classNumber&gt; is the class number of the class; a &lt;classElement&gt; has the form:</p>
+<pre>	&lt;elementType&gt; &lt;source&gt;</pre>
+<p>or</p>
+<pre>	&lt;elementType&gt; &lt;dataList&gt;</pre>
+<p>where &lt;elementType&gt; is &#x27;image&#x27;, &#x27;action&#x27;, &#x27;sound&#x27;, &#x27;head&#x27;, &#x27;byte&#x27; or &#x27;word&#x27;; &lt;source&gt; is the source of the element, either a Unix file name enclosed in quotes or the symbolic name of an element defined by an element definition statement; and &lt;dataList&gt; is simply a comma-separated list of numbers that are used directly for byte and word data (this data is placed directly into the class descriptor for the class).</p>
+<h3>Output</h3>
+<p>Muddles writes a listing to the standard output and produces the five data files named &quot;class.dat&quot;, &quot;action.dat&quot;, &quot;image.dat&quot; and &quot;sound.dat&quot; and &quot;head.dat&quot;.  Each data file consists of a 256 word table followed by the data record.  Each data record begins with a length word, followed by the actual data itself.  The data records in the &quot;class.dat&quot; file are class descriptors. They have this structure:</p>
+<pre>	word	class descriptor length (i.e., the length word)
+	byte	number of images
+	byte	number of sounds
+	byte	number of actions
+	byte	offset from start of class descriptor to first image
+	byte	offset from start of class descriptor to first sound
+	byte	offset from start of class descriptor to first action
+	word	instance descriptor length
+	bytes	random class-specific data (&#x27;word&#x27; and &#x27;byte&#x27; class elements)
+	bytes	image numbers
+	bytes	sound numbers
+	bytes	action numbers</pre>
+<h3>Puddle</h3>
+<p>Puddle is a Muddle post-processor that is used to cope with changes that are made to the object disk database over time.  Puddle is invoked with the command</p>
+<pre>	puddle old.dat new.dat &gt; composite.dat</pre>
+<p>where &quot;old.dat&quot; is an old data file, &quot;new.dat&quot; is a newer version of the same file, and &quot;composite.dat&quot; is the output that Puddle will produce which is a new data file with the contents of &quot;new.dat&quot; but with a layout that minimizes the number of blocks that are different from &quot;old.dat&quot;.  (In order to use this effectively, your Muddle input file must be maintained in such a fashion that new elements are always added at the end, so that the resource ID numbers of corresponding elements in &quot;old.dat&quot; and &quot;new.dat&quot; are the same.)</p>
+<p>Once the composite output file is created with Puddle, you can use the utility &#x27;deltab&#x27; (short for delta-block) to generate a listing of the block numbers that have changed:</p>
+<pre>	deltab old.dat composite.dat &gt; listfile</pre>
+<p>where &quot;old.dat&quot; and &quot;composite.dat&quot; are the same files used in the &#x27;puddle&#x27; command.  &#x27;listfile&#x27; is simply a list of the block number (in C64 disk blocks) that differ between the two &quot;.dat&quot; files.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/muddle.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

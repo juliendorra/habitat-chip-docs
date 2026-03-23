@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratus Directory Map - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/stratusMap.t" style="font-size:0.85em;">View source</a></div>
+<h1>Useful info about the Q-Link Stratus:</h1>
+<p>Useful info about the Q-Link Stratus:</p>
+<p>Dial up the local Telenet node, enter 3 carriage returns and then (at the &#x27;@&#x27; prompt) enter &#x27;70339l&#x27; (that&#x27;s an &quot;L&quot;, not a &quot;1&quot;).</p>
+<p>Our login is &#x27;chip&#x27;.  Password is &#x27;lunch&#x27;.</p>
+<p>To login type</p>
+<pre>	login chip -module m1</pre>
+<p>It will prompt for the password.</p>
+<p>Directory structure:</p>
+<p>%cvideo#d010&gt;lucas</p>
+<pre>	Our home directory.  The only interesting thing here is the
+	&#x27;abbreviations&#x27; file.  Update this at your peril.</pre>
+<p>%cvideo#d010&gt;lucas&gt;microcosm</p>
+<pre>	The master directory for OUR source code on the Stratus.  The alias
+	&#x27;work&#x27; will cd you to this directory from anywhere in the system.</pre>
+<pre>	EVERYTHING that is ours should be compiled from this directory, even
+	though the source is in one of its subdirectories (otherwise the
+	include files won&#x27;t work -- bunch of include files that are used
+	everywhere are to be found here).</pre>
+<p>%cvideo#d010&gt;lucas&gt;microcosm&gt;Actions</p>
+<pre>	Sources for the generic action code.  A bunch of files of the form
+	&#x27;actions_something.pl1&#x27;.  These are all included in a single master
+	file named &#x27;actions.pl1&#x27;.</pre>
+<pre>	To recompile, use the command &#x27;pl1 Actions&gt;actions&#x27; from the master
+	directory.</pre>
+<p>%cvideo#d010&gt;lucas&gt;microcosm&gt;Classes</p>
+<pre>	Sources for the class behavior code.  There is one file for each
+	class, named &#x27;class_something.pl1&#x27;.  To recompile, use the command
+	&#x27;pl1 Classes&gt;class_something&#x27; *or* &#x27;plc something&#x27; from the master
+	directory.</pre>
+<p>%cvideo#d010&gt;lucas&gt;microcosm&gt;Structs</p>
+<pre>	Sources for struct definition include files used everywhere.  There is
+	one such file for each class names &#x27;struct_something.incl.pl1&#x27; plus a
+	bunch of additional ones that are used in various places.  You don&#x27;t
+	need to compile these, they are source included.</pre>
+<p>%cvideo#d010&gt;lucas&gt;microcosm&gt;Misc</p>
+<pre>	Sources for miscellaneous routines used in out code.  There are three
+	files, &#x27;helpers.pl1&#x27;, &#x27;bits.pl1&#x27; and &#x27;messages.pl1&#x27;.</pre>
+<pre>	&#x27;helpers.pl1&#x27; is the bulk of the miscellaneous routines.  Basically,
+	anything of ours that is not elsewhere is here (of course).</pre>
+<pre>	&#x27;bits.pl1&#x27; is all the bit-twiddling routines that PL/1 doesn&#x27;t let
+	you do nicely.</pre>
+<pre>	&#x27;messages.pl1&#x27; is all the message I/O routines for the behavior code.</pre>
+<pre>	Compile this stuff with &#x27;pl1 Misc&gt;whatever&#x27; from the master directory.</pre>
+<p>%cvideo#d010&gt;lucas&gt;microcosm&gt;Linkable</p>
+<pre>	The linkable object modules (&#x27;.obj&#x27; files) for ALL of our stuff.
+	Whenever you recompile some things (from the master directory always),
+	you should enter the command &#x27;mv *.obj Linkable&#x27;, otherwise changes
+	will not get picked up by a rebind.</pre>
+<p>%cvideo#d010&gt;lucas&gt;toolbox</p>
+<pre>	Contains a bunch of utilities we&#x27;ve written.  The alias &#x27;cdtool&#x27; takes
+	you here from anywhere.</pre>
+<pre>	In particular, this directory contains OUR version of Twiddle, so
+	always &#x27;cdtool&#x27; before running twiddle, otherwise it may not know
+	about some of the newer classes.</pre>
+<p>%cvideo#d010&gt;quantum&gt;stratus&gt;source&gt;microcosm</p>
+<pre>	Source and object files for the regionproc and the like.  The alias
+	&#x27;cdbind&#x27; takes you to this directory.  There is an abbreviation for
+	this directory name, &#x27;bindir&#x27;, that can be used in command arguments
+	at any time.</pre>
+<pre>	You can recompile the regionproc from this directory with the command
+	&#x27;pl1 regionproc&#x27;.  You don&#x27;t need to do anything with the &#x27;.obj&#x27; file
+	after recompiling regionproc.</pre>
+<pre>	This directory also contains the stuff we need to update twiddle when
+	we add a new class.  There is a file &#x27;init_twiddle.pl1&#x27; here.  Here
+	you will also find &#x27;init_twiddle.doc&#x27; and &#x27;twiddle.doc&#x27; which tell you
+	how to upgrade twiddle and how to use twiddle, respectively.  If you
+	update &#x27;init_twiddle.pl1&#x27; according to these instructions, you then
+	need to enter the following commands (in order, from this directory):
+		pl1 init_twiddle
+		bind twiddle init_twiddle
+		cdtool
+		cp bindir&gt;twiddle.pm . -delete</pre>
+<p>%cvideo#d010&gt;quantum&gt;run_lucas</p>
+<pre>	The &quot;run directory&quot;.  The alias &#x27;cdrun&#x27; will take you here.  There is
+	also an abbreviation for this directory name, &#x27;rundir&#x27;, that can be
+	used in command arguments.</pre>
+<pre>	This is where you do a reset from.  The command &#x27;reset&#x27; (which will
+	only work from this directory) will reset Habitat.</pre>
+<pre>	The log file also lives here.  It is named &#x27;log.log&#x27;.</pre>
+<pre>	Also in this directory are the commands &#x27;stop_monitor&#x27; and
+	&#x27;start_monitor&#x27; which, respectively, bring down and put back up the
+	Q-Link test system.  Be careful that ALL processes (except your login
+	process, of course) are dead before doing a &#x27;start_monitor&#x27;.  They
+	don&#x27;t stop instantaneously when you do a &#x27;stop_monitor&#x27;.  </pre>
+<pre>	You can leave &quot;mail&quot; for Janet by putting messages in files here with
+	names like &#x27;note_to_janet_47&#x27; (do an &#x27;ls&#x27; first to pick the next
+	number in the sequence).  Janet also leaves mail for us here, in files
+	with names like &#x27;note_to_chip_23&#x27;.  The alias &#x27;mail&#x27; will check for
+	these files from anywhere.  You just have to remember what the most
+	recent one was, as it doesn&#x27;t just show you the new messages...</pre>
+<p>Other useful command aliases we have created:</p>
+<pre>	&#x27;fixup&#x27; will rebind the regionproc, install it AND reset.  Can be
+		issued anywhere.
+	&#x27;redo&#x27; will rebind and reinstall but WON&#x27;T reset.  This is useful for
+		making a new version while you are still testing an old one.
+	&#x27;rebind&#x27; will rebind.  Only works from &#x27;bindir&#x27;.  Not useful unless
+		you know what you&#x27;re doing.
+	&#x27;tl&#x27; will print out the last ten lines of the log file (from
+		anywhere).
+	&#x27;up&#x27; will tell you what processes are running.  This is how you tell
+		if the regionproc has crashed.  The three processes to look
+		for are &#x27;MCdata&#x27;, &#x27;microcosm&#x27; and &#x27;RegionP0&#x27; (sometimes also
+		&#x27;Region.0&#x27;).
+	&#x27;nopause&#x27; always issue this command after having done a
+		&#x27;start_monitor&#x27;.  It will fix up the terminal I/O that
+		&#x27;start_monitor&#x27; always messes up (by default, the Stratus
+		always pipes ALL terminal output through something like the
+		unix &#x27;more&#x27; command, which is usually very irritating).
+	&#x27;grep&#x27; approximates the unix grep command.
+	&#x27;alias&#x27; greps through the abbreviations file, in case you forgot a
+		command or a directory name.
+	&#x27;edit filename&#x27; invokes the awful Stratus line editor.  There is a
+		copy of the Stratus commands manual (which explains the line
+		editor) on my desk.</pre>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/stratusMap.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

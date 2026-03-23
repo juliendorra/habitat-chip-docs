@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palladium - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/palladium.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Palladium Demo</h1>
+<p class="author">by how we hope to show off to best effect...</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">September 14, 1986</p>
+<h2>Rationale</h2>
+<p>The following plan is being crafted to avoid that glaring demonstrative <em>faux pas</em>, “<b>MEM FAULT</b>”.  This occurs when the Commodore 64 runs out of memory, which in turn occurs when there is too much stuff in a region for it to hold.  There is a feature to prevent this that will eventually be installed in the host system, but this feature is not yet working.</p>
+<p>We have altered the Commodore 64 software so that if it runs out of memory, instead of printing <b>MEM FAULT</b> and dying it will automagically dump you back into People Connection, whence you can re-enter Habitat.  Your Avatar will have been quietly teleported back to your turf (the presumption is that you haven&#x27;t <b>MEM FAULT</b>ed from within your turf; if you have then we&#x27;re screwed).  This is not the fatal event in front of the audience that a full-blown crash would be, but it is still to be avoided since it will be obvious to the audience that Something Didn&#x27;t Work Right.</p>
+<p>What we want to do therefor, is avoid <b>MEM FAULT</b>s altogether.  The key to this is to avoid doing anything that would cause one.  This requires 1) knowing what not to do, and 2) not doing it.  Easy, no?</p>
+<p>We will try to achieve this by planning how the demonstrations are to be executed, by rehearsing to make sure we all understand the plan, and by being very careful in our conduct of the presentation.</p>
+<h2>Avoiding MEM FAULTs</h2>
+<p>In practice, <b>MEM FAULT</b>s most commonly occur when entering a new region. What generally happens is that a region gets filled with stuff, but not <em>too</em> filled, and then somebody tries to enter it carrying enough things to push the poor little machine over the edge.</p>
+<p>Most of the regions in the world will fit in the Commodore 64&#x27;s memory with room to spare for their full load of Avatars plus several additional objects. Most of the problems we have had have been the result of everyone filling their pockets with as many random, miscellaneous items as they can carry, and then moving about the world.  Since every Avatar can carry five things in his pouch plus a sixth thing in his hands, one or two fully laden Avatars can overflow an only moderately full region quite readily.  The main tactic for avoiding <b>MEM FAULT</b>s is therefor to avoid filling your Avatar&#x27;s pockets with stuff.</p>
+<p>Many of the demo situations will be set up in advance, with the necessary props pre-positioned in the regions where they will be used.  You will enter these regions, pick up and interact with the objects you find there, and then (this is the important part) put the objects down again before you leave.  For objects that are planned, as part of the presentation, to be carried between regions, we will test in advance to be certain that they will fit without difficulty.  We also will build in as much margin for safety as we can with the props, so that if you accidently carry off an object that you shouldn&#x27;t have, usually nothing bad will happen.  However, this safety margin cannot be guaranteed.  <em>For our presentation, you should not carry around anything that is not intended as a portable prop for some planned part of the demo.</em></p>
+<h2>The Plan</h2>
+<p>This plan was designed to avoid <em>opportunities</em> to create <b>MEM FAULT</b> situations, even by accident.  The two most likely accidents, in our estimation, are memory lapse (“Oops!”) or “audience intervention”.  This plan is therefor <em>very</em> conservative and may not necessarily show off all the features of the system in the flashiest manner.  You may be tempted by the pressures of the moment to violate the plan.  Avoid this temptation! Remember: <em>if the system crashes, we all die.</em></p>
+<h2>Setup</h2>
+<p>We are currently planning on 12 online Avatars: 8 being run from stations at the Palladium and 4 being run by people back in Virginia.</p>
+<p>The Commodore 64s at the Palladium will be teamed into four pairs, chosen so that each machine is paired with another in a different part of the building. Each pair will operate together, using the medium of Habitat itself to coordinate their activities.</p>
+<p>For each of couple of stations at the Palladium, it would be nice to have an extra person to act as relief for the demonstrators and as a runner to carry messages to the other demo stations and to other Quantum, Lucasfilm, or Commodore people who might need to be communicated with.</p>
+<p>It will also be preferable to have the Commodore 64s equipped with 300 baud modems, even though Commodore will probably want to show off by using 1200 baud modems.  300 baud means that the animation will be a lot smoother and so the overall effect will be more pleasing, especially when there are multiple Avatars in a region all doing things simultaneously.</p>
+<h2>Virginia Players</h2>
+<p>The players in Virginia will have fixed region assignments: they will login in a particular region and they should not leave that region for the duration of the session.  Other Avatars will visit them, not vice-versa.  These fixed-position players&#x27; primary role will be to demonstrate the social aspects of the system: showing off <b>TALK</b> and letting the audience see multiple Avatars all wandering around in the same place at the same time.  These players are free, within the constraints of the role they are playing, to move around within the region, pick up and manipulate the objects that are there, and carry on conversations.  <em>Under no circumstances should these players attempt to leave their assigned region.</em></p>
+<p>Somebody should also be standing by in Virginia with a conventional terminal logged in to the Stratus to run Twiddle or otherwise intervene as may be required by minor emergencies.</p>
+<h2>Palladium Players</h2>
+<p>As mentioned above, the Commodore 64s at the Palladium will operate in pairs. The Avatars in each pair will move around the world more-or-less together (to demonstrate social interaction).  The more experienced of the two players in each pair will be designated the “leader” and will direct where they are to go and what they are to do.  The other player should follow along with this.</p>
+<p>Each pair will be assigned to a particular portion of the world which they should not stray from.  This is to prevent unplanned encounters with other players that might result in the dreaded <b>MEM FAULT</b>s.  The assignments of pairs to sections of the world will be thematic: each pair will show off a different aspect of the existing universe.  Each pair will have a prepared sequence of activities to demonstrate.  As the needs of the moment dictate, they are free to repeat things, skip things, rearrange the order in which they do things, and move around within the confines of their designated area. However, <em>these players should never attempt to do anything that is not on the list of “demonstrable activities”.</em></p>
+<h2>Demonstrable Activities</h2>
+<p>The following may be done with impunity:</p>
+<pre>□ Walking around (including walking between regions)
+□ Talking to other Avatars
+□ Identifying other Avatars or objects with the HELP key
+□ Hitting the color-change key
+□ Making gestures with the gesture keys
+□ Sending ESP messages to other Avatars
+□ Picking things up and putting things down again
+□ Opening and closing containers
+□ Putting things in containers (including pockets and garbage cans)
+□ Taking things out of containers (including pockets and garbage cans)
+□ Teleporting
+□ Reading mail or other documents
+□ Digging with the shovel
+□ Changing body color/pattern with the spray bottle
+□ Changing sex with the sex change machine
+□ Depositing money in the ATM
+□ Operating the Choke Machine or the parking meters (requires tokens)
+□ “Shooting” somebody with a fake gun
+□ Turning lights on and off (including the flashlight)
+□ Operating a sensor
+□ Digging with a shovel (including opening or closing a hole)
+□ Taking off your head or putting on another head
+□ Sitting in a chair or couch
+□ Mailing a letter
+□ Filling or emptying a water bottle
+□ Handing something to another Avatar (other than tokens)
+□ Stealing something from another Avatar
+</pre>
+<p>The following may be done with caution:</p>
+<pre>□ Throwing things (be careful not to throw one thing <em>behind</em> another, as you&#x27;ll never be able to pick it up again)
+□ Operating an escape device (it&#x27;ll take you back to your Turf, possibly disrupting your presentation)
+□ Flushing the garbage can (it&#x27;ll make the contents of the garbage can disappear irretrievably)
+□ Zapping somebody with a stun gun (they&#x27;ll be stunned, of course)
+□ Writing on a piece of paper (flakey?)
+□ Receiving mail (flakey?)
+</pre>
+<p>The following should only be done under controlled circumstances, as they will create new objects that could fill up memory.</p>
+<pre>□ Withdrawing money from the ATM (be sure there is room for a new token object)
+□ Paying tokens to somebody (be sure there is room for a new token object)
+□ Purchasing something from a vendo (be sure there is room for the object you are purchasing)
+</pre>
+<h2>“The Script”</h2>
+<p>This “script” is not a word-for-word canned presentation.  Instead it is a sequence of possible demonstration activities that covers the basic concepts of Habitat.</p>
+<h2>Fixed-position (Virginia) Avatars</h2>
+<p>There will be four fixed-position Avatars run by people in Virginia.  Each of these will have an assigned role to play and an assigned region to play it in. The four are:</p>
+<h2>CONSTRUCTION WORKER</h2>
+<p>The construction worker will be an Avatar with the hard-hat head.  He&#x27;ll be positioned in one of the construction zone regions off the end of one of the roads.  His schtick is to act like an enraged union worker, chasing away anyone who doesn&#x27;t belong in the construction area, saying things like “Hey! You&#x27;re not supposed to be in here!  This is a construction zone!  You could get hurt!  Can&#x27;t you read?  It says `KEEP OUT&#x27;!  This part of the world isn&#x27;t finished yet!  Go away!”  If people talk to him nicely he&#x27;ll cool off and explain that this is a new section of the world that they&#x27;re working on here that should be opening soon.  If anybody asks what they&#x27;re building, it&#x27;s a secret and shame on them for prying!</p>
+<h2>TREASURE HUNTER</h2>
+<p>The treasure hunter will be Swelldrela from the video.  She&#x27;ll be out on D&#x27;nalsi Island somewhere where there&#x27;s a hole.  She&#x27;ll have a shovel and the hole will have some goodie (like a gemstone) buried in it.  When people arrive she&#x27;ll gossip about treasure hunting and explain that she&#x27;s searching for the Jewelled Horn of The Green Bleem which she&#x27;s sure is around here somewhere... Then she&#x27;ll start digging in various places until she finds the hole, whereupon she&#x27;ll put down the shovel, reach into the hole, and extract the treasure — which will be a gemstone or whatever, not the Jewelled Horn. She&#x27;ll make snide comments to the effect of “Another stupid gem!  I&#x27;ll probably only get 20 or 30 thousand tokens for it, hurrumph!” and so on. When the visiting Avatars leave, she should re-bury the treasure to get ready for the next round of demonstration.</p>
+<h2>BOGUS BANDIT</h2>
+<p>The bogus bandit will be the Mung The Mellifluous character from the video. He&#x27;ll be standing on a street corner with the fake gun.  He&#x27;ll make a show of trying to rob people, then fire the gun with the flag popping out that says “BANG!” and, ha, ha, it&#x27;s only a joke.  His “victims” can either react with amusement, in which case he&#x27;ll banter with them jovially, or with irritation, in which case he&#x27;ll get defensive and childish.  When the visiting Avatars leave, he needs to reset the fake gun so that the BANG! flag is no longer showing.</p>
+<h2>BARTENDER</h2>
+<p>The bartender will be the Valentino character from the video.  He&#x27;ll be standing behind the bar in Kelly&#x27;s Bar &amp; Grill.  When people come in he&#x27;ll tell jokes and try to get them to tell their troubles.  If somebody tries to order a drink he&#x27;ll do a schtick like the Monty Python cheese shop bit.</p>
+<h2>Mobile (Palladium) Avatars Common Actions</h2>
+<p>There will be eight mobile Avatars run by people in the Palladium.  They will be grouped into pairs who will travel around the world together.  Each pair will run together through a the same rough sequence, starting out in their turves, stepping out into the world, meeting up with each other, and then going off to see what&#x27;s to see.  There will then be four separate thematic areas to be visited, one assigned to each pair.  This assignment, by the way, is to try to ensure that we never have people meeting up in an unplanned manner.  The common starting routine for each pair is as follows:</p>
+<h2>. AVATAR STANDING IN TURF</h2>
+<p><em>We start out with two Avatars inside adjacent turves.  Minimal props for each turf region include a couple of different body sprayers, a Change-O-Matic, and a chest of drawers.  The Avatars should each have a token object in their pockets of some large denomination (large enough that it won&#x27;t be all used up over two and a half hours of demonstrations).  Each does the following:</em></p>
+<pre>Make introductory remarks. 
+Explain that it&#x27;s an imaginary world that you visit using your Commodore 64 or
+	128 computer, your telephone, and a modem.
+Explain that the character on the screen is an Avatar and that you control him.
+Describe customization. 
+Explain the basic commands <b>GO</b>, <b>GET</b>, <b>PUT</b>, and <b>DO</b>.
+Demonstrate commands and some Avatar customization by picking up body sprayer,
+	changing the color of a body part, and then putting the sprayer down again.
+Sit in chair.
+Explain about turf.
+Stand up from chair.
+Demonstrate some turf customization by picking up Change-O-Matic and changing
+	the walls and furniture.
+Demonstrate containers by putting Change-O-Matic or a sprayer into the chest
+	of drawers (opening and closing the chest, of course).
+Walk to door, open it, and go out.</pre>
+<h2>. AVATAR STANDING IN FRONT OF HOUSE</h2>
+<pre>Talk about turf some more, this time emphasizing relationship to rest of world.
+Explain about regions.</pre>
+<p><em>Only one of the two Avatars in the pair:</em></p>
+<pre>Demonstrate walking from one region to another by walking next door.</pre>
+<h2>. NEXT REGION, NEIGHBOR AVATAR APPEARS</h2>
+<p><em>The two Avatars are now in the same region, the first one having walked next door to the front of the other one&#x27;s turf, where the other one is waiting as the result of Scene 1.</em></p>
+<pre>Explain that you aren&#x27;t alone in this world, that everyone else who is
+	connected to Habitat at the same time is also there with you.
+Demonstrate asynchronous activities by each moving around so that the other can see.
+Explain the <b>TALK</b> command.
+Carry on a conversation with each other (“Hello” etc.) that eventually leads
+	to the two of you deciding to go downtown (or wherever) together.
+Both walk next door to the region with the TelePort booth in it.</pre>
+<h2>. BOTH AVATARS IN TELEPORT BOOTH REGION</h2>
+<pre>Explain tokens as the form of money in Habitat.
+Explain Trust Funds.
+Possibly tell anecdote about the National Leisure Act.
+Show off token object and demonstrate the operation of pockets by getting
+	token out of pockets.
+Explain about TelePorts as an alternative to walking. 
+Converse to decide where to Port to, settling on the Port address of wherever
+	you want to show off next.
+Each in turn should get in booth, put in their money, and Port away to the
+	agreed upon address (upon arrival they should put their remaining
+	tokens back in their pockets).</pre>
+<h2>Mobile (Palladium) Avatars Individual Actions</h2>
+<p>In addition the above routine which everybody runs through, each pair of mobile Avatars visits a particular part of the world and does things there. Each pair also has a “rendezvous point” where they can bump into one of the other pairs for a four-Avatar <em>tete-a-tete</em>.</p>
+<h2>UPTOWN PAIR</h2>
+<p>The Uptown Pair start out at turves on Bleem St., in numbers 18 and 28.  This provides convenient access to the TelePort booth at the North end of the street (which is to the left as you face towards their houses).  They are free to wander Bleem St. and also Foon Ave. to the east (see map), though, of course, residential neighborhoods all pretty much look alike.  They will nose around the north half of the business district (they should get there by TelePort).  Valid regions for them visit in the business district include the north side Plazas, the north side streets, the Bank, the Bar, the Pawnshop and the Head Shop.  They won&#x27;t be able to go into the Hall of Records (we&#x27;ll lock the door).  They shouldn&#x27;t try to purchase anything from the vending machines nor carry off any of the loose objects laying about in any of the buildings. They should not pick up <em>anything</em> in the Pawnshop.  They can also visit the east and west Plazas and the Fountain of the Oracle, where they may encounter the Downtown Pair.  They should not attempt to communicate with the Oracle.  If they go into the Bar they&#x27;ll meet the Bartender with whom they can banter.  If they want to play around with the TelePort system, valid TelePort addresses for them to try are:</p>
+<pre><b>Foon Ave Cross</b>
+Bleem St Cross
+Bleem St N End<em> (this is the booth near their turves)</em>
+<b>Plaza NE</b><em> (this is the canonical business district address)</em>
+<b>Plaza NW</b></pre>
+<h2>DOWNTOWN PAIR</h2>
+<p>The Downtown Pair start out at turves on Dice Ave., in numbers 11 and 21. This provides convenient access to the TelePort booth at the south end of the street (which is to the left as you face towards their houses).  They are free to wander Dice Ave. and also Mince St. to the east (see map), though, of course, residential neighborhoods all pretty much look alike.  They will nose around the south half of the business district (they should get there by TelePort).  Valid regions for them visit in the business district include the south side Plazas, the south side streets, the News Stand, the General Store, and the Meeting Hall.  They won&#x27;t be able to go into the Clothes Store or the Furniture Store (we&#x27;ll lock the doors).  They shouldn&#x27;t try to purchase anything from the vending machines nor carry off any of the loose objects laying about.  They can also visit the east and west Plazas and the Fountain of the Oracle, where they may encounter the Uptown Pair.  They should not attempt to communicate with the Oracle.  If they go left from the south-east corner of downtown (Rodeo Dr. on the map) they&#x27;ll go into the Construction Zone, where they&#x27;ll meet the Construction Worker who will yell at them for getting into mischief.  If they want to play around with the TelePort system, valid TelePort addresses for them to try are:</p>
+<pre><b>Dice Ave Cross</b>
+Dice Ave S End<em> (this is the booth near their turves)</em>
+<b>Dice Ave N End</b>
+Plaza SE
+Plaza SW<em> (this is the canonical downtown address)</em></pre>
+<h2>D&#x27;NALSI ISLAND PAIR</h2>
+<p>The D&#x27;nalsi Island Pair start out at turves on Wacka Rd., in numbers 19 and 29.  This provides convenient access to the TelePort booth at the east end of the street (which is to the left as you face towards their houses).  They are free to wander Wacka Rd. and also Kings Rd., Cross Rd., Wazoo St. and Spiff Ln. to the north (see map), though, of course, residential neighborhoods all pretty much look alike.  They will nose around D&#x27;nalsi Island (they should get there by TelePort) and the Desert.  They can go anywhere on D&#x27;nalsi Island or the Desert (though they should be careful in the Desert as they might get lost).  At the location on D&#x27;nalsi Island designated on the map, they&#x27;ll meet the Treasure Hunter who will stage a treasure finding for them.  If they want to play around with the TelePort system, valid TelePort addresses for them to try are:</p>
+<pre><b>Wacka Rd Cross</b>
+Wacka Rd E End<em> (this is the booth near their turves)</em>
+<b>Wacka Rd W End</b>
+Spiff Ln Cross
+Spiff Ln W End
+Dnalsi Island<em> (this is the ideal way to reach the island)</em>
+Desert Heart<em> (this is the ideal way to reach the desert)</em></pre>
+<p>They can also get to the Desert and D&#x27;nalsi Island by walking.  D&#x27;nalsi Island is south (upward) from Wacka Rd. Cross and the Desert is north (upward) from Spiff Ln. Cross.  (See the map.)</p>
+<h2>FOREST PAIR</h2>
+<p>The Forest Pair start out at turves on Randy Rd., in numbers 13 and 23.  This provides convenient access to the TelePort booth at the east end of the street (which is to the left as you face towards their houses).  They are free to wander Randy Rd. and also Aric Ave., Over Ave., Wrong Wy. and This Way. to the north (see map), though, of course, residential neighborhoods all pretty much look alike.  They will nose around the Forest (“The Back 40”) and the Beach (they should get there by TelePort and walking).  They can go anywhere in these realms.  At the location in the Forest designated on the map, they&#x27;ll meet the Bogus Bandit who will stage a mock holdup.  If they want to play around with the TelePort system, valid TelePort addresses for them to try are:</p>
+<pre><b>Randy Rd Cross</b>
+Randy Rd E End<em> (this is the booth near their turves)</em>
+<b>Randy Rd W End</b>
+This Way Cross
+This Way W End
+This Way E End</pre>
+<p>To get to the Forest they should walk south (upwards) from Randy Rd Cross.  To get to the Beach they should walk north (upwards) from This Way Cross.  (See the map.)</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/palladium.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

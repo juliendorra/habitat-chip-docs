@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Batch Processes - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/batch.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Batch Processes</h1>
+<p class="author">by Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">March 19, 1987</p>
+<p class="doc-number">Habitat Document # 41</p>
+<h2>Introduction</h2>
+<p>This document describes various batch programs that we will to run regularly in order to maintain the Habitat world.  As with several other Habitat definition documents, this is not intended to be the final word on its subject.  Each of the processes here should be run periodically, during off-hours, with the frequency depending on what is being done.  (We are curious what is done on the weekends with processes that want to run daily, since there are no weekend off-hours.)</p>
+<ul class="bullet">
+<li><em>Hall Of Records</em> — sifts through the region, avatar and records databases and produces updated text for the Book of Records document.  Run daily.</li>
+<li><em>Garbage Collection</em> — cleans up debris left scattered about the world by the activities of the players.  Run daily.</li>
+<li><em>Stock Market</em> — adjusts the buying and selling prices of stocks and other securities in the Habitat Stock Market game.  Run daily.</li>
+<li><em>Rent Collection</em> — collects rents for commercial property from the renting Avatars&#x27; bank accounts.  Run weekly.</li>
+<li><em>Internal Stats Summary</em> — collects various pieces of information about the world and produces a summary printout.  It is a management tool for the maintainence of the world.  Run daily.</li>
+<li><em>Cat Mover</em> — moves the various house cats around.  It is a minor bit of silliness to liven up the world.  Run daily.</li>
+</ul>
+<h2>Hall Of Records</h2>
+<p>The Hall of Records process must assemble the text for the most up to date edition of the Book of Records.  This text is associated with the plaques in the Hall of Records as well as with any copies of the Book of Records that may be in the hands of individual Avatars.  The records themselves are described in more detail in the document <em>Hall of Records</em> (Habitat document #32). The Book of Records is assembled from information in the records and avatar databases.</p>
+<p>The Book of Records consists of one page per record category, plus a table of contents and an introduction page.  Each record page consists of a paragraph describing the record category and then the record information itself.  For some categories we post the name of an individual record holder, while with others we give a list of the top N record holders.  The format of each page is fixed.  All that is updated by the Hall of Records process is the names and scores of the various record holders.  The specific text for each page and the formula for computing the record holders will be provided in a separate document (a revision of document #32).</p>
+<h2>Garbage Collection</h2>
+<p>This process is described in the document <em>Garbage Collection for Habitat</em> (Habitat document #39).  Please refer to that document for the gory details.</p>
+<h2>Stock Market</h2>
+<p>This process manages the market fluctuations for the Habitat Stock Market game.  The game works as follows:  We have created a special style of book object that looks like a stock certificate.  These objects will represent the securities themselves (and will contain text describing which fictitious company they represent shares in and how many shares they represent).  In downtown Populopolis there is a Stock Exchange, which is a series of regions containing vending machines and pawn machines.  These machines provide for buying and selling, respectively.  At any given time, the vendos will sell a given security for a particular price and the pawn machines will buy it back for that price minus a certain percentage representing the “broker&#x27;s commission”.  However, these prices will fluctuate with time.  In order to “play the market”, players must make guesses as to the chances that a given security&#x27;s price will go up or down, and bet accordingly.</p>
+<p>Initially, the Stock Market game will be a purely statistical gambling game — the prices fluctuations of the various securities will be random.  As we have the time and player interest, we can start introducting non-random elements, such as tying the values of stocks to particular events in the habitat world, and allowing players to incorporate their own companies and sell their stock on the Exchange.  To begin with, however, it&#x27;s going to be rolling dice all the way.</p>
+<p>The way it will work is as follows: the host will keep a table with an entry for each stock.  This table associates with each stock a probability that it will go up or down and probabilities that will determine the amount of change in each direction.  The table also contains the current price of the stock and tells which entries in which vendos and pawn machines should be updated when the price changes.  The probabilities should be adjusted from time to time to prevent the simulated market from becoming too predictable.  For each entry in the stock table, the Stock Market process should generate a new value for the stock on the basis of the probability entries, updating the appropriate vendos and pawn machines to match.</p>
+<h2>Rent Collection</h2>
+<p>Certain regions in the downtown areas will be set aside as player-operated businesses.  These regions are “rented” to the players on a week-to-week basis.  The host will keep a table of information about each of these, telling the region number, tenant Avatar and rent.  Once a week, the amount of the rent is deducted from the Avatar&#x27;s bank account.  If there is not enough money, the Avatar is evicted.  Eviction simply consists of returning the region to the list of regions available for rental — we can worry about removing the contents later.</p>
+<h2>Internal Stats Summary</h2>
+<p>The Internal Stats Summary is a maintainence tool for the system operators. It is similar to the Hall of Records process, except that it gathers additional information and generates a summary file rather than a Habitat text database entry.  The specifics will be described together with the Hall of Records in a forthcoming document.</p>
+<h2>Cat Mover</h2>
+<p>The Cat Mover is a little bit of silliness.  Priority for implementation can be relatively low.  The idea is that we move all the house cats around on a regular basis.  For each cat in the object database, we compute a new position based on some random numbers.  Typically there will be a small number of places in any given turf where a cat can go (i.e., on a couch, in a chair, in the chest of drawers, certain positions on the floor).  One of these is selected at random with an equal probability for each.  In addition, each time a cat is moved there is a small chance that it will seek a new owner.  If this happens, we pick a turf at random from the entire set of turves in the world, subject only to the condition that there is not already a cat there.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/batch.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report December - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/reportDecember.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Report January 8, 1986</h1>
+<p class="author">by “Because we thought you&#x27;d want to know”</p>
+<p class="institution">Chip Morningstar, Lucasfilm Ltd. Games Division</p>
+<h2>Introduction</h2>
+<p>This is the second in a series of monthly reports detailing the progress on the <b>MicroCosm</b> project at Lucasfilm.  This report describes events and achievements during the month of December, 1985.</p>
+<h2>Work In Progress/Tasks Accomplished</h2>
+<p>We met our December 15 milestones and delivered as planned.</p>
+<p>Aric Wilmunder finished the revisions to GRACE, our animation cel editor. Using this editor, our animator, Gary Winnick, has begun work on the avatar. We jointly arrived at a specification for the required animation (a list of the motions and postures that will be required).  From this he has started designing the precise set of cels that will, in various combinations, realize the spec.  The first look at this indicates that it may require fewer cels (and therefore less storage) that originally anticipated.</p>
+<p>With the cel editor finished, Aric has started work on the MicroCosm animation driver.  Starting with the basic routines created by Charlie Kellner (see previous month&#x27;s report for details), he has begun the skeleton around which all MicroCosm graphics will hang.  We hit one snag in this area, in that the original method that we intended to use for rendering animation proved to be too slow when a large number of animated characters were placed on the screen at one time.  Six to eight avatar-sized figures brought the frame rate down to 2-3 frames per second, which we find unacceptable.  After some thought we regrouped and have started over with a different animation process (though one which results in visually similar animation) that is two to four times faster. This seems to be working well.</p>
+<p>Randy Farmer has finished the basic components of the player interface.  We know have a working Balloon-O-Matic text display system, keyboard and joystick input handling routines, and working cursor and action-menu sprites. The only component of the player interface now missing are the routines which determine what object on the screen the cursor is pointing at.  For efficiency, these will be part of the animation engine and so must wait until that is further along.</p>
+<p>Randy Farmer is now working on the communications software.  We have received Quantum&#x27;s Q-Link communications protocol software and are now in the process of integrating this with our own system.  This includes translating the source into the format required by our proprietary assembler, Macross, and linking it together with the beginnings of the MicroCosm message handling software. Also, one unexpected problem has developed in this area.  We had not realized that the Q-Link software used the Commodore 64&#x27;s own ROM kernel to handle the RS232 interface to the modem.  Since we wish to bank out the Commodore ROM to recover the extra memory space which it occupies, we must now write our own interrupt-driven RS232 routines.  Randy has begun work on this and seems to be having few difficulties.  In spite of this problem, we anticipate being able to establish data communications between our system-under-development and the Q-Link host in time to meet the January 15 deadline.</p>
+<p>I have drafted a preliminary object set design document which lays out the set of basic objects we will be implementing as part of the MicroCosm fantasy world.  We held a full-Division brainstorming meeting to discuss the object set and the fantasy itself.  Lots of good ideas and criticisms were generated at this meeting and these are now being incorporated into the formal design.</p>
+<p>I also drafted a set of guidelines for the design and layout of the world itself, circulated this among the Division members, and held yet another design meeting in which we generated a very rough preliminary world map.  This map is likely to evolve beyond recognition as we develop the world, but it at least provides us with a starting point for such development.</p>
+<h2>Tasks For January</h2>
+<p>During January we plan to finish the communications software and polish the object set design.  Both of these will be done by the middle of the month in order to meet our January deliverables requirements.  In addition, we intend to continue work on the avatar animation and begin artwork for the objects themselves.  We will also start work on the home-system object database software.</p>
+<p>We are on target for our January 15 milestones.  We expect to deliver as planned.</p>
+<h2>Quantum Comments</h2>
+<p>Mid-month we received the Q-Link communications software source code as we had requested.  We are about at the point where we will need access to the Quantum host development system to work on the object definitions that will go in the host database.  During early January we will meet with Marc Seriff and Janet Hunter to discuss the technical specifics of the host database processor so that they can begin work on it.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/reportDecember.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

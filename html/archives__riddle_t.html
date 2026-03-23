@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riddle - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/riddle.t" style="font-size:0.85em;">View source</a></div>
+<h1>Riddle: Region Internal Database Description LanguagE</h1>
+<p>Riddle: Region Internal Database Description LanguagE</p>
+<p>May 27, 1986</p>
+<p>There are two forms of Riddle: &quot;Human-Level Riddle&quot; and &quot;Machine-Level Riddle&quot;.  The latter is a roughly syntax-free, highly encoded form of the latter, and is optimized for easy parsing and terseness.  The former is what people will mostly use.</p>
+<p>This is the definition for &quot;Human-Level Riddle&quot; (which we call simply &quot;Riddle&quot;):</p>
+<p>A Riddle file consists of one or more Riddle statements.  There are five types of statements: include, assignment, macro-assignment, object-use and object-definition.</p>
+<p>The include statement has the form:</p>
+<pre>	include &quot;&lt;filename&gt;&quot;;</pre>
+<p>where &lt;filename&gt; is the name of a file to include, expressed as a string constant.  It does what you expect.</p>
+<p>The assignment statement has the form:</p>
+<pre>	&lt;name&gt; = &lt;expression&gt;;</pre>
+<p>while the macro-assignment statement has the form:</p>
+<pre>	&lt;name&gt; @= &lt;expression&gt;;</pre>
+<p>The two are similar in that they both assign a value to an identifier, &lt;name&gt;. However, the nature of the value is different:  The ordinary assignment statement computes the value of &lt;expression&gt; and makes that computed value the value of &lt;name&gt;.  Further references to &lt;name&gt; result in this value.  The macro-assignment statement, on the other hand, merely assigns the expression &lt;expression&gt; itself to be the value of name, and each time &lt;name&gt; is referenced, &lt;expression&gt; is recomputed and the resulting value used.  In other words, macro-assignment defers the computation of &lt;expression&gt; and always results in the value that &lt;expression&gt; would have if it were substituted directly for &lt;name&gt;.  If the values of any of the terms in &lt;expression&gt; change between references to &lt;name&gt;, then the corresponding value that results from a reference to &lt;name&gt; will also change.</p>
+<p>The object-use statement describes an instance of an object which is to be inserted in the present context.  Its form is:</p>
+<pre>	&lt;objectCall&gt; &lt;objectClass&gt; &lt;globalObjectId&gt; {
+		&lt;properties&gt;
+		&lt;contents&gt;
+	}</pre>
+<p>The interpretation of this is: create an object of the sort indicated by &lt;objectCall&gt; with class &lt;objectClass&gt;, assign it the global object identifier &lt;globalObjectId&gt; and give it the property values specified by &lt;properties&gt; and the contents specified by &lt;contents&gt;.  Any of these elements by be omitted, except that (ultimately) you must specify a class for the object, either directly, or somewhere in the chain of &lt;objectCall&gt;s.</p>
+<p>&lt;objectCall&gt; has the form:</p>
+<pre>	@ &lt;name&gt;</pre>
+<p>and, if given, indicates that the object being defined is to be based on the previously defined object &lt;name&gt; that was created with an object-definition statement (described below).  If omitted, the object specification is taken solely from the specified information that follows.</p>
+<p>&lt;objectClass&gt; is an &lt;expression&gt; that specifies the class number of the object being created.  If a class is not given, it is derived from &lt;objectCall&gt;. Ultimately, all object must have a class specified.</p>
+<p>&lt;globalObjectId&gt; has the form:</p>
+<pre>	$ &lt;expression&gt;</pre>
+<p>The expression must result in a number.  This number will become the object&#x27;s database identifier key.  It can be omitted (and, I think, usually will be), in which case the Riddle processor will assign one.</p>
+<p>&lt;properties&gt; are the properties to be associated with the object.  This is zero or more elements of the form:</p>
+<pre>	&lt;offset&gt;: &lt;data&gt;;</pre>
+<p>where &lt;offset&gt; is an expression resulting in a numeric offset into the object descriptor (usually this will be a single identifier, whose value is set up ahead of time, naming the offset of an object state variable).  &lt;data&gt; is one or more &lt;expression&gt;s, separated by commas.  Each property element assigns the given data elements into the successive bytes of the object descriptor indicated by &lt;offset&gt;.</p>
+<p>&lt;contents&gt; has the form:</p>
+<pre>	[ &lt;objectUse&gt; &lt;objectUse&gt; ... ]</pre>
+<p>i.e., one or more object-use statements, enclosed in brackets.  The object-use statements define objects which are to be created as the contents of the object being declared here.  If no &lt;contents&gt; element is specified, then the object will have no objects in its contents vector (which it shouldn&#x27;t have anyway unless it is some sort of container).</p>
+<p>The object-definition statement has the form:</p>
+<pre>	&lt;name&gt; # &lt;objectUse&gt;</pre>
+<p>It defines &lt;name&gt; to be an object of the form indicated by the object-use statement &lt;objectUse&gt;.  This object-use statement is exactly as described above.</p>
+<p>Expressions can take the following forms:</p>
+<pre>	&lt;name&gt;					the value of identifier &lt;name&gt;
+	&lt;number&gt;				a numeric constant
+	&lt;string&gt;				a string constant
+	( &lt;expression&gt; )			the value of the expression
+	~ &lt;expression&gt;				bitwise complement
+	- &lt;expression&gt;				arithmetic negation
+	&lt;expression&gt; + &lt;expression&gt;		addition
+	&lt;expression&gt; - &lt;expression&gt;		subtraction
+	&lt;expression&gt; * &lt;expression&gt;		multiplication
+	&lt;expression&gt; / &lt;expression&gt;		integer division
+	&lt;expression&gt; % &lt;expression&gt;		integer modulus
+	&lt;expression&gt; &amp; &lt;expression&gt;		bitwise AND
+	&lt;expression&gt; | &lt;expression&gt;		bitwise OR
+	&lt;expression&gt; ^ &lt;expression&gt;		bitwise XOR</pre>
+<p>A &lt;name&gt; can be any string of alphabetic characters, digits, and &#x27;_&#x27;, that does not start with a digit.</p>
+<p>A &lt;number&gt; can be any of the standard number formats we use: a decimal number (any sequence of decimal digits that does not start with 0), an octal number (any sequence of octal digits preceded by &#x27;0&#x27;), a hex number (any sequence of hexadecimal digits preceded by &#x27;0x&#x27; or &#x27;0X&#x27;), a binary number (any sequence of 0 and 1 preceded by &#x27;0b&#x27; or &#x27;0B&#x27;), a quarter (any sequence of base-4 digits preceded by &#x27;0q&#x27; or &#x27;0Q&#x27;) or an ascii character enclosed in single quotes (with the usual \ escape sequences).</p>
+<p>Any &lt;expression&gt; can be followed by a &lt;typeSpecifier&gt; of the form:</p>
+<pre>	.b
+	.w
+	.l</pre>
+<p>&quot;.b&quot; indicates that the value is to be treated as a byte (the default).  &quot;.w&quot; indicates that the value is to be treated as a word (two-byte quantity, high order byte first).  &quot;.l&quot; indicates that the value is to be treated as a long (four-byte quantity, high byte to low byte).</p>
+<p>A &lt;string&gt; is any sequence of characters enclosed in double quotes, with the usual \ escape sequences.</p>
+<p>At the top-level, the only object-use statements allowed are ones that create region objects, i.e., ones in which the &lt;objectType&gt; is 0.</p>
+<p>Object-definition statements may be used to declare completely or partially specified objects for use inside the regions.</p>
+<p>Simple, no?</p>
+<p>Also, of course, whitespace may be freely used for formatting, and comments may be inserted at almost any point bracketed by &quot;/*&quot; and &quot;*/&quot;.</p>
+<p>This is the definition for &quot;Machine-Level Riddle&quot;:</p>
+<p>Semantically, machine-level Riddle is a subset of the above, with the following differences:</p>
+<pre>	1) No assignment, macro-assignment or include statements are allowed.
+	2) All expressions must be replaced with simple decimal numbers.
+	3) All type specifiers must be explicit.
+	4) The containment relationship is &quot;unfolded&quot;, i.e., objects indicate
+		which other object they are contained in, instead of listing
+		the objects they themselves contain.</pre>
+<p>In other words, it&#x27;s just like the above, except that EVERYTHING must be already evaluated.</p>
+<p>Syntactically, it is quite different, being encoded in a form that requires essentially no parsing beyond that already performed by conventional formatted input routines.</p>
+<p>A Machine-level Riddle file consists of a number of lines, each of which contains one or more decimal integers, separated by spaces.  Each line has the form:</p>
+<pre>	&lt;codeNumber&gt; &lt;otherStuff&gt;</pre>
+<p>Where &lt;codeNumber&gt; is a number that encodes the meaning of the line, and &lt;otherStuff&gt; is any number of additional numbers that are interpreted on the basis of &lt;codeNumber&gt;.  By this means we can have &quot;statements&quot; without resorting to parsing.  There are two basic machine-level Riddle &quot;statements&quot;: object-use and object-definition.</p>
+<p>The object-definition statement consists of a line of the form:</p>
+<pre>	1 &lt;objectNumber&gt;</pre>
+<p>followed by an object-use statement.</p>
+<p>The &#x27;1&#x27; encodes the fact that this is an object-definition statement, and &lt;objectNumber&gt; is the identifier assigned to the object being defined.  The body of the object-use statement that follows becomes the definition of object number &lt;objectNumber&gt;.</p>
+<p>An object-use statement consists of a line of the form:</p>
+<pre>	2 &lt;objectNumber&gt; &lt;class&gt; &lt;globalId&gt; &lt;container&gt;</pre>
+<p>followed by zero or more property definitions (described below), followed by a line of the form:</p>
+<pre>	3</pre>
+<p>The &#x27;2&#x27; encodes the start of the object specification.  &lt;objectNumber&gt; is the number of an object previously defined using an object-definition statement, on top of whose definition this object is to be constructed.  &lt;objectNumber&gt; should be &#x27;-1&#x27; if no earlier object definition is to be referenced.  &lt;class&gt; is the class number of the object being created, or &#x27;-1&#x27; if no class number is to be specified at this time.  &lt;globalId&gt; is the global database identification number of the object being created, or &#x27;-1&#x27; if no such identifier is to be assigned at this time, or &#x27;0&#x27; if one should be generated and assigned automagically.  &lt;container&gt; specifies the another object in which this object is to be contained.  A negative number of the form, -N, indicates that this object is contained by the object with global object identifier N (this way we can refer to objects outside the Riddle file that are already in the database).  A positive number M indicates the ordinal of the containing object in the Riddle file, i.e, the object described by the Mth line that started with a &#x27;2&#x27;.  A &#x27;0&#x27; indicates that this object is contained by the database at large.  In such a case the object ought to be a region.</p>
+<p>The &#x27;3&#x27; encodes the end of the object specification.</p>
+<p>A property definition specifies one of the properties of an object.  It is a line of the form:</p>
+<pre>	4 &lt;offset&gt; &lt;dataCount&gt; &lt;data&gt;</pre>
+<p>The &#x27;4&#x27; encodes that this line is a property definition.  &lt;offset&gt; is a number that is the offset into the object instance vector corresponding to the property being specified here.  &lt;dataCount&gt; is the number of data values being assigned.  Its value is usually 1.  &lt;data&gt; is precisely &lt;dataCount&gt; number specifiers that indicate the value(s) of the property specified by &lt;offset&gt;. Each such number specifier has the form:</p>
+<pre>	&lt;type&gt; &lt;value&gt;</pre>
+<p>Where type is 1, 2 or 4, indicating byte, word or long values respectively, while value is the actual number value.</p>
+<p>For the convenience of the processor that reads this stuff, there are also lines of the form</p>
+<pre>	5 &lt;number&gt;</pre>
+<p>Which indicates that no further contents for object &lt;number&gt; will be found in this file.  &lt;number&gt; is encoded as the &lt;container&gt; field above is encoded: a negative number -N indicates that there are no further contents objects for the object with global id N, while a positive number M indicates that there are no further contents for the Mth object specified in the file.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/riddle.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

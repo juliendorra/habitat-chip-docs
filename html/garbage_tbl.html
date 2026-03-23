@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garbage Collection - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/garbage.tbl" style="font-size:0.85em;">View source</a></div>
+<h1>Garbage Collection for Habitat™</h1>
+<p class="author">by Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">February 25, 1987</p>
+<p class="doc-number">Habitat Document # 39</p>
+<h2>Introduction</h2>
+<p>This document begins the process of defining off-line batch tasks that must be run periodically in order to maintain the <em>Habitat</em> world.  One of the first such maintainence tasks to consider is garbage collection.  This is the removal from public places of various objects that are considered debris or clutter, so that these places do not become overly congested and thus inhibit normal operation.</p>
+<p>We envision the garbage collector as a program that is run during off hours (i.e., during the day) which scans the entire <em>Habitat</em> database and removes selected objects to “limbo” based on some rules which will be defined here.  There will likely be two versions of the garbage collector. One version is run daily while the other is run less frequently, e.g., monthly.  The daily sweep handles the basic maintainance task of policing up random objects.  The monthly sweep is concerned with longer term changes in the world, particularly the reclamation of the Avatars and Turves of inactive or deleted accounts.</p>
+<h2>The Daily Sweep</h2>
+<p>The garbage collection process consists of making a decision about each object in the database — Does it belong here?  This decision is based on two pieces of information: what kind of object it is and where it is located.  We will consider location first.</p>
+<p>Objects are either contained inside other objects or they are in regions.  For our mission here, we only need to be concerned with objects that are in regions.  Decisions about objects in containers will be made on the basis of the container.  In other words, if the container goes to limbo, then its contents automatically go with it.  If the container stays, then its contents also stay.  For garbage collection purposes, regions may be divided into three broad categories: private regions, public regions, and “semi-public” regions.</p>
+<p>Private regions include Turves and leased shop space.  Each of these regions is the exclusive province of some player and we will leave it up to the player to decide what should or should not be there.  Policing the private regions is up to the players themselves.</p>
+<p>Public regions include downtown areas, major roads, and the interiors of various system-run service establishments.  It is very important that these regions be kept clear of debris, since they are high-traffic areas.  The garbage collector should be strict in deciding what doesn&#x27;t belong in these regions.</p>
+<p>What we are calling “semi-public” regions include such things as forests, deserts, and other public but lower traffic places.  As with public regions, these too need to be kept clear, but we can be a little looser in our interpretation of what is allowed to stay.  This way, interesting objects can be left laying around for people to find.</p>
+<p>Which of these three cases applies to a particular region is determined by looking at the region&#x27;s <code>owner</code> property.  A value of <code>0</code> indicates that it is a public region.  A value of <code>1</code> (???) indicates a semi-public region.  Any other value indicates a private region.</p>
+<p>As with regions, we also group objects into categories.  A complete list of each object class and its corresponding category is found in the Appendix to this document.  There are eight categories:</p>
+<ul class="bullet">
+<li><em>Scenic</em> — these objects are the background building blocks of the world.  They include such things as trees, walls, ground, and so on.  They are immune to garbage collection.  In general, Scenic objects are immobile (i.e., they have no <b>GET</b> behavior) and their placement is not a matter of player choice.</li>
+<li><em>Internal</em> — these objects are associated with the internal details of the operation of the system.  They include such things as test objects as well as the Avatars themselves.  As with Scenic objects, they are immune to garbage collection.</li>
+<li><em>Valuable</em> — these are objects of immediate value to anyone who finds them.  They include Tokens and magical artifacts of various sorts. Though they can clutter the world, they are not likely to be left unattended for long before somebody picks them up.  Since finding one of these objects is fun and rewarding for the players, we won&#x27;t garbage collect them.</li>
+<li><em>Mathom</em> — these are the run-of-the-mill objects that players can pick up and carry around.  This category includes both objects which are mere props, such as knick-knacks and balls, and objects which are valuable or useful, such as escape devices or guns.  In general, we want to garbage collect these items from public places, but leave them unmolested in semi-public and private places.</li>
+<li><em>Dual</em> — these are objects which may be treated either as Scenic objects or Mathom objects, depending on whether they can be picked up and carried.  Currently, there are only two classes in this category, rock and flag.  The <code>mass</code> property distinguishes Scenic from Mathom.</li>
+<li><em>Container</em> — this category includes only those containers which may be picked up and carried (immobile containers are Scenic objects).  These objects are little peculiar.  If they are empty, then they are just Mathoms.  However, if they have something in them then the judgement becomes a little more complex.  We would propose the establishment a Lost-and-Found shop in each downtown area, and move these objects there, where they may be claimed by any passers by, instead of transferring them to limbo.</li>
+<li><em>Book</em> — books need to be treated specially.  In general, they can contain valuable information and so should not be swept up unconditionally. However, there can be a proliferation of these objects due to the availablity of cheap printing (i.e., vending machines).  We propose separating the space of text-identifiers into two groups: long term documents and short term documents.  The latter includes things like the <em>Weekly Rant</em> and other periodicals, as well as clues for treasure hunts and the like.  The former includes works of literature and reference materials.  The idea is that short term documents should be garbage collected, since they are easily replaced (indeed, if one of these is just left laying around, it may well be the case that nobody wants it any more) and often contain material that is quickly outdated.  Long term documents should go to the Lost-and-Found.</li>
+<li><em>Paper</em> — like books, paper needs to be treated specially.  As with books, pieces of paper can contain valuable information and so should not be swept up unconditionally.  However, there can be a proliferation of these objects due to the ease with which new pieces of paper can be created, and paper is probably going to be the largest source of garbage objects in the system.  We propose the following rules.  Paper in public spaces is always garbage collected.  Paper in private and semi-public spaces is garbage collected if it is older than some age (we propose 1 month to begin with). Whether we track the age in the text database entries or in the objects themselves is immaterial to the design, though for technical reasons one or the other may be preferred.  Paper should also be an exception to the rule that objects in containers are not garbage collected.  We should always look at paper objects no matter where they are found (except in the mail slot of Avatars&#x27; pockets, of course).</li>
+</ul>
+<p>There are a couple of general exceptions to the above rules.  The first is that any object whose <code>restricted</code> bit is set is immune to garbage collection.  The second is that any object whose container is a garbage can is automatically garbage collected (i.e., we flush all garbage cans nightly).  In the case of conflict between these two rules, the first takes precedence, although it should not be possible to ever put restricted objects into garbage cans in the first place.</p>
+<p>Finally, there are a couple of picyune exceptions to the above rules: an escape device should be garbage collected if its <code>charge</code> property is less than 1, as should a drugs object if its <code>count</code> property is less than 1.</p>
+<h2>The Monthly Sweep</h2>
+<p>Although the daily garbage collection will ensure that the world does not become unduly cluttered, there is still a problem with consumption of certain resources.  In particular, Turves represent an important recyclable commodity. We wish to be able to reclaim the property of deceased or inactive Avatars.</p>
+<p>Avatars who are candidates for this reclamation include those associated with deleted accounts, of course.  However, we also wish to eliminate those Avatars associated with accounts that are active in the greater Q-Link system but not in <em>Habitat</em>.  We would suggest an inactivity period of 2 months to qualify for reclamation, but this number is just an initial estimate and should be adjusted upward or downward according to Q-Link&#x27;s prior experience with the rest of the system and our experience running <em>Habitat</em> itself.</p>
+<p>It may also be the case that we wish to reclaim the Turves of deleted Avatars daily and only sweep up the inactive ones monthly.  Quantum&#x27;s input on this is solicited, since the decision hinges largely on the question of the computational burden of the sweep.</p>
+<p>Reclaiming a Turf consists of garbage collecting all the “non-native” objects from the Turf region (including the Avatar itself), returning the region to the available Turf list, and (in the case of inactive accounts) marking the user&#x27;s Q-Link records to indicate that he or she no longer has an Avatar.</p>
+<p>By “non-native” objects, we mean those objects which have been carried into the region by the player, as opposed to those objects which were furnished with the Turf to begin with.  We can determine these by considering the class categories of the objects: Scenic objects stay and everything else goes. The portable objects that an Avatar is granted upon hatching (such as mail, a Token, the latest Rant, and so on) should be created when the Avatar is, since there is no way of guaranteeing that these will be left in the Turf when the Avatar lapses into inactivity.</p>
+<hr>
+<pre><b>Appendix — Garbage Collection Categories of Object Classes</b></pre>
+<h2>Book</h2>
+<table>
+<tr><th>lw(1) lw(15) lw(15) lw(15) lw(15) lw(15) .</th></tr>
+<tr><td>:book</td></tr>
+</table>
+<h2>Container</h2>
+<table>
+<tr><th>lw(1) lw(15) lw(15) lw(15) lw(15) lw(15) .</th></tr>
+<tr><td>:bag:box</td></tr>
+</table>
+<h2>Dual</h2>
+<table>
+<tr><th>lw(1) lw(15) lw(15) lw(15) lw(15) lw(15) .</th></tr>
+<tr><td>:flag:rock</td></tr>
+</table>
+<h2>Internal</h2>
+<table>
+<tr><th>lw(1) lw(15) lw(15) lw(15) lw(15) lw(15) .</th></tr>
+<tr><td>:avatar:ghost:region:test:zone</td></tr>
+</table>
+<h2>Mathom</h2>
+<table>
+<tr><th>lw(1) lw(15) lw(15) lw(15) lw(15) lw(15) .</th></tr>
+<tr><td>:ball:boomerang:bottle:changomatic:club</td></tr>
+<tr><td>:compass:die:escape device:fake gun:flashlight</td></tr>
+<tr><td>:frisbee:game piece:grenade:gun:head</td></tr>
+<tr><td>:knick knack:knife:matchbook:movie camera:security device</td></tr>
+<tr><td>:sensor:shovel:spray can:stereo:stun gun</td></tr>
+<tr><td>:tape:wind up toy</td></tr>
+</table>
+<h2>Paper</h2>
+<table>
+<tr><th>lw(1) lw(15) lw(15) lw(15) lw(15) lw(15) .</th></tr>
+<tr><td>:paper</td></tr>
+</table>
+<h2>Scenic</h2>
+<table>
+<tr><th>lw(1) lw(15) lw(15) lw(15) lw(15) lw(15) .</th></tr>
+<tr><td>:aquarium:ATM:bed:bridge:building</td></tr>
+<tr><td>:bureaucrat-in-a-box:bush:chair:chest:coke machine</td></tr>
+<tr><td>:couch:countertop:display case:door:dropbox</td></tr>
+<tr><td>:elevator:fence:flat:floor lamp:fortune machine</td></tr>
+<tr><td>:fountain:garbage can:glue:ground:hand of god</td></tr>
+<tr><td>:hole:hot tub:house cat:jukebox:magic immobile</td></tr>
+<tr><td>:mailbox:pawn machine:picture:plant:plaque</td></tr>
+<tr><td>:pond:river:roof:safe:sex changer</td></tr>
+<tr><td>:short sign:sign:sky:street:streetlamp</td></tr>
+<tr><td>:super trapezoid:table:teleport booth:trapezoid:tree</td></tr>
+<tr><td>:vendo front:vendo inside:wall:window</td></tr>
+</table>
+<h2>Valuable</h2>
+<table>
+<tr><th>lw(1) lw(15) lw(15) lw(15) lw(15) lw(15) .</th></tr>
+<tr><td>:amulet:crystal ball:drugs:gemstone:instant object pill</td></tr>
+<tr><td>:key:magic lamp:magic staff:magic wand:ring</td></tr>
+<tr><td>:ticket:tokens</td></tr>
+</table>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/garbage.tbl" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

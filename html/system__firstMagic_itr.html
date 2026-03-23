@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Magic - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/firstMagic.itr" style="font-size:0.85em;">View source</a></div>
+<h1>First Magic for Habitat™</h1>
+<p class="author">by Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">November 10, 1986</p>
+<p class="doc-number">Habitat Document # 30</p>
+<h2>Some technical background</h2>
+<p>In the Habitat implementation, we have left a number of general-purpose “hooks” for special-case situations.  One of these is magic.  A magical item carries a “magic type” value in the host database record that describes it. This value is simply an integer that is used to index into an array of entry points to magical procedures.  Each of these procedures then takes whatever action or actions may be appropriate for the particular kind of magic that it is trying to represent.  Adding a new type of magic requires that we create a new magical procedure and install it in the array.  However, it requires no change to the Commodore 64 software at all.  From the Commodore 64&#x27;s point of view, a magic item is a magic item.  All the Commodore knows how to do is trigger its magical function, whatever that may be.  It is up to the host to use the appropriate series of asynchronous messages to the Commodore to bring about the desired effect.</p>
+<p>This mechanism has been tested and works.  However, there are currently no non-trivial magical procedures (i.e., ones that do more than simply exercise the mechanism to verify that it works correctly) implemented.  We would like to have some magic in the world in order to get user feedback from beta-test on the efficacy of the mechanism.  Adding some magic will also make the world a more interesting place by adding things that an Avatar can do.  We have therefore decided to define and implement a small number (we have chosen four to start with) of magical procedures that can be bound to magic items for the players to use.  The purpose of this document is to describe the magical mechanism in general and to specify the first magical procedures that we will implement.</p>
+<h2>Types of magic</h2>
+<p>These classes of objects currently have the sort of “hook” for conditional installation of arbitrary procedures:</p>
+<pre>magic wand
+magic staff
+amulet
+gemstone
+switch (stationary magic)
+drugs
+sensor</pre>
+<p>Of these, drugs and sensor each have independent procedure lookup arrays, since they follow slightly different behavior protocols than the others. Functionally, there is no other distinction between the various types of magic item.  Creatively, however, we will generally choose to assign them to thematic groups:  Magic wands and staves can do pretty much anything, with staves typically being more powerful.  Amulets generally provide information. Gemstones are only rarely magical (i.e., an ordinary gemstone&#x27;s magical procedure is effectively a no-op), but when they <em>are</em> magical the magic is of a particularly rare and powerful sort.</p>
+<p>The switch or stationary magic item is used in a couple of different ways, depending on the graphical style used.  On the one hand, it is a hook for implementing various sorts of switches and controls that will not ordinarily be thought of by the player as magic.  This includes such things as triggering the end of a Capture-The-Flag game or resetting the board in a chess region as well as implementing puzzles involving complex control panels, baroque machines, and the like.  On the other hand, if associated with more magical looking graphics or with natural features of various sorts (such as trees, for example) it lets us implement site-based magic.  For example, we could create an enchanted forest in which certain trees held special powers.</p>
+<h2>First Magic</h2>
+<p>We have decided to implement four magical procedures initially in order to try out the mechanism on the world.  Here are the ones we have chosen:</p>
+<ul class="bullet">
+<li><em>Change height</em> — Each time it is used, it increases the height of the user Avatar by 4 units, wrapping to the minimum height when the maximum height is exceeded.</li>
+<li><em>Make people jump</em> — Makes the Avatar at whom it is aimed jump up in the air as if he or she had issued a JUMP gesture with the gesture keys.</li>
+<li><em>Make everyone turn blue</em> — Turns everyone in the region (except the user) blue, i.e., <em>all</em> their body pattern nybbles are set to the blue value.</li>
+<li><em>Send avatar home</em> — TelePorts the Avatar at whom it is aimed back to his or her home turf.  Operates like an escape device, except that it works on someone else rather than on yourself.</li>
+</ul>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/firstMagic.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

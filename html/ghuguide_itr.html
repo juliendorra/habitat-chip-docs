@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghu User Guide - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/ghuguide.itr" style="font-size:0.85em;">View source</a></div>
+<p class="author">by (A manual for God&#x27;s Handy Utility), Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">March 9, 1987</p>
+<p class="doc-number">Habitat Document # 23b</p>
+<p>The</p>
+<p>Ghu</p>
+<p>Ghuide</p>
+<h2>Introduction</h2>
+<p>This document is a user&#x27;s manual and reference guide for <b>Ghu</b>, a utility for Habitat operators on the Stratus system.  This is a preliminary draft and will no doubt evolve as both the tool and its users become more sophisticated.</p>
+<h2>What It Is</h2>
+<p><b>Ghu</b> is meant to be a full-featured operator&#x27;s utility for the Habitat system.  (It is descended from an earlier utility named <b>Twiddle</b>, which you may have heard of or even used.)  It is intended to be run by Quantum and Lucasfilm operational staff from a conventional terminal connected to the Stratus host.  <b>Ghu</b> has lots of “features”; however, we will try to keep everything as simple as we can.  We anticipate that additional features will be added as our knowledge of what we need develops.</p>
+<p><b>Ghu</b> is a command-line-oriented utility.  It reads command lines from the terminal and executes them.  (It is not designed as a visual, CRT-oriented program since it must be usable over something like Telenet.)  Using <b>Ghu</b> commands, you can examine, modify or add to any of the various databases that the Habitat system uses.  It lets you do this in a very general and powerful way that (hopefully) will keep the amount of work you must do to a minimum. For more advanced uses, <b>Ghu</b> allows you to define macros and command loops to turn common or repetitive procedures into single commands.</p>
+<h2>The Databases</h2>
+<p>There are three primary databases that Habitat uses, together with a number of more minor ones.  Each of the three primary databases describes one of the major elements of the Habitat world: regions, objects and avatars.  The lesser databases contain information about teleport addresses, text for book and paper objects, requests made to the oracle, and so on.  They will be described in more detail in the sections below that the discuss the commands that deal with them.</p>
+<h2>Things and Types</h2>
+<p>Each region, object and avatar in the Habitat world has a <em>global ID number</em> that identifies its place in its respective database.  In many of the commands described below, you need to provide one of these global ID numbers for some entity in one of the databases.  Since avatar #145733901 is not the same as region #145733901, you need to indicate, in addition to the global ID number, what sort of thing it is that you are referring to.  Many of the command descriptions below will refer to something called a <em>thing</em> (in italics, just like that), which is an expression that refers to an object, region or avatar.  It has the following form:</p>
+<ul class="bullet">
+<li><em>t  globalID</em></li>
+</ul>
+<p>where <em>t</em> is “type specifier” that is one of the three letters <code>a</code> (for avatar), <code>o</code> (for object), or <code>r</code> (for region); and <em>globalID</em> is a global ID number.  For example,</p>
+<ul class="bullet">
+<li><code>r 145733901</code></li>
+</ul>
+<p>refers to region #145733901, while</p>
+<ul class="bullet">
+<li><code>o 47</code></li>
+</ul>
+<p>refers to object #47.</p>
+<p>In practice, usually you can leave the type specifier out, in which case a default type will be chosen depending on the particular command being executed.  In the command descriptions that follow, we will tell you what the default type associated with each command is (the defaults are chosen to be the most common types you would expect to use with each command).</p>
+<p>You may also apply the <code>a</code> type to strings, allowing you to designate avatars by name.  You do this by entering an expression of the form:</p>
+<ul class="bullet">
+<li><code>a &#x27;</code><em>name</em><code>&#x27;</code></li>
+</ul>
+<p>For example</p>
+<ul class="bullet">
+<li><code>a &#x27;chip&#x27;</code></li>
+</ul>
+<p>designates the avatar named “chip” (that&#x27;s me!) while</p>
+<ul class="bullet">
+<li><code>a &#x27;spblives&#x27;</code></li>
+</ul>
+<p>designates the avatar named “spblives”.  In contexts where a string value is not allowed but an avatar number <em>is</em> allowed, <b>Ghu</b> will automatically try to treat a string value as an avatar name.</p>
+<h2>Values and Expressions</h2>
+<p>Note: this is fairly advanced stuff.  If you are just using <b>Ghu</b> casually you can skip ahead to the next section, <b>The Commands</b>.</p>
+<p>The above description of <em>things</em> and types referred to a “global ID number”.  In the examples that were given, we actually used a number, just as you would expect.  However, wherever a <b>Ghu</b> command calls for the use of a numeric value of any sort (or a string value or a bit value, for that matter), you can use a symbolic name or an expression instead.  Furthermore, you can enter numbers in hexadecimal, octal, quaternary or binary bases instead of the normal decimal, if for some reason you wish to do so.</p>
+<p>In general, the command descriptions below will refer to a <em>value</em>.  A <em>value</em> can be a number, a string, a bit-string, a symbolic name (which you create using the <code>name</code> command), or an expression.  Each of these will be described in what follows.</p>
+<h2>Numbers</h2>
+<p>A number may be specified in a variety of different formats.  For the sake of eliminating arguments about which is “better” (and at the expense of some minor complication) we have chosen to adopt both the Unix-derived representations that we use at Lucasfilm and the PL/1 derived representation used by Quantum, since both can be handled at the same time without significant ambiguity.</p>
+<ul class="bullet">
+<li>Decimal — a decimal number is represented by a sequence of decimal digits (i.e., <code>0</code> through <code>9</code>).  The only restriction is that the first digit may not be a <code>0</code>.  Examples: <code>47  3  123786432333</code></li>
+<li>Octal — an octal number is represented by a sequence of octal digits (i.e., <code>0</code> through <code>7</code>), the first of which <em>must</em> be a <code>0</code> digit. Examples: <code>0377  022  0  047</code></li>
+<li>Alternatively, a sequence of octal digits enclosed in apostrophes and followed by <code>b3</code> may be used.  Examples: <code>&#x27;377&#x27;b3  &#x27;22&#x27;b3  &#x27;0&#x27;b3  &#x27;47&#x27;b3</code></li>
+<li>Hexadecimal — a hex number is represented by a sequence of hex digits (i.e., <code>0</code> through <code>9</code> and <code>a</code> through <code>f</code>) preceded by <code>0x</code> or <code>0X</code>.  Examples: <code>0xf000  0x80  0X10FF  0x0</code></li>
+<li>Note that case is not significant in the hex digits <code>a</code> through <code>f</code> (i.e., <code>a</code> is the same as <code>A</code>).  Alternatively, a sequence of hex digits enclosed in apostrophes and followed by <code>b4</code> may be used. Examples: <code>&#x27;f000&#x27;b4  &#x27;80&#x27;b4  &#x27;10ff&#x27;b4  &#x27;0&#x27;b4</code></li>
+<li>Binary — a binary number is represented by a sequence of binary digits (i.e., <code>0</code> and <code>1</code>) preceded by <code>0b</code> or <code>0B</code>.  Examples: <code>0b10101010  0B111  0b10001</code></li>
+<li>Quarters — a quarter is represented by a sequence of quaternary digits (i.e., <code>0</code> through <code>3</code>) preceded by <code>0q</code> or <code>0Q</code>.  Examples: <code>0q1230  0q2020  0Q0013</code></li>
+<li>Alternatively, a series of quaternary digits enclosed in apostrophes and followed by <code>b2</code> may be used.  Examples: <code>&#x27;1230&#x27;b2  &#x27;2020&#x27;b2 &#x27;0013&#x27;b2</code></li>
+</ul>
+<h2>Bit-strings</h2>
+<p>A bit-string is represented by a series of binary digits (i.e., <code>0</code> and <code>1</code>) enclosed in apostrophes and followed by the letter <code>b</code>. Examples: <code>&#x27;1011101&#x27;b  &#x27;1&#x27;b  &#x27;0&#x27;b  &#x27;1111&#x27;b</code></p>
+<p>A bit-string is <em>not</em> the same as an ordinary number specified in a binary format, as described above under <b>Numbers</b>.</p>
+<h2>Strings</h2>
+<p>A string is represented by a series of characters enclosed in apostrophes or quotation marks (e.g., <code>&quot;hello world.&quot;</code> or <code>&#x27;this is a string&#x27;</code>). Non-printing and special characters may be embedded in the string by using the backslash character (“<code>\</code>”) as an escape followed by an indicator character (we are borrowing this convention from Unix).  The escape characters include, for example:</p>
+<pre>
+	<code></code>		newline
+	<code></code>		horizontal tab
+	<code></code>		backspace
+	<code>\\</code>		backslash
+	<code>\&#x27;</code>		apostrophe
+	<code>\&quot;</code>		quote
+	<code>\^</code><em>c</em>		CONTROL-<em>c</em> (where <em>c</em> is any character).
+	<code>\</code><em>ddd</em>		arbitrary byte (where <em>ddd</em> is one, two or three octal digits).
+	<code></code><em>hh</em>		arbitrary byte (where <em>hh</em> is one or two hexadecimal digits).
+</pre>
+<p>Additionally, a variety of escape codes that represent the Habitat sign formatting characters are recognized.  A complete list of all the escape codes is given in <b>Appendix A</b> at the end of this document.</p>
+<h2>Names</h2>
+<p>A symbolic name is represented as a sequence of alphanumeric characters, the first of which may not be a decimal digit.  Names may also contain the characters underscore (“<code>_</code>”) and dollar sign (“<code>$</code>”).  The case of alphabetic characters in symbolic names <em>is</em> significant (i.e., <code>foo</code>, <code>FOO</code> and <code>FoO</code> are <em>not</em> the same name).  The value of a symbolic name in an expression will be either the value defined for that name using the <code>name</code> or <code>set</code> commands, or, if the name is the name of a field of the current-default-thing (see the description of the current-default-thing under <b>General Database Handling Commands</b> below), then the value will be the current value of that field.</p>
+<h2>Special Names</h2>
+<p>A few symbolic names are pre-defined by <b>Ghu</b> and have a special meaning all their own.</p>
+<ul class="bullet">
+<li><b><code>today</code> —</b> is a number that represents the system time code of today&#x27;s date (i.e., the time as of midnight).</li>
+<li><b><code>now</code> —</b> is a number that is the system time code for whatever time it is when the expression containing it is evaluated.</li>
+<li><b><code>last_textid</code> —</b> is always set to the text id of the most recently written text database entry.</li>
+<li><b><code>page_count</code> —</b> is always set to the page count of the most recently read or written text database entry.</li>
+<li><b><code>user_name</code> —</b> is a string that is the Stratus user name of the user running <b>Ghu</b>.</li>
+<li><b><code>general_access</code> —</b> is a number that is TRUE (i.e., 1) if the user running <b>Ghu</b> is on the “general access” list and FALSE (i.e., 0) if not.  (See <b>Access Control</b> below.)</li>
+<li><b><code>random</code> —</b> is a random number.  It is a different random number every time it is used.</li>
+<li><b><code>index</code> —</b> is used only inside integer <code>for</code> loops (see the <em>for</em> command below) and is the current value of the loop counter.</li>
+<li><b><code>contents</code> —</b> may be used as an array field of any container object, and represents the contents of that object.  For example</li>
+<p><code>o 15446.contents(3)</code></p>
+<p>represents the object that is contained in slot 3 of object #15446.  (See the discussion of fields and arrays below.)</p>
+</ul>
+<h2>Expressions</h2>
+<p>In general, any place where a <em>value</em> is called for an expression may be given.  There is a variety of expression operators that you can use.</p>
+<h2>Arithmetic operators</h2>
+<ul class="bullet">
+<li><em>expression</em><code> +  </code><em>expression</em></li>
+<p><em>expression</em><code> -  </code><em>expression</em></p>
+<p><em>expression</em><code> *  </code><em>expression</em></p>
+<p><em>expression</em><code> /  </code><em>expression</em></p>
+<p><code>- </code><em>expression</em></p>
+</ul>
+<p>These correspond to addition, subtraction, multiplication, division and negation respectively.  The addition operator (“<code>+</code>”) is also the string concatenation operator, i.e., “adding” two strings concatenates them.  For example,</p>
+<ul class="bullet">
+<li><code>&quot;foo&quot; + &quot;bar&quot;</code></li>
+</ul>
+<p>is equal to</p>
+<ul class="bullet">
+<li><code>&quot;foobar&quot;</code></li>
+</ul>
+<h2>Logical operators</h2>
+<ul class="bullet">
+<li><em>expression</em><code> &amp;&amp;  </code><em>expression</em></li>
+<p><em>expression</em><code> and  </code><em>expression</em></p>
+<p><em>expression</em><code> ||  </code><em>expression</em></p>
+<p><em>expression</em><code> or  </code><em>expression</em></p>
+<p><code>! </code><em>expression</em></p>
+<p><code>not </code><em>expression</em></p>
+</ul>
+<p>Logical values are used in <b>Ghu</b>&#x27;s conditional statement, <code>if</code>.  A logical value is represented in <b>Ghu</b> by an ordinary number.  A value of <code>0</code> is interpreted as FALSE.  Any other value is interpreted as TRUE. The logical operators for AND, OR and NOT are each represented in two forms: as symbolic operators and as keywords.  Use whichever form you feel most comfortable with (the symbolic operators are derived from the programming language <b>C</b>).</p>
+<h2>Comparison operators</h2>
+<ul class="bullet">
+<li><em>expression</em><code> &lt;  </code><em>expression</em></li>
+<p><em>expression</em><code> lt  </code><em>expression</em></p>
+<p><em>expression</em><code> &lt;=  </code><em>expression</em></p>
+<p><em>expression</em><code> leq  </code><em>expression</em></p>
+<p><em>expression</em><code> ==  </code><em>expression</em></p>
+<p><em>expression</em><code> eq  </code><em>expression</em></p>
+<p><em>expression</em><code> !=  </code><em>expression</em></p>
+<p><em>expression</em><code> neq  </code><em>expression</em></p>
+<p><em>expression</em><code> &gt;=  </code><em>expression</em></p>
+<p><em>expression</em><code> geq  </code><em>expression</em></p>
+<p><em>expression</em><code> &gt;  </code><em>expression</em></p>
+<p><em>expression</em><code> gt  </code><em>expression</em></p>
+</ul>
+<p>The comparison operators may be used to compare the values of numbers, strings, or bit-strings.  As with the logical operators, there are two forms for each comparison, one symbolic and the other a keyword.  The comparisons supported are less-than, less-than-or-equal, equal, not-equal, greater-than-or-equal, and greater-than.  The result of a comparison will be either <code>0</code> or <code>1</code>, representing FALSE or TRUE respectively.</p>
+<h2>Bit operators</h2>
+<ul class="bullet">
+<li><em>expression</em><code> &amp;  </code><em>expression</em></li>
+<p><em>expression</em><code> |  </code><em>expression</em></p>
+<p><em>expression</em><code> ^  </code><em>expression</em></p>
+<p><code>~ </code><em>expression</em></p>
+<p><code>^ </code><em>expression</em></p>
+</ul>
+<p>The bit operators work on bit-strings and numbers.  The operators shown are (respectively) AND, OR, XOR, NOT and NOT.  There are two forms of the NOT operator, one derived from <b>C</b> and the other from PL/1.</p>
+<h2>Test operator</h2>
+<ul class="bullet">
+<li><code>? </code><em>expression</em></li>
+</ul>
+<p>is used to determine what sort of thing <em>expression</em> is.  Its value is a number that encodes <em>expression</em>&#x27;s type: <code>0</code> means it is a region, <code>1</code> means it is an avatar, <code>2</code> means it is an object, and any other value means it is none of these.</p>
+<h2>Field selection</h2>
+<p>The database entries for objects, avatars and regions have various fields, each of which is named.  You can extract the value from a field using the “<code>.</code>” operator:</p>
+<ul class="bullet">
+<li><em>expression </em><code>.  </code><em>fieldname</em></li>
+</ul>
+<p>where <em>expression</em> is the global ID of the thing you are interested in and <em>fieldname</em> is the name of the field you want.  For example:</p>
+<ul class="bullet">
+<li><code>a 435679123.x</code></li>
+</ul>
+<p>refers to the x-coordinate field of avatar #435679123.  Additionally, some fields are <em>arrays</em> of values, and these arrays may be indexed:</p>
+<ul class="bullet">
+<li><em>expression1 </em><code>( </code><em>expression2 </em><code>)</code></li>
+</ul>
+<p>where the <em>expression1</em> identifies the thing and field in question and <em>expression2</em> is the array index.  For example:</p>
+<ul class="bullet">
+<li><code>o 634989100.nitty_bits(5)</code></li>
+</ul>
+<p>refers to the fifth element of object #634989100&#x27;s <code>nitty_bits</code> field.</p>
+<h2>Other stuff</h2>
+<p>In addition to the operators, there are a few more things that need to be mentioned regarding expressions.</p>
+<p>All of the operators described above have the sort of precedences you would expect them to have (e.g., multiplication and division before addition and subtraction).  The exact operator precedences are listed in <b>Appendix B</b>. Parentheses:</p>
+<ul class="bullet">
+<li><code>( </code><em>expression</em><code> )</code></li>
+</ul>
+<p>may be used at any point to override the normal precedences of the operators.</p>
+<p>Note that since there is only one string operator, concatenation, most expressions involving strings per se are rather silly (you <em>can</em> treat objects&#x27; string fields as arrays of characters and index them, however).  In arithmetic expressions, we treat a single character string as a number whose value is the value of the 8-bit ASCII code for the character in the string. Similarly, two-character strings represent 16-bit numbers and so on.  We do <em>not</em> adopt the nearly useless PL/1 convention of trying to convert the string containing the characters <code>&#x27;4&#x27;</code> and <code>&#x27;7&#x27;</code> into the number 47.</p>
+<h2>The Commands</h2>
+<p>The specifics of the various commands will be described shortly.  First, some general information:</p>
+<p>The command names have been chosen so that they are unique in the first few characters.  Single letter abbreviations are often possible.  However, any unambiguous initial substring of a command name is an acceptable abbreviation.</p>
+<p>In general, commands are terminated by the end of the line, but multiple commands may be given on a line separated by semicolons (“<code>;</code>”).  For example, the line:</p>
+<ul class="bullet">
+<li><code>display r 5001; contents r 5001; quit</code></li>
+</ul>
+<p>is equivalent to entering each of the three commands separately on its own line.</p>
+<p>A single command may be spread over multiple lines by ending all but the final line with a backslash (“<code>\</code>”).  For example:</p>
+<ul class="bullet">
+<li><code>add class_teleport = r 5000, 40, 150,\</code></li>
+<p>0, 0, 200,\</p>
+<p>0, &#x27;1&#x27;b, &quot;Foon St&quot;</p>
+</ul>
+<p>is the same as</p>
+<ul class="bullet">
+<li><code>add class_teleport = r 5000, 40, 150, 0, 0, 200, 0, &#x27;1&#x27;b, &quot;Foon St&quot;</code></li>
+</ul>
+<p>Usually this is only worth bothering with for very long command lines, which are relatively rare.</p>
+<p>Any command may be followed by</p>
+<ul class="bullet">
+<li><code>into </code><em>filename</em></li>
+</ul>
+<p>in which case the printed output generated by the command is written to the given file instead of to the terminal.  For example:</p>
+<ul class="bullet">
+<li><code>contents r 5000 into dumpfile.out</code></li>
+</ul>
+<p>would output a list of the contents of region #5000 into the file “<code>dumpfile.out</code>”.</p>
+<p><b>A comment on notation:</b>  Each of the command descriptions that follow begin with a summary of the syntax of the command.  Things that are to be entered literally, such as keywords and delimiter characters, will be written in a <code>typewriter-like typeface such as this</code>.  Things which you are supposed to substitute an expression or value of your own will be written in an <em>italic typeface such as this</em>.  Things which are optional will be enclosed with funny brackets  like this.   Sometimes you will also see things enclosed in brackets  like this  which means that the thing within the brackets may be repeated zero or more times.</p>
+<h2>Important Basic Commands</h2>
+<p>These two commands should be all you need to know to at merely survive using <b>Ghu</b>.</p>
+<br>
+<h2>help</h2>
+<ul class="bullet">
+<li><code>help </code> <em>command</em> </li>
+</ul>
+<p>If no <em>command</em> is given, <code>help</code> prints out a list of all the available commands along with a quick one-liner description of each.  If a <em>command</em> is given, it prints an explanation of that command.  For example:</p>
+<ul class="bullet">
+<li><code>help display</code></li>
+</ul>
+<p>prints an explanation of the <code>display</code> command.</p>
+<br>
+<h2>quit</h2>
+<ul class="bullet">
+<li><code>quit</code></li>
+</ul>
+<p>Exits <b>Ghu</b> and returns to the Stratus system command level.</p>
+<h2>General Database Handling Commands</h2>
+<p>These commands often refer to something called the “current-default-thing”. The current-default-thing is a thing (object, avatar or region) that <b>Ghu</b> keeps in memory.  Various commands implicitly or explicitly change which thing is the current default, and other commands operate on the current-default-thing unless explicitly told otherwise.  This should become clearer as you read the command descriptions themselves.</p>
+<br>
+<h2>add</h2>
+<ul class="bullet">
+<li><code>add </code> <em>class</em>  <code>= </code><em>value</em> <code>, </code><em>value</em>   </li>
+</ul>
+<p>Creates a new thing of the given class (note: regions have class 0 and avatars have class 1).  You can specify the class and the values of the new thing&#x27;s property fields (in order) directly on the command line.  Alternatively, if any of these are omitted <b>Ghu</b> will prompt you for them.  The new thing becomes the current-default-thing.  For an example of the use of the <code>add</code> command, see the discussion on page 6 of line continuation using backslashes.</p>
+<br>
+<h2>contents</h2>
+<ul class="bullet">
+<li><code>contents </code><em>value</em>  <code>full</code> </li>
+</ul>
+<p>The <code>contents</code> command prints a list of the things contained by the thing specified by <em>value</em> (a region by default).  Each thing is listed on a line with its global ID and the values of its fundamental properties (x-y position, orientation, etc.).  If the keyword <code>full</code> is given, it also lists the contents of each container inside <em>value</em>, and each container inside those, and so on.  For example:</p>
+<ul class="bullet">
+<li><code>contents r 8100</code></li>
+</ul>
+<p>would print a list of the things contained in region #8100, whereas</p>
+<ul class="bullet">
+<li><code>contents r 8100 full</code></li>
+</ul>
+<p>would print not only the things contained by region #8100, but any things contained by those things, and any things contained by <em>those</em> things, and so on.</p>
+<br>
+<h2>display</h2>
+<ul class="bullet">
+<li><code>display </code> <em>value</em>  <code> . </code></li>
+</ul>
+<p>The <code>display</code> command displays the thing indicated by <em>value</em>.  If value designates an object, avatar or region, it makes the indicated thing the current-default-thing and then prints the values of all of its fields.  If <em>value</em> is not a thing (e.g., if it is simply a string or a number) <em>value</em> itself is printed out.  If <em>value</em> is omitted, the current-default-thing is displayed.  If the <code>display</code> command is ended with a period, <b>Ghu</b> withholds printing a newline after displaying the value.  For example:</p>
+<ul class="bullet">
+<li><code>display r 9164</code></li>
+</ul>
+<p>would print out a description of region #9164.  Whereas</p>
+<ul class="bullet">
+<li><code>display o 17007.container</code></li>
+</ul>
+<p>would print out a description of the region, object or avatar that contains object #17007 (compare this to the similar example given under the description of the <code>value</code> command above).</p>
+<br>
+<h2>find</h2>
+<ul class="bullet">
+<li><code>find </code><em>value</em></li>
+</ul>
+<p>Prints out the chain of containership from the thing indicated by <em>value</em> (an object by default, though it may also be an avatar) to the outermost containing region, listing the global ID and class of each container in the chain.  For example, the command</p>
+<ul class="bullet">
+<li><code>find o 17659</code></li>
+</ul>
+<p>might result in output of the form</p>
+<ul class="bullet">
+<li><code>Object 17659 (flashlight) currently in object 1005131</code></li>
+<p>Object 1005131 (box) currently in avatar 255538382</p>
+<p>Avatar 255538382 (chip) currently in region 9132</p>
+<br>
+</ul>
+<h2>get</h2>
+<ul class="bullet">
+<li><code>get </code><em>value</em></li>
+</ul>
+<p>The <code>get</code> command makes the thing indicated by <em>value</em> the current-default-thing.  In this respect it operates like the <code>display</code> command, except that it doesn&#x27;t print out a description of the thing.  By default, <em>value</em> is an object, though it may also be a region or an avatar.  For example:</p>
+<ul class="bullet">
+<li><code>get a 453124989</code></li>
+</ul>
+<p>would make avatar #453124989 the current-default-thing, while</p>
+<ul class="bullet">
+<li><code>get 1609</code></li>
+</ul>
+<p>would get object #1609.</p>
+<br>
+<h2>set</h2>
+<ul class="bullet">
+<li><code>set </code><em>lvalue</em><code> = </code><em>value</em>  <code>! </code></li>
+</ul>
+<p>Sets <em>lvalue</em> to have the value <em>value</em>.  <em>lvalue</em> must be one of three things: (1) a symbolic name or (2) the name of a field of the current-default-thing or (3) an expression designating a field of some other <em>thing</em>.  If it is a field, then <em>value</em> must have a type that matches <b>Ghu</b>&#x27;s internal definition for that field (see the descriptions of the <code>class</code> and <code>define</code> commands below).  If <em>lvalue</em> designates a field of some thing other than the current-default-thing, the thing designated is first made the current-default-thing before the field&#x27;s value is set.  If the command is terminated with an exclamation point (“<code>!</code>”), it immediately writes the new version of the thing changed to the database as if an <code>update</code> command had been issued.  For example</p>
+<ul class="bullet">
+<li><code>set foobar = 47</code></li>
+</ul>
+<p>would set the value of the symbolic name <code>foobar</code> to be the number <code>47</code>.</p>
+<ul class="bullet">
+<li><code>set a &#x27;fred&#x27;.region = 9173</code></li>
+</ul>
+<p>would set the value of the avatar named “fred”&#x27;s <code>region</code> field to region #9173.  The avatar named “fred” would also become the current-default-thing.  In contrast</p>
+<ul class="bullet">
+<li><code>set a &#x27;fred&#x27;.region = 9173!</code></li>
+</ul>
+<p>would do all of the above <em>and</em> write the changed avatar record back out to the database file.  Note that you cannot set the special pre-defined field <code>contents</code>.  For example,</p>
+<ul class="bullet">
+<li><code>set a &#x27;fred&#x27;.contents(3) = o 47</code></li>
+</ul>
+<p>will not work!</p>
+<br>
+<h2>update</h2>
+<ul class="bullet">
+<li><code>update</code></li>
+</ul>
+<p>Writes the current-default-thing out to its associated database.</p>
+<br>
+<h2>value</h2>
+<ul class="bullet">
+<li><code>value </code><em>value</em> <code> .  </code></li>
+</ul>
+<p>Simply prints out the value <em>value</em>.  If the <code>value</code> command is ended with a period, <b>Ghu</b> withholds printing a newline after printing the value (this can be useful in writing macros that want to display data in formats of the macros&#x27; choosing).  Examples:</p>
+<ul class="bullet">
+<li><code>value 42+5</code></li>
+</ul>
+<p>would print out</p>
+<ul class="bullet">
+<li><code>47</code></li>
+</ul>
+<p>whereas</p>
+<ul class="bullet">
+<li><code>value o 17007.container</code></li>
+</ul>
+<p>might print out</p>
+<ul class="bullet">
+<li><code>r 9164</code></li>
+</ul>
+<p>The sequence of commands</p>
+<ul class="bullet">
+<li><code>value &quot;The container is &quot; .</code></li>
+<p>value o 10024.container .</p>
+<p>value &quot; and it is of class &quot; .</p>
+<p>value o 10024.container.class</p>
+</ul>
+<p>would print out something like:</p>
+<ul class="bullet">
+<li><code>The container is o 17007 and it is of class 13</code></li>
+</ul>
+<p>If <em>value</em> is the name of a macro, the definition of the macro will be printed.</p>
+<h2>Specialized Database Handling Commands</h2>
+<br>
+<h2>list</h2>
+<ul class="bullet">
+<li><code>list </code> <em>value1</em>   <code>--  </code>  <em>value2</em> </li>
+</ul>
+<p>Prints a list of the existing regions in the range from <em>value1</em> to <em>value2</em> (inclusive).  If <em>value1</em> is omitted, it defaults to the first region in the database.  If <em>value2</em> is omitted, it defaults to the last region in the database.  If only one <em>value</em> is given and the <code>--</code> is omitted, only the one region specified is listed.  If both <em>value</em>s are omitted the <code>--</code> may be omitted as well.  Omitting both <em>value</em>s means that the entire region database is to be listed.  For each region, the <code>list</code> command prints a line containing the region ID number, those of its four neighbors (or -1 if there is no neighbor in a particular direction), and the region&#x27;s orientation.  For example:</p>
+<ul class="bullet">
+<li><code>list 5       </code>lists region number 5</li>
+<p><code>list 5--10   </code>lists regions 5 through 10</p>
+<p><code>list 5--     </code>lists from region 5 to the end of the database</p>
+<p><code>list --10    </code>lists from the start of the database to region 10</p>
+<p><code>list --      </code>lists all regions</p>
+<p><code>list         </code>also lists all regions</p>
+</ul>
+<p>thus, the command</p>
+<ul class="bullet">
+<li><code>list 9100--9103</code></li>
+</ul>
+<p>would result in output looking something like</p>
+<pre><code></code>
+	REGION           WEST       NORTH          EAST       SOUTH
+	  9100             -1        9101             -1          -1
+	  9101             -1        9102           9113        9100
+	  9102             -1          -1             -1        9101
+	  9103             -1          -1           9108          -1</pre>
+<br>
+<h2>newturf</h2>
+<ul class="bullet">
+<li><code>newturf </code><em>value</em></li>
+</ul>
+<p>Adds the region number specified by <em>value</em> to Habitat&#x27;s internal list of regions available to be allocated as turfs for new users.</p>
+<br>
+<h2>nuke</h2>
+<ul class="bullet">
+<li><code>nuke </code><em>value1</em>  <code>-- </code><em>value2</em> </li>
+</ul>
+<p>Removes the specified regions (and any objects contained within them) from the database.  The regions are specified as in the <code>list</code> command, except that any range of regions must have explicit start and end numbers.  For example</p>
+<ul class="bullet">
+<li><code>nuke 500--999</code></li>
+</ul>
+<p>would delete all the regions with ID&#x27;s in the range 500 to 999.  If there are avatars in the regions being <code>nuke</code>&#x27;d, it will ask if you wish to delete them.  Note that if you don&#x27;t delete them, you had better move them to regions that still exist before allowing any of their associated players to enter Habitat.</p>
+<br>
+<h2>oracle</h2>
+<ul class="bullet">
+<li><code>oracle </code><em>value</em>  <code>dump</code>   <code>since </code><em>date </em> </li>
+</ul>
+<p>or</p>
+<ul class="bullet">
+<li><code>oracle all  </code><code>dump</code>   <code>since </code><em>date </em> </li>
+</ul>
+<p>Prints the oracle question database entries associated with the oracle object identified by <em>value</em>.  Alternatively, the keyword <code>all</code> may be given, in which case the entries for all oracle objects are printed.  If the keyword <code>dump</code> is given, it simply prints the entries in sequence, listing the oracle ID, the time and date of the question, the avatar asking the question, and the text of the question itself.  If the keyword <code>dump</code> is omitted, it prints each question individually and then prompts for an action to take.  The allowed actions are:</p>
+<ul class="bullet">
+<li><code>quit</code> — stop printing questions and return to <b>Ghu</b> command level.</li>
+<li><code>delete</code> — remove this question from the database and display the next one.</li>
+<li><code>answer </code> <em>filename </em> — send a Habitat mail message to the avatar asking the question.  <b>Ghu</b> will prompt the terminal for the text of the message, or, if <em>filename</em> is given, the text will be taken from that file.  After sending this message the question is then removed from the database.</li>
+<li><code>next</code> — print the next question.</li>
+</ul>
+<p>For convenience, abbreviations to any of these answers are allowed. Furthermore, simply entering a carriage return in response to the action prompt will be taken as a <code>next</code> action.</p>
+<p>You can limit the questions by date by specifying <code>since </code><em>date</em>, where <em>date</em> is either a numeric time-code or a string that will be interpreted as a standard VOS date/time string, i.e., <code>&quot;87-12-22 17:43&quot;</code>.</p>
+<br>
+<h2>pages</h2>
+<ul class="bullet">
+<li><code>pages </code><em>value1 </em><code>= </code><em>value2</em></li>
+</ul>
+<p>The <code>pages</code> command truncates the page count of a document.  <em>value1</em> is taken as a text entry ID.  <em>value2</em> is taken as a page count.  The page count of the document indicated by <em>value1</em> is set to be no more that the value indicated by <em>value2</em>.  In other words, any additional pages exceeding the page count are deleted from the document.  For example, if document #1009 is a seven page document, the command</p>
+<ul class="bullet">
+<li><code>pages 1009 = 5</code></li>
+</ul>
+<p>would truncate it to five pages, discarding pages 6 and 7.</p>
+<br>
+<h2>read</h2>
+<ul class="bullet">
+<li><code>read </code> <em>value1</em>  <code>, </code><em>value2</em>  </li>
+</ul>
+<p>The <code>read</code> command prints out the text of a document.  If <em>value1</em> designates an object, it must be a paper, book or plaque object, and that object&#x27;s text entry is printed.  Otherwise, <em>value1</em> should be a plain number, which will be taken as the text database ID number of a text entry to be printed.  <em>value2</em>, if given, specifies a page number within the chosen text entry to print.  If <em>value2</em> is omitted, all pages of the chosen entry are printed.</p>
+<br>
+<h2>readmail</h2>
+<ul class="bullet">
+<li><code>readmail </code><em>value</em></li>
+</ul>
+<p>Will display mail messages waiting for the avatar designated by <em>value</em>. It prints each mail message individually and the prompts for an action to take.  The allowed actions are:</p>
+<ul class="bullet">
+<li><code>quit</code> — stop printing mail messages and return to <b>Ghu</b> command level.</li>
+<li><code>delete</code> — remove this message from the mail database and display the next one.</li>
+<li><code>answer </code> <em>filename </em> — send a reply mail message to the avatar who send the message just displayed.  <b>Ghu</b> will prompt the terminal for the text of the message, or, if <em>filename</em> is given, the text will be taken from that file.</li>
+<li><code>next</code> — print the next message.</li>
+</ul>
+<p>For convenience, abbreviations to any of these answers are allowed. Furthermore, simply entering a carriage return in response to the action prompt will be taken as a <code>next</code> action.</p>
+<p>For example</p>
+<ul class="bullet">
+<li><code>readmail &#x27;chip&#x27;</code></li>
+</ul>
+<p>would read any Habitat mail waiting for Chip.</p>
+<br>
+<h2>remturf</h2>
+<ul class="bullet">
+<li><code>remturf </code><em>value</em></li>
+</ul>
+<p>Removes the region number specified by <em>value</em> from Habitat&#x27;s internal list of regions available to be allocated as turfs to new users.  If <em>value</em> is not on this list, <b>Ghu</b> will give you an error message.</p>
+<br>
+<h2>sendmail</h2>
+<ul class="bullet">
+<li><code>sendmail </code><em>value1 </em> <code>from </code><em>value2 </em>  <code>file </code><em>filename</em></li>
+</ul>
+<p>Sends mail to the avatar designated by <em>value1</em>.  <em>value2</em>, if given, designates the avatar from whom the mail is supposed to be sent.  If <em>value2</em> is omitted, the mail will be from “The Oracle”.  Ordinarily, the text of the message will be taken from the terminal, just as when entering text for a piece of paper using the <code>write</code> command.  If a <em>filename</em> is given, the text will be taken from that file instead.  For example</p>
+<ul class="bullet">
+<li><code>sendmail &#x27;chip&#x27;</code></li>
+</ul>
+<p>would send a mail message to Chip from The Oracle.  On the other hand,</p>
+<ul class="bullet">
+<li><code>sendmail &#x27;chip&#x27; from &#x27;spblives&#x27;</code></li>
+</ul>
+<p>would send a mail message to Chip from SPBlives.  The command</p>
+<ul class="bullet">
+<li><code>sendmail &#x27;chip&#x27; from &#x27;spblives&#x27; file form_letter</code></li>
+</ul>
+<p>would send the message with the text taken from the file “form_letter”.</p>
+<br>
+<h2>teleport</h2>
+<ul class="bullet">
+<li><code>teleport </code><em>value1 </em> <code>= </code><em>value2</em> </li>
+</ul>
+<p><em>value1</em> is taken as a teleport address (and so it should be a string value).  If <em>value2</em> is not given, the <code>teleport</code> command prints out the teleport database entry associated with the given address (<b>Ghu</b> will automatically add the area code if you don&#x27;t explicitly give one).  For example</p>
+<ul class="bullet">
+<li><code>teleport &#x27;Bleem St Cross&#x27;</code></li>
+</ul>
+<p>might output</p>
+<ul class="bullet">
+<li><code>Teleport  &quot;pop-bleemstcross    &quot; --&gt; o 2344</code></li>
+</ul>
+<p>Also, when simply displaying a teleport entry, you can give an address of the form</p>
+<ul class="bullet">
+<li><em>string</em><code>*</code></li>
+</ul>
+<p>and <b>Ghu</b> will display all teleports with address that start with the string <em>string</em>.  For example:</p>
+<ul class="bullet">
+<li><code>teleport &#x27;Bleem*&#x27;</code></li>
+</ul>
+<p>might display this</p>
+<ul class="bullet">
+<li><code>Teleport  &quot;pop-bleemstcross    &quot; --&gt; o 2344</code></li>
+<p>Teleport  &quot;pop-bleemstnend     &quot; --&gt; o 2226</p>
+</ul>
+<p><em>value2</em>, if given, may be a region ID or the object ID of a teleport booth or elevator object.  If <em>value2</em> is given, the <code>teleport</code> command sets the teleport database entry associated with the address <em>value1</em> to point to the region indicated by <em>value2</em>.  If <em>value2</em> identifies a teleport booth or elevator object, the ID of region containing the booth or elevator is used.  For example,</p>
+<ul class="bullet">
+<li><code>teleport &#x27;secretaddress&#x27; = o 2344</code></li>
+</ul>
+<p>would make the teleport address “<code>secretaddress</code>” (or “<code>Secret Address</code>”, since case and whitespace are squeezed out in use) a synonym for “<code>bleemstcross</code>”.</p>
+<br>
+<h2>titles</h2>
+<ul class="bullet">
+<li><code>titles </code> <em>value1</em>   <code>--  </code>  <em>value2</em> </li>
+</ul>
+<p>Prints the titles of documents in the text database for documents in the range from <em>value1</em> to <em>value2</em>.  If <em>value1</em> is omitted, it defaults to 0.  If <em>value2</em> is omitted it defaults to 100,000 (this way you won&#x27;t see peoples&#x27; mail).</p>
+<br>
+<h2>turfs</h2>
+<ul class="bullet">
+<li><code>turfs</code></li>
+</ul>
+<p>Prints a list of all the region numbers in Habitat&#x27;s internal list of regions available to be allocated as turfs to new users.</p>
+<br>
+<h2>write</h2>
+<ul class="bullet">
+<li><code>write  </code><em>value1</em>  <code>, </code><em>value2</em>   <code>file  </code><em>filename</em> </li>
+</ul>
+<p>The <code>write</code> command is the opposite of the <code>read</code> command. <em>value1</em> and <em>value2</em> are taken as a document identifier and page number, respectively, just as in the <code>read</code> command.  The <code>write</code> command, however, <em>writes</em> the text of the indicated document.  If a <em>filename</em> is given, the text is taken from that file.  Otherwise, <b>Ghu</b> prompts the terminal for the new text.</p>
+<p>There is a limit of 16 lines per page with no more than 40 characters per line allowed.  All the standard <code>Ghu</code> backslash (`<code>\</code>&#x27;) escapes are recognized, in order to allow you to put Habitat graphic characters into documents; each such escape sequence, of course, only counts as one character towards the 40 character limit.  Page breaks may be indicated by lines beginning with the pound-sign (`<code>#</code>&#x27;) character.  These lines do not go into the text database and do not count towards the 16 line per page limit. When entering text from the terminal, the end of the text is indicated by a line consisting of a lone period character (`<code>.</code>&#x27;).  When reading the text from a file, the end of text is indicated by the end of the input file.</p>
+<p>If a page number is given, pages in the indicated document are replaced starting with the given page number.  As many pages as you provide text for will be replaced, while remaining pages that were already in the document will not be touched.  For example, suppose document #1009 contains 7 pages and you entered the command</p>
+<ul class="bullet">
+<li><code>write 1009, 3</code></li>
+</ul>
+<p>and then provided two pages worth of text.  The two pages starting with page 3 (i.e., pages 3 and 4) would be replaced, while pages 1 and 2 and 5 through 7 would be left unchanged.</p>
+<p>If no page number is given, the entire document is replaced by the new text you provide.  Thus, in the above example, if you had instead entered the command</p>
+<ul class="bullet">
+<li><code>write 1009</code></li>
+</ul>
+<p>and then provided the same two pages worth of text, the new document #1009 would be a two page document containing just the two new pages you entered. The old contents of pages 1 through 7 would be deleted.</p>
+<p>Note that the format of the output from the <code>read</code> command matches the format of the input expected by the <code>write</code> command.  Thus you can extract the text from one document and put it into another using a temporary file as an intermediary.  For example:</p>
+<ul class="bullet">
+<li><code>read 2000 into tempfile</code></li>
+<p>write 2500 file tempfile</p>
+</ul>
+<p>would copy the text from document 2000 into document 2500.  Using a Stratus file outside of <b>Ghu</b> in this fashion is also useful if you need to do extensive editing on a document, e.g.,</p>
+<ul class="bullet">
+<li><code>read 2000 into tempfile</code></li>
+<p>quit</p>
+<p><em>edit tempfile using Stratus editor</em></p>
+<p><code>ghu</code></p>
+<p>write 2000 file tempfile</p>
+</ul>
+<p>Note that the input and output formats used by <code>read</code> and <code>write</code> are set up so that this will work even with multi-page documents.</p>
+<h2>Class Definition Handling Commands</h2>
+<p><b>Ghu</b> maintains an internal table that describes the names and data types of the fields of each class of object in the system (it also describes the fields of avatars and regions).  This table is saved away in a secret file that <b>Ghu</b> reads every time it starts up.  <b>Ghu</b> provides commands that let you examine and update this table.  (In general, you should never change this table yourself, unless you are making changes to the Habitat software also, such as adding a new object class.)</p>
+<br>
+<h2>class</h2>
+<ul class="bullet">
+<li><code>class </code><em>value</em></li>
+</ul>
+<p>Prints out the current class definition for class number <em>value</em>.  Note that the class definitions for ordinary objects do not include the fields that are common to all objects.  The definition of <em>these</em> fields may be displayed by entering a class value of <code>-1</code>.  For example, entering the command</p>
+<ul class="bullet">
+<li><code>class 74</code></li>
+</ul>
+<p>in the current system would give you the following output:</p>
+<ul class="bullet">
+<li><code>---- Class 74 (teleport) ----</code></li>
+<p>state:                  bin15 = 0</p>
+<p>take:                   bin31 = 0</p>
+<p>address(20):            character = &quot;                    &quot;</p>
+<br>
+</ul>
+<h2>define</h2>
+<ul class="bullet">
+<li><code>define </code><em>value  string</em></li>
+<p>fielddefinitions</p>
+<p><code>enddefine</code></p>
+</ul>
+<p>Adds or changes one of <b>Ghu</b>&#x27;s internal class definitions.  <em>value</em> indicates the class number of the class being defined.  <em>string</em> indicates the name to be given the class (this is the name that is printed out in contents lists and so on).  <em>fielddefinitions</em> are a list of field definitions, one for each field of the class.  Note that regions are class <code>0</code>, avatars are class <code>1</code>, and objects have class numbers greater than <code>1</code>.  Also, the class definitions for ordinary objects do not include the fields that are common to all objects.  These are defined by the “pseudo-class” number <code>-1</code>.</p>
+<p>The field definitions themselves are a series of lines, each with the following form:</p>
+<ul class="bullet">
+<li> <code>#</code>  <em>name</em>  <code>( </code><em>value1</em><code> ) </code> <code>: </code><em>type</em>  <code>= </code><em>value2</em> </li>
+</ul>
+<p>where <em>name</em> is the name of the field and <em>type</em> is the field&#x27;s data type (the allowed types will be given momentarily).  <em>value1</em>, if given, indicates the dimension of an array or string field.  It should be a number. <em>value2</em>, if given, indicates a default initial value for the field.  This value will be used when new instances of this class are created (e.g., using the <code>add</code> command).  If the field is an array field, <em>value2</em> may actually be a list of values separated by commas, one value for each entry in the array.  The “<code>#</code>” character at the start of the line, if given, indicates that this is an “invisible” field.  Such fields are not displayed when the <code>display</code> command displays a thing (though invisible fields can be displayed by asking for them explicitly).</p>
+<p>The allowed data types for fields are the following:</p>
+<ul class="bullet">
+<li><code>character</code> — A character or character string value.  The dimension indicates the length of the string.</li>
+<li><code>bin15</code> — A bin(15) value, i.e., a 2-byte integer.</li>
+<li><code>bin31</code> — A bin(31) value, i.e., a 4-byte integer.</li>
+<li><code>bit</code> — A bit or bit-string value.  The dimension, if given, indicates the length (in bits) of the bit-string.</li>
+<li><code>words</code> — A character or character string, in which each character is placed in its own 2-byte word (this is required for any character string which is to be transmitted to the Commodore 64).  The dimension indicates the length (in words/characters) of the string.</li>
+<li><code>regid</code> — A region ID number.</li>
+<li><code>objid</code> — An object ID number.</li>
+<li><code>avaid</code> — An avatar ID number.</li>
+<li><code>fatword</code> — A 2-byte integer value in which each byte is placed in its own 2-byte word (this is required for any word value that is to be transmitted to the Commodore 64).</li>
+<li><code>entity</code> — A database ID of some sort.  It is stored as a 4-byte ID number together with a 2-byte code that indicates whether it is an object, avatar or region ID number.</li>
+<li><code>varstring</code> — A PL/1 style variable length character string.  The dimension, if given, indicates the maximum length of the string.</li>
+<li><code>byte</code> — A 1-byte integer value.</li>
+</ul>
+<p>For example, the following command would <code>define</code> the display case object as it is currently constituted:</p>
+<ul class="bullet">
+<li><code>define 22 &#x27;display case&#x27;</code></li>
+<p>open_flags:      bin15 = 3</p>
+<p>key:             fatword = 0</p>
+<p>owner:           avaid = 0</p>
+<p>locked(5):       bit = 0, 0, 0, 0, 0</p>
+<p># filler(11):      bit</p>
+<p>enddefine</p>
+</ul>
+<p>note that the unused “filler” bits are flagged as invisible, since they are ordinarily of no interest.</p>
+<h2>Power User Commands</h2>
+<p>These commands enable you to create macros and command files and to tell <b>Ghu</b> to perform operations repetitively or conditionally.  Although everyone will probably make use of macros that are defined for them, most of these facilities are for more advanced <b>Ghu</b> users.</p>
+<br>
+<h2>alias</h2>
+<ul class="bullet">
+<li><code>alias </code> <em>name</em>  <code>= </code><em>string</em>  </li>
+</ul>
+<p>Defines <em>name</em> to be a command alias (abbreviation) for the string <em>string</em>.  Whenever <em>name</em> is found at the beginning of a command line it is textually replace by <em>string</em>.  If <em>string</em> is omitted, the <code>alias</code> command prints out the current alias definition for <em>name</em>. If both <em>name</em> and <em>string</em> are omitted, the <code>alias</code> command prints out a list of all currently defined command aliases.  For example</p>
+<ul class="bullet">
+<li><code>alias odump = &quot;oracle all dump&quot;</code></li>
+</ul>
+<p>would define the alias <code>odump</code> to be a command that would give a complete dump of the oracle question database.</p>
+<br>
+<h2>allmacros</h2>
+<ul class="bullet">
+<li><code>allmacros</code></li>
+</ul>
+<p>Prints out the names and definitions of all macros currently defined.  See the discussion of the <code>macro</code> command, below.</p>
+<br>
+<h2>allnames</h2>
+<ul class="bullet">
+<li><code>allnames</code></li>
+</ul>
+<p>Prints a list of all the symbolic names currently defined, with their values and associated types.  See the discussion of the <code>name</code> command below.</p>
+<br>
+<h2>break</h2>
+<ul class="bullet">
+<li><code>break</code></li>
+</ul>
+<p>The <code>break</code> command provides a convenient way to exit from a loop or a macro.  The <code>break</code> command simply aborts the innermost containing <code>for</code> loop or macro call.  For example:</p>
+<ul class="bullet">
+<li><code>for all o</code></li>
+<p>if (class == box)</p>
+<p>value &quot;Hey!  I found a box, id=&quot;.</p>
+<p>value ident</p>
+<p>break</p>
+<p>endif</p>
+<p>endfor</p>
+</ul>
+<p>This will look through the object database until it finds the first box object, at which point it will print a message and stop.</p>
+<br>
+<h2>execute</h2>
+<ul class="bullet">
+<li><code>execute </code><em>filename</em></li>
+</ul>
+<p>Reads and executes <b>Ghu</b> commands from the indicated file, resuming command input from the terminal upon reaching the end of the file or encountering an error in one of the commands in it.  For example</p>
+<ul class="bullet">
+<li><code>execute mymacros.ghu</code></li>
+</ul>
+<p>would execute the commands in the file “<code>mymacros.ghu</code>”.  One warning about <code>execute</code>: the reading and execution of the commands in the given file will only take place after all commands on the line containing the <code>execute</code> command have been processed.  Thus the command line</p>
+<ul class="bullet">
+<li><code>display foo; execute myfyle; display bar</code></li>
+</ul>
+<p>would first display the value of <code>foo</code>, then set up the file “<code>myfyle</code>” to be executed, then display the value of <code>bar</code>, and only <em>then</em> read and execute whatever is in “<code>myfyle</code>”.  Thus you must be careful in your use of the <code>execute</code> command.  In particular, if the macro <code>verify_user</code> were to be defined in the file “<code>macros.ghu</code>”, then the following would generate an error:</p>
+<ul class="bullet">
+<li><code>execute macros.ghu; verify_user</code></li>
+</ul>
+<p>since <code>verify_user</code> will not be defined until after the whole line is processed.  Putting these two commands on separate lines is the right way to handle this situation.  Similarly,</p>
+<ul class="bullet">
+<li><code>execute some_stuff; quit</code></li>
+</ul>
+<p>will process the <code>quit</code> command (and thus exit <b>Ghu</b>) <em>before</em> the file “<code>some_stuff</code>” is ever read.  For the same reason, you cannot use the <code>execute</code> command in a command string passed to <b>Ghu</b> from VOS command level using the <code>-command</code> option (described below in the section <b>The Ghu Command Line</b>).</p>
+<br>
+<h2>for</h2>
+<ul class="bullet">
+<li><code>for </code><em>value1 </em><code>to </code><em>value2</em></li>
+<p>commands<code></code></p>
+<p>endfor</p>
+</ul>
+<p>or</p>
+<ul class="bullet">
+<li><code>for all </code><em>type</em></li>
+<p>commands<code></code></p>
+<p>endfor</p>
+</ul>
+<ul class="bullet">
+<li><code>forr all </code><em>type </em><code>in </code><em>value</em></li>
+<p>commands<code></code></p>
+<p>endfor</p>
+</ul>
+<p>The <code>for</code> command provides a looping facility.  There are three forms of the <code>for</code> command.  The first form loops from <em>value1</em> to <em>value2</em>.  These values may be object, avatar or region identifiers or they may be plain integer numbers.  If they are object, avatar or region identifiers, then they must both be identifiers of the same type (e.g., both are region identifiers).  In the case of the loop bounds being object, avatar or region identifiers, <b>Ghu</b> executes the commands <em>commands</em> once for each object, avatar or region in the given range, with the current-default-thing set to each object, avatar or region in the range in turn.  If the loop bounds are plain integer numbers, then <b>Ghu</b> executes <em>commands</em> once for each value in the range, with the special symbolic name <code>index</code> set to this value each time through.</p>
+<p>The second form of the <code>for</code> command allows you to loop through all objects, avatars, or regions in the database.  <em>type</em> should be one of the type specifiers <code>a</code>, <code>o</code> or <code>r</code>.</p>
+<p>The third form of the <code>for</code> command allows you to loop through all objects or avatars contained in a particular region or container.  <em>type</em> should be one of the type specifiers <code>a</code> or <code>o</code>.  <em>value</em> should be the identifier of a region, avatar or container object.</p>
+<p>Examples:</p>
+<ul class="bullet">
+<li><code>for all a</code></li>
+<p>value screen_name</p>
+<p>endfor</p>
+</ul>
+<p>prints the screen name of every avatar in the database.</p>
+<ul class="bullet">
+<li><code>for r 1000 to r 5000</code></li>
+<p>display</p>
+<p>endfor</p>
+</ul>
+<p>displays all the regions in the range 1000 to 5000.</p>
+<ul class="bullet">
+<li><code>for 1 to 20</code></li>
+<p>value index</p>
+<p>endfor</p>
+</ul>
+<p>will print the numbers from 1 to 20 (a trivial example).</p>
+<ul class="bullet">
+<li><code>for all o in r 9164</code></li>
+<p>value class</p>
+<p>endfor</p>
+</ul>
+<p>will print the class numbers of all the objects in region 9164.</p>
+<br>
+<h2>if</h2>
+<ul class="bullet">
+<li><code>if </code><em>value1</em></li>
+<p>commands1</p>
+<p> <code>elseif </code><em>value2</em></p>
+<p>commands2 </p>
+<p> <code>else</code><em></em></p>
+<p>commands3 </p>
+<p><code>endif</code></p>
+</ul>
+<p>The <code>if</code> command provides a conditional command execution facility.  If <em>value1</em> evaluates to TRUE (i.e., non-zero), the commands <em>commands1</em> are executed.  Else if <em>value2</em> evaluates to TRUE, then the commands <em>commands2</em> are executed.  Otherwise, the commands <em>commands3</em> are executed.  There may be any number of <code>elseif</code> clause (or none at all). The final <code>else</code> clause may be omitted as well.  For example</p>
+<ul class="bullet">
+<li><code>if region == turf</code></li>
+<p>value &quot;The avatar is already home&quot;</p>
+<p>else</p>
+<p>region = turf!</p>
+<p>value &quot;The avatar has been moved home&quot;</p>
+<p>endif</p>
+</ul>
+<p>would make sure that the default thing (assumed to be an avatar) is home, printing out an appropriate message in either case.</p>
+<br>
+<h2>macro</h2>
+<ul class="bullet">
+<li><code>macro </code><em>name</em></li>
+<p><em>commands</em></p>
+<p><code>endmacro</code></p>
+</ul>
+<p>Defines the macro <em>name</em> as the series of <b>Ghu</b> commands given by <em>commands</em>.  The symbol <em>name</em> may then be used as a <b>Ghu</b> command whose function is to perform whatever actions would be performed by <em>commands</em>.</p>
+<p>When macros are called, you can pass arguments to them.  In the text of the macro itself you can refer to the variable names <code>$1</code>, <code>$2</code>, <code>$3</code>, etc., which refer to the first, second, third, etc. arguments of the macro call.  Here is an example:</p>
+<ul class="bullet">
+<li><code>macro reset</code></li>
+<p>get a $1</p>
+<p>set region = turf</p>
+<p>set bank_balance = $2</p>
+<p>update</p>
+<p>endmacro</p>
+</ul>
+<p>This macro will move an avatar back to his turf and set his bank balance to a specified amount.  You would call it with a command such as this:</p>
+<ul class="bullet">
+<li><code>reset &#x27;chip&#x27;, 100</code></li>
+</ul>
+<p>or</p>
+<ul class="bullet">
+<li><code>reset 145322919, 500</code></li>
+</ul>
+<p>The first example would move the avatar named “chip” home and set his bank balance to 100 tokens, while the second example would move avatar #145322919 home and set his bank balance to 500 tokens.</p>
+<p>All macros defined using the <code>macro</code> command are saved in <b>Ghu</b>&#x27;s environment file when you quit, and are read in again when you start <b>Ghu</b> up again.  Thus, any macro you create will be available for use anytime you run <b>Ghu</b> in the future.  See the section below on <b>The Ghu Command Line</b> for more details about environment files.</p>
+<br>
+<h2>name</h2>
+<ul class="bullet">
+<li><code>name </code><em>name </em><code>=  </code><em>value</em></li>
+</ul>
+<p>Creates the global symbolic name <em>name</em> with the type and value specified by <em>value</em>.  For example</p>
+<ul class="bullet">
+<li><code>name library = r 9164</code></li>
+</ul>
+<p>would define the name <code>library</code> and give it the value <code>r 9164</code>.</p>
+<p>All names defined using the <code>name</code> command are saved in <b>Ghu</b>&#x27;s environment file when you quit, and are read in again when you start <b>Ghu</b> up again.  Thus, any value you name using the <code>name</code> command will be available for use anytime you run <b>Ghu</b> in the future.  See the section below on <b>The Ghu Command Line</b> for more details about environment files.</p>
+<p>Certain names are predefined by <b>Ghu</b> automatically.  These include all the class numbers, represented by symbols such as <code>teleport</code> or <code>box</code>, in addition to the special symbols such as <code>now</code> and <code>random</code> described earlier in the section on expressions.</p>
+<br>
+<h2>start_logging</h2>
+<ul class="bullet">
+<li><code>start_logging </code><em>filename</em>  <code>continue </code> </li>
+</ul>
+<p>Starts logging all <b>Ghu</b> output to the file <em>filename</em>.  This logging is done using the Stratus logging facility, and is a global modification to your Stratus environment.  In particular, if you start logging within <b>Ghu</b> and then exit, terminal output will continue to be logged in <em>filename</em> outside of <b>Ghu</b> as well.</p>
+<p>If the <code>continue</code> keyword is given, the log file is appended to rather than written afresh.</p>
+<br>
+<h2>stop_loggin</h2>
+<ul class="bullet">
+<li><code>stop_logging</code></li>
+</ul>
+<p>Stops any logging that had previously been started by a <code>start_logging</code> command.</p>
+<br>
+<h2>unname</h2>
+<ul class="bullet">
+<li><code>unname </code><em>name</em></li>
+</ul>
+<p>Deletes the symbolic name <em>name</em> from <b>Ghu</b>&#x27;s symbol table and removes it from the environment file.  In effect, this command undoes the work of the <code>name</code> or <code>macro</code> commands.</p>
+<h2>Obscure Lucasfilm Tools Commands</h2>
+<p>These commands are used in conjunction with several of the region creation and editing utilities we use at Lucasfilm.  The Stratus user probably does not need to be concerned with these commands, but we are documenting them in the interest of completeness.</p>
+<br>
+<h2>cook</h2>
+<ul class="bullet">
+<li><code>cook </code><em>filename</em></li>
+</ul>
+<p>Translates the file full of “raw” format object and region definitions named by <em>filename</em> into a collection of new entries in the region and object databases.</p>
+<p>There is an internal array that <b>Ghu</b> allocates which limits the maximum size of the “raw” file that the <code>cook</code> command can handle.  By default, this limit is set at 10,000 regions and objects (total).  If you need to cook a larger “raw” file, you can set the array size larger by using the <code>-cooksize</code> option on the <b>Ghu</b> command line (see below).</p>
+<br>
+<h2>griddle</h2>
+<ul class="bullet">
+<li><code>griddle </code><em>value</em>  <code>full</code> </li>
+</ul>
+<p>The <code>griddle</code> command dumps the object, region or avatar specified by <em>value</em> in “Griddle” format.  (“Griddle” format is a special text format for describing database entries.  It is used by some of the region creation utilities at Lucasfilm.)  If <code>full</code> is specified, it dumps not only the thing specified but any things contained within it, and any things contained within <em>those</em>, and so on.</p>
+<br>
+<h2>raw</h2>
+<ul class="bullet">
+<li><code>raw </code><em>value</em>  <code>full</code> </li>
+</ul>
+<p>The <code>raw</code> command dumps the object, region or avatar specified by <em>value</em> in “raw” format.  (“raw” format is a special text format for describing database entries.  It is used by some of the region creation utilities at Lucasfilm.)  If <code>full</code> is specified, it dumps not only the thing specified but any things contained within it, and any things contained within <em>those</em>, and so on.</p>
+<h2>The Ghu Command Line</h2>
+<p>The <b>Ghu</b> command issued from VOS command level on the Stratus has the following form:</p>
+<ul class="bullet">
+<li><code>ghu</code>  <em>databasedir</em>   <code>-command </code><em>commandstring</em>   <code>-env </code><em>environmentfile</em> </li>
+<p> <code>-no_automacro</code>   <code>-cooksize </code><em>size </em> </p>
+</ul>
+<p>where <em>databasedir</em> is the pathname of a directory in which the various database files for a running Habitat system will be found.  If omitted it defaults to whatever the directory containing the current operational system is.  <em>(Note: for the time being it defaults to a </em><b>Ghu</b> test directory. You have to enter the name of the production system directory yourself.)</p>
+<p><em>commandstring</em> is an optional string of <b>Ghu</b> commands that will be parsed like an ordinary <b>Ghu</b> command line.  If the <code>-command</code> option is used, the commands in <em>commandstring</em> will be executed and then <b>Ghu</b> will exit.  If <code>-command</code> is not given, <b>Ghu</b> will come up in interactive mode and start reading command lines from the terminal until a <code>quit</code> command or an end-of-file is encountered.</p>
+<p><em>environmentfile</em> is the name of a file from which to read (and into which to store) the <b>Ghu</b> environment.  If omitted it defaults (for the time being) to <code>#d010&gt;lucas&gt;toolbox&gt;default.env</code>.  We recommend that anyone doing any serious work with <b>Ghu</b> keep their own environment file.  Stored in the environment file are symbolic name and macro definitions.  Whenever you define a symbolic name using the <code>name</code> command or a macro using the <code>macro</code> command, it is saved in the environment file.  When you start up a <b>Ghu</b> session, this file is read in automatically and all the names and macros are available to you.</p>
+<p>When an environment file is read (either the default file or the one specified with the <code>-env</code> option), <b>Ghu</b> looks in the file for a macro named <code>automacro</code>.  If it finds such a macro, it executes it before starting to read commands from the user.  The execution of the <code>automacro</code> can be circumvented by supplying the <code>-no_automacro</code> option on the <code>Ghu</code> command line.  However, you must have general access (see the next section) to be allowed to use this option.</p>
+<p>The default size of the internal array used by the <code>cook</code> command (see above) may be adjusted using the <code>-cooksize</code> option.  The default is 10,000, but it is sometimes necessary to set it to a larger value when “cooking” huge realms.</p>
+<h2>Access Control</h2>
+<p><code>Ghu</code> provides a simple but powerful mechanism for controlling access to the various Habitat databases and to the manipulations to these databases that <code>Ghu</code> enables.  There are two categories of access that <code>Ghu</code> recognizes, which we call &quot;general access&quot; and &quot;restricted access&quot;.   A user is allowed general access if his or her Stratus account name is listed in the access control file, <code>#d010&gt;lucas&gt;toolbox&gt;ghu_access</code>.  If the user name is not in this file, then <b>Ghu</b> assumes restricted access.</p>
+<p>A general access user may do any of the operations described in this document. A restricted access user may only issue macro calls or execute the <code>quit</code> command.  Note that in order for a restricted access user to be able to do anything useful, this mechanism requires that there be macros pre-defined for him or her to use.  These macros come from an environment file that is set up for the user by someone else with general access.  Access to environment files is regulated via the <code>automacro</code> mechanism described in the previous section.  Typically, an environment file will contain an <code>automacro</code> that looks something like this:</p>
+<ul class="bullet">
+<li><code>macro automacro</code></li>
+<p>if user_name != &#x27;joe.user&#x27; and !general_access</p>
+<p>value &#x27;Hey, you are not the right guy!&#x27;</p>
+<p>quit</p>
+<p>endif</p>
+<p>endmacro</p>
+</ul>
+<p>This macro will throw the user off unless he has user name <code>joe.user</code> or he is a privileged (general access) account.  Typically, environment files should be set up containing macros to perform various special but limited sets of operations.  For example, someone who was responsible for publishing the <em>Rant</em> would be given macros for this purpose.</p>
+<h2>Using Ghu With The Real Database</h2>
+<p>This section discusses the current Habitat databases in some detail.  The information given here describes the database records of the significant object classes, including any important constraints on the values allowed in the various fields.  Eventually, <b>Ghu</b> will attempt to enforce these constraints automagically.  For the time being, however, it only performs the most minimal checks on the data you give it, so you need this information to help you avoid breaking things.</p>
+<p>In the descriptions that follow, we will describe each field using the syntax of the <code>define</code> command, described above.  This will provide the name, dimension, data type, and so on.  We will follow this with descriptive text giving other details about the field.</p>
+<h2>The Basic Object</h2>
+<p>These are the fields of the “basic object”.  All objects have these fields, regardless of class.  Some objects also have additional, class-specific fields, which will be discussed later.</p>
+<ul class="bullet">
+<li><code># ident:          objid</code></li>
+</ul>
+<p>This is the global ID number of the object.  DO NOT CHANGE THIS VALUE UNDER ANY CIRCUMSTANCES.</p>
+<ul class="bullet">
+<li><code># class:          bin31</code></li>
+</ul>
+<p>This is the class of the object.  This is always a number in the range 2 to 255.  Not all of the numbers in this range are currently used, however, and the <code>class</code> field should always have a value that corresponds to an existing class number.  In general, you should never change the value of this field, except in the most specialized of circumstances.  If you need to change the class of an existing object, consult your local Habitat guru.</p>
+<ul class="bullet">
+<li><code>  container:      entity</code></li>
+</ul>
+<p>This is the ID of the thing containing this object.  All objects are contained by something.  This ID should correspond to an actual object, avatar or region somewhere in the database, with the following exception: <code>r 99</code> (region #99) is the “container” for deleted objects.  That is, objects which are destroyed are not actually removed from the database.  Instead, they are moved to region #99.  There is no region #99, so if you try to display it you will get an error message from <b>Ghu</b>.  However, you <em>can</em> look at its contents with the <code>contents</code> command (amazing, huh?) and see the list of deleted objects (this will be a <em>long</em> list!).</p>
+<ul class="bullet">
+<li><code>  x:              bin15</code></li>
+</ul>
+<p>This is the horizontal position of the object on the screen.  It should be a positive number less than 160 (sometimes a larger value will be used to place an object “off stage”, but this should not be done in regular practice). Furthermore, this value <em>must</em> be a multiple of 4.  A value of 0 corresponds to the left-hand edge of the screen, while 156 (the maximum allowed value in general) corresponds to the right-hand edge.  The x-coordinate is only relevant if the object is contained by a region.  If the object is contained by an avatar or another object, then the x-coordinate is ignored.</p>
+<ul class="bullet">
+<li><code>  y:              bin15</code></li>
+</ul>
+<p>This is (in general) the vertical position of the object on the screen. However, the interpretation of this field&#x27;s value is a little bit complicated.</p>
+<p>If the object is contained by a region, the <code>y</code> field indicates the vertical screen position of the object.  The allowed vertical screen positions are in the range from 0 to 127, with 0 indicating the bottom of the screen and 127 indicating the top (actually, the top of the Habitat graphics window, not the top of the screen itself).  However, objects may be placed in either the <em>foreground</em> or the <em>background</em>.  Background objects are not redrawn every frame, so it is advantageous, in terms of frame rate, to have as many of the objects in the region as possible be in the background.  However, objects that move around cannot be placed in the background, and avatars cannot walk behind background objects.  Thus a lamp post on a street corner, for example, should be placed in the foreground.  Background objects are given <code>y</code> values in the range 0 to 127 corresponding directly to their vertical screen positions.  Foreground objects are given <code>y</code> values in the range 128 to 255, corresponding to their vertical screen positions plus 128 (i.e., 128 is the bottom of the screen and 255 is the top).  Note also that foreground objects should never be placed higher than the region&#x27;s horizon line (indicated by the region&#x27;s <code>depth</code> field, described below).</p>
+<p>If the object is contained by an avatar or another object, rather than by a region, the <code>y</code> field encodes the object&#x27;s position within its container. Each container object has a limited number of containment “slots”.  The exact number varies with the class of the container object.  The <code>y</code> field of the contained object must be a positive number that is less than the maximum number of slots in the container.  Furthermore, you should be careful that no more than one object goes into a particular slot (i.e., no two objects in the same container have the same <code>y</code> value).</p>
+<ul class="bullet">
+<li><code>  style:          bin15</code></li>
+</ul>
+<p>This is the graphic style of the object.  The graphic style encodes which of a number of possible graphic images will be displayed for the object.  Many objects only have a single possible style, so this value is usually 0.  The number of available styles for any class of objects is usually quite small in any case.  What the style numbers actually mean in terms of any particular object varies depending on the class.  Consult the <b>Habitat Object Manual</b> for details.</p>
+<ul class="bullet">
+<li><code>  gr_state:       bin15</code></li>
+</ul>
+<p>This is the graphic state of the object.  The graphic state encodes which of a small number of variations of a particular image is to be displayed.  Graphic state variations often correspond to functional state variations of the object itself.  For example, the two states of a door image, 0 and 1, correspond to the door closed and the door open respectively.  As with graphic style, consult the <b>Habitat Object Manual</b> for the specific graphic state information about each available class.</p>
+<ul class="bullet">
+<li><code>  orient:         bin15</code></li>
+</ul>
+<p>This field contains the orientation of the object (i.e., whether it is facing right or left).  The <code>orient</code> field also controls the color or pattern that the object will be displayed with.  The value for <code>orient</code> is computed as</p>
+<ul class="bullet">
+<li><code>patcol*128 + color*8 + orientation</code></li>
+</ul>
+<p>where <code>orientation</code> is 0 if the object is to have normal orientation (facing right) or 1 if the object is to have reversed orientation (facing left); <code>color</code> is the color or pattern number for the object (the colors are just the normal 16 Commodore 64 colors; the patterns are the 16 we&#x27;ve all come to know and love); and <code>patcol</code> is 1 if <code>color</code> is to be interpreted as a color and 0 if <code>color</code> is to be interpreted as a pattern number.</p>
+<ul class="bullet">
+<li><code>  gr_width:       bin15</code></li>
+</ul>
+<p>This field is obsolete.  In the future it may be renamed and then reused for another purpose.  Until then, ignore it.</p>
+<ul class="bullet">
+<li><code>  restricted:     bit</code></li>
+</ul>
+<p>This is a bit-flag that, if set, indicates that the object is “restricted”. The restriction mechanism is used, for example, to keep library books in the library and board game pieces in the arcade.  If an object&#x27;s <code>restricted</code> bit is set, the system enforces the following limitations on the behavior of an avatar holding it: (1) he cannot put the object in his pocket nor into any sort of portable container, (2) he cannot turn into a ghost, and (3) he cannot leave a region through any exit which has its corresponding exit restriction bit set in the region record.</p>
+<ul class="bullet">
+<li><code>  nitty_bits(31): bit</code></li>
+</ul>
+<p>These are 31 general purpose bit-flags that are not allocated to any particular purpose.  They will be used up as features are added to the system. In addition, they may be used for various short-term purposes by games that we might invent which would run for perhaps a few days and then be removed from the system.  Ordinarily, however, you need not be concerned with these bits.</p>
+<ul class="bullet">
+<li><code># fillers(5):     bin15</code></li>
+</ul>
+<p>This field is simply a place holder.  Don&#x27;t touch it.</p>
+<ul class="bullet">
+<li><code># prop_length:    bin15</code></li>
+</ul>
+<p>This field is used internally.  ABSOLUTELY NEVER ALTER THIS FIELD!</p>
+<ul class="bullet">
+<li><code># property_data:  bin15</code></li>
+</ul>
+<p>This is a dummy field that is used internally as a place-holder for the class-specific fields, if there are any.  Don&#x27;t mess with it.</p>
+<h2>The Avatar</h2>
+<p>These are the fields of the avatar record.</p>
+<ul class="bullet">
+<li><code># ident:           avaid</code></li>
+</ul>
+<p>This is the global ID number of the avatar.  DO NOT CHANGE THIS VALUE UNDER ANY CIRCUMSTANCES</p>
+<ul class="bullet">
+<li><code>  region:          regid</code></li>
+</ul>
+<p>This is the region ID number of the region where the avatar is currently located.  It should, of course, be the ID of an actual region.</p>
+<ul class="bullet">
+<li><code>  container:       objid</code></li>
+</ul>
+<p>This is the global ID number of an object containing the avatar.  This is used to handle avatars sitting in chairs and the like.  If the avatar is not sitting in a chair (i.e., usually), then this field should be set to 0.</p>
+<ul class="bullet">
+<li><code>  x:               bin15</code></li>
+</ul>
+<p>This is the horizontal position of the avatar on the screen.  It is interpreted in the same way as the <code>x</code> field of an object (see above), with one exception.  The exception is that an <code>x</code> value of -1 indicates that the avatar is currently a ghost.</p>
+<ul class="bullet">
+<li><code>  y:               bin15</code></li>
+</ul>
+<p>This is the vertical position of the avatar on the screen.  It is interpreted in exactly the same way as the <code>y</code> field of an object (see above).</p>
+<ul class="bullet">
+<li><code># not_really_turf: regid</code></li>
+</ul>
+<p>This is an historical artifact.  Ignore it.</p>
+<ul class="bullet">
+<li><code>  gr_state:        bin15</code></li>
+</ul>
+<p>This is the graphic state of the avatar.  Its value is computed as</p>
+<ul class="bullet">
+<li><code>invisible*128 + onhold*64 + moonwalk</code></li>
+</ul>
+<p>where <code>invisible</code> is 1 or 0 corresponding to whether or not the avatar is to be invisible; <code>moonwalk</code> is similarly 1 or 0 corresponding to whether or not the avatar is supposed to moonwalk (i.e., face backwards when walking); and <code>onhold</code> indicates whether the avatar is waiting to be displayed in a region.  The only avatars who should ever be made invisible are oracle avatars in oracle regions; anything else would be inviting people to invade each others&#x27; privacy.  Also, you should NEVER set the <code>onhold</code> bit.</p>
+<ul class="bullet">
+<li><code>  gr_width:        bin15</code></li>
+</ul>
+<p>This field is obsolete.  In the future it may be renamed and then reused for another purpose.  Until then, ignore it.</p>
+<ul class="bullet">
+<li><code>  genl_flags(32):  bit</code></li>
+</ul>
+<p>These are 32 general purpose bit-flags that are not allocated to any particular purpose.  However, for the time being it is preferable to use the <code>nitty_bits</code> (see below), so don&#x27;t touch these.</p>
+<ul class="bullet">
+<li><code>  orient:          bin15</code></li>
+</ul>
+<p>This field contains the orientation of the avatar.  It is similar to the <code>orient</code> field of an object (see above).  However the interpretation of the number is somewhat different.  The value is computed as</p>
+<ul class="bullet">
+<li><code>sex*128 + height*8 + orientation</code></li>
+</ul>
+<p>where <code>orientation</code> is 0 if the avatar is to face right or 1 if the avatar is to face left (facing front or back is controlled by the <code>activity</code> field, described below); <code>height</code> is the height of the avatar in the range 0 to 15; and <code>sex</code> is 1 if the avatar is female and 0 if the avatar is male.</p>
+<ul class="bullet">
+<li><code># prof_length:     bin15</code></li>
+</ul>
+<p>This field is used internally.  ABSOLUTELY NEVER ALTER THIS FIELD!</p>
+<ul class="bullet">
+<li><code>  style:           byte</code></li>
+</ul>
+<p>This field tells what sort of avatar this is (e.g., regular avatar, penguin, dragon, etc.).  Ordinarily it is 0 (meaning a regular avatar body).  See the <b>Habitat Object Manual</b> for details about the available avatar styles.</p>
+<ul class="bullet">
+<li><code># filler(27):      character</code></li>
+</ul>
+<p>This field is simply a place holder.  Don&#x27;t touch it.</p>
+<ul class="bullet">
+<li><code>  name(10):        character = &quot;&quot;</code></li>
+</ul>
+<p>This is the name of the avatar in “internal” form, i.e., all characters converted to lower case and all spaces squeezed out.  You can look but DON&#x27;T EVER CHANGE THIS VALUE.</p>
+<ul class="bullet">
+<li><code>  screen_name(10): character = &quot;&quot;</code></li>
+</ul>
+<p>This is the name of the avatar as the user entered it.  As with the <code>name</code> field, you can look at this value but DON&#x27;T EVER CHANGE IT.</p>
+<ul class="bullet">
+<li><code>  activity:        bin15</code></li>
+</ul>
+<p>This field encodes the posture or gesture that the avatar is currently assuming.  See the <b>Habitat Object Manual</b> for details on the possible values.  In general, however, you should not alter the value of this field yourself except in specialized circumstances.</p>
+<ul class="bullet">
+<li><code>  action:          bin15</code></li>
+</ul>
+<p>This is an internal value used for animation on the Commodore 64.  Don&#x27;t touch it.</p>
+<ul class="bullet">
+<li><code>  health:          bin15</code></li>
+</ul>
+<p>This field indicates the relative physical health of the avatar.  Allowed values are in the range 0 to 255, with a value of 255 indicating perfect health and a value of 0 indicating that the avatar is dead.</p>
+<ul class="bullet">
+<li><code>  restrainer:      bin15</code></li>
+</ul>
+<p>This is an historical artifact.  Don&#x27;t mess with it.</p>
+<ul class="bullet">
+<li><code>  custom(3):       bin15</code></li>
+</ul>
+<p>These three values encode the customization parameters of the avatar. <code>custom(1)</code> is</p>
+<ul class="bullet">
+<li><code>torsoPattern*16 + armPattern</code></li>
+</ul>
+<p>where <code>torsoPattern</code> is the pattern number to be applied to the avatar&#x27;s upper body and <code>armPattern</code> is the pattern for the arms.  Both of these pattern numbers can take values in the range from 0 to 15.  Similarly, <code>custom(2)</code> is just</p>
+<ul class="bullet">
+<li><code>legPattern</code></li>
+</ul>
+<p>i.e., the pattern to apply to the avatar&#x27;s legs (again, in the range 0 to 15). <code>custom(3)</code> is currently reserved for future use.</p>
+<ul class="bullet">
+<li><code>  bank_balance:    bin31</code></li>
+</ul>
+<p>This is the avatar&#x27;s bank account balance.  Be careful how much money you give people.</p>
+<ul class="bullet">
+<li><code>  turf:            regid</code></li>
+</ul>
+<p>This is the region ID of the region that is the avatar&#x27;s turf.  Changing this value changes where the avatar lives.</p>
+<ul class="bullet">
+<li><code>  stun_count:      bin15</code></li>
+</ul>
+<p>This is a counter that is used to implement stun guns and magic which temporarily disables the avatar.  If this field has a value greater than 0, then the avatar cannot move.  Each time the avatar tries to move, the value of <code>stun_count</code> is decremented by one, until it reaches 0 and then avatar can move again.  As a rule of thumb, it should never be set to more than 3.</p>
+<ul class="bullet">
+<li><code>  nitty_bits(31):  bit</code></li>
+</ul>
+<p>These are 31 general purpose bit-flags that are not allocated to any particular purpose.  They will be used up as features are added to the system. In addition, they may be used for various short-term purposes by games that we might invent which would run for perhaps a few days and then be removed from the system.  Ordinarily, however, you need not be concerned with these bits.</p>
+<ul class="bullet">
+<li><code>  curse_immune:    bit</code></li>
+</ul>
+<p>This bit indicates that the avatar is currently immune to curses.  Ordinarily it is set by being cured of a curse, and then cleared daily by a batch process.  By this means you can only get cursed once per day.</p>
+<ul class="bullet">
+<li><code>  true_orient:     bin15</code></li>
+</ul>
+<p>This field holds the “true” value of the <code>orient</code> field, i.e., the value that it was set to when the avatar was hatched.  Ordinarily you should not change it.  This field (and the other <code>true_</code><em>xxx</em> fields below) allow us to restore an avatar to his normal state after having been changed by magic and such.</p>
+<ul class="bullet">
+<li><code>  true_head_style: bin15</code></li>
+</ul>
+<p>This field holds the “true” <code>style</code> value of the avatar&#x27;s head.  This is set when the avatar is hatched and changed whenever the avatar changes his head voluntarily.  However, if the avatar&#x27;s head is changed by magic or other involuntary means, this field is <em>not</em> updated.  This way we can figure out what the avatar&#x27;s head is really supposed to be.</p>
+<ul class="bullet">
+<li><code>  true_custom(3):  bin15</code></li>
+</ul>
+<p>These fields hold the “true” values of the <code>custom</code> fields (described above).</p>
+<ul class="bullet">
+<li><code>  curse_type:      bin15</code></li>
+</ul>
+<p>This is the curse that the avatar is currently inflicted with, if any.  If the avatar is not cursed (that is, almost always), this field should be set to 0. If the avatar <em>is</em> cursed, then the number here corresponds to what curse he has.  You shouldn&#x27;t set this field to a non-zero value unless you know what curse you are giving.</p>
+<ul class="bullet">
+<li><code>  curse_counter:   bin15</code></li>
+</ul>
+<p>This is a counter that is used for the maintainance of curses.  It is the number of “tags” that the avatar must issue before being freed of the curse. Ordinarily it has values such as 1 or 2.</p>
+<ul class="bullet">
+<li><code>  last_on:         bin31</code></li>
+</ul>
+<p>This field holds the time that the avatar last signed on.  The <code>display</code> command will decode it into a readable time and date.  You should never change this value yourself.</p>
+<h2>The Region</h2>
+<ul class="bullet">
+<li><code>  ident:             regid</code></li>
+</ul>
+<p>This is the global ID number of the region.  DO NOT CHANGE THIS VALUE UNDER ANY CIRCUMSTANCES</p>
+<ul class="bullet">
+<li><code>  owner:             avaid = -1</code></li>
+</ul>
+<p>This is the avatar ID of the avatar who “owns” this region, i.e., whose turf this region is.  Most regions (“public regions”) are not owned by anyone. This is indicated by setting this field to -1.  Setting this field to 0 indicates that this region is reserved to be a turf region, but has not yet been assigned to anyone.</p>
+<ul class="bullet">
+<li><code>  light_level:       bin15 = 0</code></li>
+</ul>
+<p>This is the illumination level that is “natural” for the region.  A value of 0 or more indicates that the region is lit, while -1 or less indicates that the region is dark.  Turning on a light in the region increments this value by one; turning the light off again decrements it.  Normally, this value will be set to 0 or -1.  Other values result in confusion for players.</p>
+<ul class="bullet">
+<li><code>  depth:             bin15 = 32</code></li>
+</ul>
+<p>This field indicates how “deep” the region is.  That is, how far back from the front of the screen the region extends.  In practical terms, this is the y-position of the region&#x27;s horizon line.  The normal value for this field is 32, although specialized regions may deviate from this.</p>
+<ul class="bullet">
+<li><code>  east_neighbor:     regid</code></li>
+<p><code>  west_neighbor:     regid</code></p>
+<p><code>  north_neighbor:    regid</code></p>
+<p><code>  south_neighbor:    regid</code></p>
+</ul>
+<p>These fields are the region IDs of the adjoining regions in each of the given directions.  A value of -1 indicates that there is no region in that direction.</p>
+<ul class="bullet">
+<li><code>  class_group:       bin15</code></li>
+</ul>
+<p>This is for future use.  Ignore it for the time being.</p>
+<ul class="bullet">
+<li><code>  orient:            bin15</code></li>
+</ul>
+<p>This is the region&#x27;s orientation, or facing, with respect to the Habitat compass.  The region&#x27;s orientation is the direction that is up, or to the back, when the region is displayed on the screen.  The possibles values are 0 through 3, with 0=west, 1=north, 2=east and 3=south.</p>
+<ul class="bullet">
+<li><code>  entry_proc:        bin15</code></li>
+<p><code>  exit_proc:         bin15</code></p>
+</ul>
+<p>These are code numbers for special procedures to be executed whenever an avatar enters or leaves the region.  For the time being, these fields should always be set to 0.</p>
+<ul class="bullet">
+<li><code>  east_exit:         bin15</code></li>
+<p><code>  west_exit:         bin15</code></p>
+<p><code>  north_exit:        bin15</code></p>
+<p><code>  south_exit:        bin15</code></p>
+</ul>
+<p>These are “exit types” for each of the specified directions.  Special actions can thus be associated with each exit.  For the time being, however, these fields should always be set to 0.</p>
+<ul class="bullet">
+<li><code>  east_restriction:  bit</code></li>
+<p><code>  west_restriction:  bit</code></p>
+<p><code>  north_restriction: bit</code></p>
+<p><code>  south_restriction: bit</code></p>
+</ul>
+<p>These are bit-flags that indicate restrictions on each of the respective exits from the region.  If an exit&#x27;s restriction bit is set, the system will not allow an avatar to leave in that direction if he is holding an object whose <code>restriction</code> bit is set.</p>
+<ul class="bullet">
+<li><code>  weapons_free:      bit</code></li>
+</ul>
+<p>This is a bit-flag that, if set, indicates that this is a weapons-free zone region.  In such regions the system will not allow weapons to do any damage.</p>
+<ul class="bullet">
+<li><code>  theft_free:        bit</code></li>
+</ul>
+<p>This is a bit-flag that, if set, indicates that this is a theft-free zone region.  In such regions the system will not allow avatars to grab things out of other avatars&#x27; hands.</p>
+<ul class="bullet">
+<li><code>  nitty_bits(26):    bit</code></li>
+</ul>
+<p>These are 26 general purpose bit-flags that are not allocated to any particular purpose.  They will be used up as features are added to the system. In addition, they may be used for various short-term purposes by games that we might invent which would run for perhaps a few days and then be removed from the system.  Ordinarily, however, you need not be concerned with these bits.</p>
+<ul class="bullet">
+<li><code>  name(20):          character = &quot;&quot;</code></li>
+</ul>
+<p>This is the “name” of the region.  It is a string that is given when the player asks for HELP for the region.  It should identify the region&#x27;s location, if you want the player to be able to find this out.  If the player is supposed to be lost when in this region, then set this to a blank string.</p>
+<ul class="bullet">
+<li><code>  avatars:           byte</code></li>
+</ul>
+<p>This is the maximum number of avatars allowed in the region.  It should almost always be 6.  It should NEVER be greater than 6.</p>
+<ul class="bullet">
+<li><code># filler(35):        character</code></li>
+</ul>
+<p>This field is simply a place holder.  Don&#x27;t touch it.</p>
+<h2>Other Objects</h2>
+<p>Each class of object may have fields which are unique to the class.  However, there are several groups of important classes that are similar to one another and so are treated uniformly by much of the Habitat software.  For complete details, see the <b>Habitat Object Manual</b>.  However, the important cases are described below:</p>
+<br>
+<h2>magic</h2>
+<p>The amulet (class 2), gemstone (33), knick-knack (43), magic staff (46), magic wand (47), ring (60), and switch (97) are magical.  All magical objects have these fields:</p>
+<ul class="bullet">
+<li><code>  magic_type:      bin15</code></li>
+<p>magic_data:      bin31</p>
+</ul>
+<p><code>magic_type</code> indicates what sort of magic this item has.  A value of 0 means that it is not magical after all.  <code>magic_data</code> is a general-purpose data word whose meaning depends on the type of magic.  The allowed magic types will not be described here.  Consult your local guru (eventually this will be documented, but it isn&#x27;t yet).</p>
+<br>
+<h2>containers</h2>
+<p>The bag (class 5), box (13), chest (135), garbage can (32), hole (88), safe (150) are all containers that may be open or closed, locked or unlocked. Furthermore, the bed (class 130), bureaucrat (158), chair (134), couch (137), countertop* (18), display case* (22), glue* (98), pawn machine(96), table (155), vendo front* (85), and vendo inside* (86) are also containers, though they are always open.  In addition, the door (class 23), while not a container, obeys the same open/close, locked/unlocked rules as containers do, and so can be treated as a container for many purposes.  Containers all have these fields (the classes marked “*” also have additional fields which are not discussed here; please consult the <b>Habitat Object Manual</b>).</p>
+<ul class="bullet">
+<li><code>  open_flags:      bin15 = 0</code></li>
+<p>key:             fatword = 0</p>
+</ul>
+<p><code>open_flags</code> encodes whether the container is open or closed, locked or unlocked.  Its value is computed as</p>
+<ul class="bullet">
+<li><code>unlocked*2 + open</code></li>
+</ul>
+<p>Where <code>unlocked</code> is 1 or 0 depending on whether the container is unlocked or locked, and <code>open</code> is 1 or 0 depending on whether the container is open or closed.  Note that if the container is open, the value of <code>unlocked</code> is really irrelevant.  <code>key</code> is the key number of the key that locks and unlocks this container.  If there is no key for this container, this should be 0.  The containers which are listed above as being permanently open should always have their <code>open_flags</code> field set to 3 and their <code>key</code> field set to 0.</p>
+<br>
+<h2>books and paper</h2>
+<p>The book (class 10), plaque (55) and paper (54) objects all have a field</p>
+<ul class="bullet">
+<li><code>  text_id:         bin31</code></li>
+</ul>
+<p>that is the text database ID of the document to be displayed for the text of the object.  Text IDs greater than 100,000 are reserved for mail.  (The book and plaque objects have other fields in addition to this one; ignore them.)</p>
+<br>
+<h2>buildings and doors</h2>
+<p>The building (class 132) and the door (class 23) have a field</p>
+<ul class="bullet">
+<li><code>  connection:      regid = -1</code></li>
+</ul>
+<p>that indicates which region the door or building is “connected to”.  Walking to a building or through an open door will take an avatar to this region.  A value of -1 in this field indicates the default, which is whatever region is adjoining in the “up” direction from the region containing the building or door.</p>
+<br>
+<h2>teleports</h2>
+<p>The elevator (class 28) and the teleport (class 74) have these fields</p>
+<ul class="bullet">
+<li><code>  state:           bin15 = 0</code></li>
+<p>take:            bin31 = 0</p>
+<p>address(20):     character = &quot;&quot;</p>
+</ul>
+<p>The only one of these which is important is <code>address</code>.  This is the teleport address as it should be displayed by the player HELP (F7) function. <code>state</code> and <code>take</code> are irrelevant for the elevator.  In the teleport they encode whether the teleport is active or not (don&#x27;t touch this yourself) and how much money the booth has taken in, respectively.</p>
+<br>
+<h2>plants and rocks</h2>
+<p>The plant (class 58) and the rock (class 61) have a field</p>
+<ul class="bullet">
+<li><code>  mass:            bin15 = 1</code></li>
+</ul>
+<p>This indicates whether or not the plant or rock can be picked up by an avatar. A <code>mass</code> of 0 means that it <em>can</em> be picked up, a value of 1 means that it cannot.</p>
+<hr>
+<pre><b>Appendix A: Character Escape Codes</b></pre>
+<br>
+<p>These are the character escape codes that you may use in strings to represent non-printing characters and Habitat sign formatting symbols:</p>
+<pre>
+	<code></code>		newline
+	<code></code>		horizontal tab
+	<code></code>		backspace
+	<code></code>		carriage return
+	<code></code>		form feed
+	<code>\</code>		escape
+	<code>\\</code>		backslash
+	<code>\&#x27;</code>		apostrophe
+	<code>\&quot;</code>		quote
+	<code>\ </code>		(backslash-space) half space
+	<code>\#</code>		double space
+	<code>\+</code>		increment text width
+	<code>\-</code>		decrement text width
+	<code>\R		increment text height</code>
+	<code>\)</code>		decrement text height
+	<code></code>		half size characters
+	<code>\R</code>		sign carriage return
+	<code></code>		move half character space down
+	<code></code>		shift to inverse video
+	<code>\&gt;</code>		cursor right
+	<code>\&lt;</code>		cursor left
+	<code>\^</code>		cursor up
+	<code></code>		cursor down
+	<code>\^</code><em>c</em>		CONTROL-<em>c</em> (where <em>c</em> is any character).
+	<code>\</code><em>ddd</em>		arbitrary byte (where <em>ddd</em> is one, two or three octal digits).
+	<code></code><em>hh</em>		arbitrary byte (where <em>hh</em> is one or two hexadecimal digits).</pre>
+<hr>
+<pre><b>Appendix B: Operator Precedences</b></pre>
+<br>
+<p>These are the precedences of the various expression operators.  From highest to lowest:</p>
+<pre>
+	<code>( )</code>
+	?
+	a o r
+	.
+	- ~ ^             (unary <code>-</code> and <code>^</code>)<code></code>
+	* /
+	+ -               (binary <code>-</code>)<code></code>
+	&amp;
+	^                 (binary <code>^</code>)<code></code>
+	|
+	&lt; lt &gt; gt == eq &lt;= leq &gt;= geq != neq
+	! not
+	&amp;&amp; and
+	|| or</pre>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/ghuguide.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

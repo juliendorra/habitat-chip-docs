@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOODL Spec - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/noodl.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Noodl™</h1>
+<p class="author">by a negligible-overhead object description language for MicroCosm, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document #3</p>
+<h2>INTRODUCTION</h2>
+<p>This document describes <b>Noodl</b>, the <b>N</b>egligible <b>O</b>verhead <b>O</b>bject <b>D</b>escription <b>L</b>anguage, which provides a convenient format for defining object class descriptions to be run under <b>Looi</b>, the <b>L</b>ow <b>O</b>verhead <b>O</b>bject <b>I</b>nterpreter in the <b>MicroCosm</b> host database system.  The purpose of this document is to try to get it all straight before we get bogged down in implementation.</p>
+<h2>WHAT IT IS</h2>
+<p><b>Noodl</b> is a simple <b>C</b> preprocessor that adds an extra layer of “syntactic sugar” for the definition of the arrays, structs and functions required to specify <b>Looi</b> objects.</p>
+<h2>OBJECT CLASS DEFINITIONS</h2>
+<p>Input to <b>Noodl</b> consists of two sorts of things: blocks of <b>C</b> statements</p>
+<pre>
+		<code>{</code>
+			<em>any-C-statements-you-choose</em>
+		<code>}</code>
+</pre>
+<p>and object class definitions</p>
+<pre>
+		<code>class </code><em>class-name </em><code>( </code><em>property-names </em><code>)</code>
+			<em>capability-definition</em>
+			<em>capability-definition</em>
+			<em>...</em>
+			<em>capability-definition</em>
+		<code>!</code>
+</pre>
+<p>where <em>class-name</em> is an identifier to use as the name of the object class being defined.  <em>Property-names</em> is a comma-separated list of identifiers to be used as the names of the object&#x27;s properties (i.e., the elements in the object&#x27;s property vector).  These properties are in addition to the four essential properties possessed by all objects: <em>class</em>, <em>owner</em>, <em>location</em>, and <em>image</em>.  The list of property names may be empty, in which case no extra properties are defined.  <em>Capability-definition</em> is (surprise!) a capability definition (described below).</p>
+<h2>CAPABILITY DEFINITIONS</h2>
+<p>A capability definition specifies one capability of an object.  Its form is</p>
+<pre>
+	<em>capability-name </em><code>( </code><em>arguments </em><code>) {</code>
+		<em>any-C-statements-you-choose</em>
+	<code>}</code>
+</pre>
+<p>where <em>capability-name</em> is an identifier chosen to be the name of the capability.  This need be unique only within the context of the particular object definition being given (i.e., different object classes can have capabilities with the same name).  <em>Arguments</em> is a comma-separated list of identifiers to be used as the symbolic names of the arguments to the capability procedure that will be generated.  The body of the capability definition can be any arbitrary group of <b>C</b> statements, as long as it does not include any function definitions (since it will itself become the body of a <b>C</b> function).</p>
+<h2>WHAT IT DOES</h2>
+<p>What <b>Noodl</b> does with all of this is generate some <code>struct</code> declarations and some compilable functions.</p>
+<h2>CLASS DESCRIPTOR TYPE</h2>
+<p>The ultimate output of <b>Noodl</b> is <b>C</b> code to initialize instances of a class descriptor <code>struct</code>.  For reference, here is this <code>struct</code>&#x27;s definition:</p>
+<pre>
+		<code>typedef struct {</code>
+			capabilityVectorType	*capabilityVector;
+			int					 capabilityCount;
+			int					 propertyCount;
+		} classDescriptorType;
+</pre>
+<h2>CAPABILITY VECTOR TYPE</h2>
+<p>The class descriptors are initialized with capability vectors, whose type is defined as:</p>
+<pre>
+		<code>typedef requestResultType (*capabilityVectorType[])();</code>
+</pre>
+<p>This peculiar definition translates into english as “array of pointers to functions returning <code>requestResultType</code>s”, i.e., an array of capability procedures. <code>requestResultType</code> is the data type of all results passed back by capability procedures.</p>
+<h2>PROPERTY VECTOR TYPES</h2>
+<p><b>Noodl</b> defines a separate property vector data type for each class of object.  However, they all have essentially the same form:</p>
+<pre>
+		<code>typedef struct {</code>
+			int		class;
+			int		location;
+			int		owner;
+			int		image;
+			<em>other properties as defined</em>
+		<code>} </code><em>objectName</em><code>PropertyVectorType;</code>
+</pre>
+<p>Yes, we define it internally as a <code>struct</code> even thought we&#x27;ve been calling it a “vector” all along.</p>
+<h2>PUTTING IT ALL TOGETHER</h2>
+<p>The following example illustrates what happens when we put all these definitions and so on together and run it through <b>Noodl</b>:</p>
+<pre>
+		<code>{</code>
+			<em>C-stuff-1</em>
+		<code>}</code>
+
+		class foo (zip, zap, zim, zam)
+			snoz (arg1) {
+				<em>C-stuff-2</em>
+			<code>}</code>
+			sneez () {
+				<em>C-stuff-3</em>
+			<code>}</code>
+			snuuuz (arg1, arg2, arg3) {
+				<em>C-stuff-4</em>
+			<code>}</code>
+		!
+
+		class bar (oop) {
+			wop () {
+				<em>C-stuff-5</em>
+			<code>}</code>
+			bop (foo) {
+				<em>C-stuff-6</em>
+			<code>}</code>
+		!
+</pre>
+<p>which translates into</p>
+<pre>
+		<em>C-stuff-1</em>
+
+		<code>typedef struct {</code>
+			int		class;
+			int		location;
+			int		owner;
+			int		image;
+			int		zip;
+			int		zap;
+			int		zim;
+			int		zam;
+		} fooPropertyVectorType;
+
+		requestResultType foo_snozCapability(object, capabilityNumber, arg1)
+			int		object;
+			int		capabilityNumber;
+			int		arg1;
+		{
+			<em>C-stuff-2</em><code></code>
+		}
+
+		requestResultType foo_sneezCapability(object, capabilityNumber)
+			int		object;
+			int		capabilityNumber;
+		{
+			<em>C-stuff-3</em><code></code>
+		}
+
+		requestResultType foo_snuuuzCapability(object, capabilityNumber, arg1,
+						arg2, arg3)
+			int		object;
+			int		capabilityNumber;
+			int		arg1;
+			int		arg2;
+			int		arg3;
+		{
+			<em>C-stuff-4</em><code></code>
+		}
+
+		capabilityVectorType fooCapabilityVector = {
+			foo_snozCapability,
+			foo_sneezCapability,
+			foo_snuuuzCapability,
+		};
+
+		classDescriptorType fooClass = {
+			fooCapabilityVector,
+			3,
+			4
+		};
+
+		typedef struct {
+			int		class;
+			int		location;
+			int		owner;
+			int		image;
+			int		oop;
+		} barPropertyVectorType;
+
+		requestResultType bar_wopCapability(object, capabilityNumber)
+			int		object;
+			int		capabilityNumber;
+		{
+			<em>C-stuff-5</em><code></code>
+		}
+
+		requestResultType bar_bopCapability(object, capabilityNumber, foo)
+			int		object;
+			int		capabilityNumber;
+			int		foo;
+		{
+			<em>C-stuff-6</em><code></code>
+		}
+
+		capabilityVectorType barCapabilityVector = {
+			bar_wopCapability,
+			bar_bopCapability,
+		};
+
+		classDescriptorType barClass = {
+			barCapabilityVector,
+			2,
+			1
+		};
+</pre>
+<p>Clearly, the form before being processed by <b>Noodl</b> is quite a bit more concise and expressive than the output.</p>
+<h2>CODING OF CAPABILITY PROCEDURES</h2>
+<p>In addition to using the preprocessor, coding <b>C</b> functions under <b>Noodl</b> requires that you obey certain conventions.  Macros and functions to facilitate the coding of capability procedure bodies are defined in an “include” file.  The <b>Noodl</b> preprocessor automatically inserts a <code>#include</code> line for this file at the beginning of its output.  Incidently, this file also contains the definitions for the various data types required by the resulting <b>C</b> code.</p>
+<p>The primary thing that a capability procedure will want to do is access (both for reading and for writing) the properties of an object.  Since the property vector is defined as a <code>struct</code>, simple references to elements in the property vector may be handled by ordinary <code>struct</code> field selection (i.e., the “<code>.</code>” and “<code>-&gt;</code>” operators in <b>C</b>).  This requires that the capability procedure have a pointer to the property vector itself.  What the procedure gets passed, however, is the object&#x27;s noid.  Thus we need a means of translating between noids and property vector addresses.  The call</p>
+<pre>
+	<code>propertyVector(</code><em>noid</em><code>)</code>
+</pre>
+<p>takes a noid and returns a pointer to the associated property vector, or <code>NULL</code> if there is no such object.  One might ask why we perform this mapping inside the capability procedure instead of doing at the top level (where it only needs to be called from one place) and passing the property vector pointer down instead of the noid.  The reason is because the translation from one to the other, though we will design it to be fast and simple, will still take a certain amount of time.  Some capabilities, however, may not require this mapping at all.  By placing the decision to map or not to map in the capability procedure we can skip the overhead of mapping whenever we don&#x27;t need it.</p>
+<p>An important overhead reducing principle we apply is to minimize the number of internal consistency checks and protection barriers maintained by the system. This means that capability procedures are responsible for the security of the objects they are dealing with — nobody is going to stop a capability procedure from violating the rules, so it is up to us, the coders of the capability procedures, to make sure they work right.  This adds some risk to the system from bugs and so on, but also enables us to avoid being bogged down in bureaucratic layerings of one protocol on top of another.  In order to make this work, however, we must provide an easy means to make various sorts of checks when they <em>are</em> required.</p>
+<p>There are different ways in which checks can be done, and we will provide macros or functions for several of them.  The most elementary of these is a simple predicate: a true-false test of some condition.  You merely call the predicate and do something conditionally based on the result.  Built on top of predicates are some higher level checks that we call <em>gates</em>.  A gate consists of a call to a “pass/fail” predicate and some canned code to abort the capability procedure (with an appropriate error return) if the result is not a “pass”.  Once the flow of control passes through a gate you can safely assume that a given condition is satisfied thereafter.  Gates are so useful that we have defined one for each predicate that can have a pass/fail interpretation.  Another sort of check is implemented through a query function which returns the status of some quantity.  The value returned can then be tested in any number of ways.</p>
+<p>One of the things you might want to check is the class of an object. Internally we use the address of a class&#x27; class descriptor as the class identifier.  We can get away with this because it&#x27;s completely internal (class descriptor address never reaches the outside world).  The function</p>
+<pre>
+	<code>objectClass(</code><em>noid</em><code>)</code>
+</pre>
+<p>returns a pointer to the class descriptor associated with the noid.  The predicate</p>
+<pre>
+	<code>isClassMember(</code><em>noid</em><code>, </code><em>class</em><code>)</code>
+</pre>
+<p>returns a boolean value indicating whether or not the particular noid represents an object of class <em>class</em>, where <em>class</em> is a pointer to a class descriptor.  The gate</p>
+<pre>
+	<code>mustBeClassMember(</code><em>noid</em><code>, </code><em>class</em><code>)</code>
+</pre>
+<p>ensures that the noid belongs to the particular class.</p>
+<p>Another thing that needs to be checked frequently is an object&#x27;s owner. Owners are denoted by player account numbers.  The function</p>
+<pre>
+	<code>objectOwner(</code><em>noid</em><code>)</code>
+</pre>
+<p>returns the owner of <em>noid</em>.  The predicate</p>
+<pre>
+	<code>isOwnedBy(</code><em>noid</em><code>, </code><em>account</em><code>)</code>
+</pre>
+<p>returns a boolean value indicating whether or not <em>account</em> is the owner of the object denoted by <em>noid</em>.  The gate associated with this is</p>
+<pre>
+	<code>mustBeOwnedBy(</code><em>noid</em><code>, </code><em>account</em><code>)</code>
+</pre>
+<p>which ensures that the given player owns the object.</p>
+<hr>
+<pre><b>Appendix — Yacc Grammar for Noodl</b></pre>
+<pre><code></code>
+</pre>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/noodl.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

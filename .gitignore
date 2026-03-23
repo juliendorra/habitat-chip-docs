@@ -1,0 +1,8 @@
+# Raw source files (downloaded from GitHub, not our output)
+raw/
+
+# macOS
+.DS_Store
+
+# Claude Code
+.claude/

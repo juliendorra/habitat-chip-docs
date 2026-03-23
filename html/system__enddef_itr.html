@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Release System Definition - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/enddef.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Definition of Public Release Habitat™ System</h1>
+<p class="author">by Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">November 1, 1986</p>
+<p class="doc-number">Habitat Document # 28</p>
+<h2>Introduction</h2>
+<p>This is a summary document defining the overall <em>Habitat</em> system.  It describes Commodore 64 software, host software, world design and generation, operations setup, and documentation.  The material that follows discusses the intended state of the system in both the beta release version and the public release version.</p>
+<h2>Commodore 64 Software</h2>
+<p>The Commodore 64 software consists of two major components: the program disk and the object disk.  Since these have been detailed in previous documents, we will not describe them in much depth here.  Briefly, however, the program disk contains the main <em>Habitat</em> program, which manages memory, graphics, animation, communications, disk I/O, and the user interface.  There are no differences between the beta release and public release versions of the program disk other than bug fixes.  The object disk contains the imagery, sound effects definitions, and behavior code for all of the objects that can appear in the <em>Habitat</em> world.  A complete list of these objects and what they do is given in Appendix A.  The only differences between the beta release and public release versions of the object disk are a few objects which are intended to be added during the beta test period.  These are indicated in the appendix.</p>
+<h2>Host Software</h2>
+<p>The host software consists of a collection of object behavior routines produced by Lucasfilm that implement the host portion of the behavior of the various objects that can appear in the world and several processes produced by Quantum which manage the running system.</p>
+<p>The set of objects implemented on the host matches the set implemented on the Commodore 64, though, of course, the division of functionality between the host and the Commodore means that the two sides of the system do different things.</p>
+<p>The primary Quantum-originated processes include the following:</p>
+<ul class="bullet">
+<li><em>Region processor</em> — responsible for managing communications with and between the players, for controlling execution of the host-resident object behavior code, for providing run-time services required by the host-resident object behavior code, and for implementing <em>Habitat</em> functions that require complicated system interface operations.  The latter include teleportation, region transition, ESP, and ghosting.  The Lucasfilm-originated host behavior code for the objects run as part of the region processor.</li>
+<li><em>Database processor</em> — responsible for transferring information between the <em>Habitat</em> disk databases and the region processor&#x27;s memory.</li>
+<li><em>Habitat master process</em> — responsible for managing the overall operation of the system, coordinating the execution of the other processes and the communications between them.</li>
+</ul>
+<p>In addition, the host software includes other ancillary processes, such as the process which initializes new users and all of the various processes that are part of the regular Q-Link system which are required for <em>Habitat</em> to have an environment in which to operate.</p>
+<p>There should be no differences between the Quantum-originated host software in the beta release version and the public release version with the possible exception of bug fixes and performance enchancements.  The Lucasfilm-originated host object behavior code will be augmented during beta test by the addition of the new objects mentioned previously.</p>
+<h2>The World</h2>
+<p>The habitat world in the beta release version consists of one major city, Populopolis, and surrounding environs.  The surrounding area includes sites for the first few adventures as well as a number of social areas and interesting places to simply explore.  In addition, for public release we are creating a Habitat Master Geographic Plan describing the locations for new residential areas and new cities to be installed as needed, and the plan for “plugging” new realms into the world as they are created during the normal operation of the system.</p>
+<p>For public release, we must generate a world capable of supporting several thousands of players.  In order to accomplish this, we are creating a number of automated tools to facilitate world building.  These include:</p>
+<ul class="bullet">
+<li><em>Automatic apartment complex generator</em> — This is a program that will combine a small number of pre-designed regions into the 20,000 turves and supporting hallways, elevators, and so on that we wish to initially generate. This is a simple utility that will be created quickly during the beta test period so that the initial batch of turves can be ready for the public release date.  After public release we will port it to host system so that new apartments can be generated on demand as needed.</li>
+<li><em>Generalized city generator</em> — This is a generalization of the apartment generator that will enable the quick generation of areas built out of standard “component” regions according to specifications given in a very simple layout language.</li>
+<li><em>Realm editor</em> — This is actually a family of programs, evolving out of our present development system and leading ultimately to a stand-alone utility for the Commodore 64.  The realm editor allows a designer to interactively lay out regions on a map and then to edit the contents and appearance of those regions individually, using the full power of the <em>Habitat</em> object set and graphic engine.  For the two releases under discussion here we will use it in its present form, an integral part of our current Lucasfilm software development system.  As a follow-on project we would like to modify it into a stand-alone program that could be used by third parties.</li>
+<li><em>Stochastic region generator</em> — This is a program that will generate large numbers of variations-on-a-theme regions to flesh out the world for public release.  It will be used to create highways, forests, wilderness, and other areas whose regions can be described according to a statistical model.</li>
+</ul>
+<p>With the exception of the apartment generator, none of these tools are part of the <em>Habitat</em> release system per se.  They are simply mechanisms that will enable us to generate the large numbers of regions that will be required to support the public release version of the system.</p>
+<h2>The Beta Release World</h2>
+<p>These are the elements we have either finished or are working on for the beta release <em>Habitat</em> world.  They are described in greater detail in the earlier document <b>Coming Attractions</b>.</p>
+<h2>Populopolis</h2>
+<p><em>Populopolis</em> is the name of <em>Habitat</em>&#x27;s first town.  In its initial (beta release) form, it consists of a downtown area together with residential areas holding turves for up to 320 players.  Downtown contains some three dozen businesses to serve the population, as well as a central plaza with the Oracle&#x27;s fountain in the middle.</p>
+<p>The downtown area includes:</p>
+<ul class="bullet">
+<li>Banks</li>
+<li>News stands</li>
+<li>Bars</li>
+<li>Stores</li>
+<li>A pawnshop</li>
+<li>Theaters</li>
+<li>The Arcade</li>
+<li>Stock Exchange</li>
+<li>Library</li>
+<li>City Hall</li>
+<li>Hall of Records</li>
+<li>Storefronts for rent</li>
+</ul>
+<h2>Other Places</h2>
+<p>There are a number of realms for exploration and minor adventures.  These are:</p>
+<ul class="bullet">
+<li><em>The Forest Road</em> — an outdoors realm consisting of a branching road that goes deep into the heart of a mysterious forest.</li>
+<li><em>The Really Quite Confusing Desert</em> — a maze puzzle.</li>
+<li><em>The Beach</em> — a simple social area, designed to look like a beach.</li>
+<li><em>The Back Forty</em> — 40 regions of forest, mostly empty, but home to a pair of mysterious wizards who figure prominently in various <em>Habitat</em> intrigues.</li>
+</ul>
+<h2>Things To Do</h2>
+<p>In addition to the above geographic areas available for general exploration and treasure hunting, we have also designed a number of more specialized things to do, some of which have special places of their own associated with them.  These activities will be coming online progressively during the the beta test period.  They include:</p>
+<ul class="bullet">
+<li>Randy&#x27;s Region Rally</li>
+<li>D&#x27;nalsi Island Adventure</li>
+<li>Capture The Flag</li>
+<li>The Quest for The Tome of Wealth and Fame</li>
+<li>Talk Show</li>
+<li>Game Show</li>
+<li>The Bijou Theater</li>
+<li>Costello&#x27;s Comedy Club</li>
+<li>Speakers&#x27; Corner</li>
+<li>Board Games — chess, checkers, backgammon and othello</li>
+<li>The Game Of Cooties</li>
+<li>The Game Of Machiavelli</li>
+<li>The Habitat Stock Market</li>
+</ul>
+<h2>The Public Release World</h2>
+<p>For public release, we will generate turves for 20,000 inhabitants together with associated hallways, streets, and business areas as are required to support that many players.  These will be placed, or made ready for placement, according to the Habitat Master Geographic Plan that will also be drafted during the beta test period.  In addition, we will add wilderness regions and other adventure realms and activities for these players.  The specific nature and number of such regions and activities, however, remains to be determined.</p>
+<h2>Operations Setup</h2>
+<p>A utility to manipulate and monitor the world in operation will be required on the host for the use of both system operators and world generators such as ourselves.  The functions required of this utility have been described in the earlier document <b>Functional Specs for Ghu</b>.  Since the tasks to be performed by this utility require a high degree of host-system interface programming, its development will be Quantum&#x27;s responsibility.  The utility will need to be in operation for public release.</p>
+<h2>Documentation</h2>
+<p>In addition to the various working documents generated during the specification, design, and implementation of the project, the completed set of <em>Habitat</em> documentation will include the following:</p>
+<ul class="bullet">
+<li><em>The Official Avatar Handbook</em> — this is the players&#x27; manual.  It describes everything that we wish to tell the player about <em>Habitat</em>: how to get into and out of the system, how the controls work, how important objects work, and so on.  It will be completed for beta release.</li>
+<li><em>Guidebook To The Oracle</em> — this is the system operators&#x27; manual.  It describes everything related to behind-the-scenes operation of the system: how the system is organized, how to use the operators&#x27; utilities, guidelines for acting as Oracle, economic policy, editorial policy, and general rules and guidelines for operations.  It will be developed during beta test on the basis of our experiences operating the system.  The first draft will be completed for public release, though we expect it to continue to evolve for some time on the basis of operational experience.</li>
+<li><em>Habitat Master Geographic Plan</em> — this is the evolving plan for the expansion of the <em>Habitat</em> world.  A very rough draft will be completed for beta release, with a “final” draft in time for public release.  However, as with the system operators&#x27; manual, we do not expect this to be a static document, as the needs of the system will change with system growth and operational experience.</li>
+<li><em>Secret Procedings of The Adventure Masters&#x27; Guild</em> — this is the manual for the “Adventure Masters”, the special class of empowered users ranking a level above ordinary players but below the Oracle Itself.  This manual will be finished during the initial phases of public operation, as the role and powers of the Adventure Masters are defined.</li>
+<hr>
+</ul>
+<p>These are the objects to be supported in the public release version of <em>Habitat</em>.  Those objects tagged with an asterisk (*) will not be operation at the start of beta test.</p>
+<pre>
+amulet — general purpose magic item
+aquarium — turf decoration
+atm — access to bank account
+avatar — represents the player himself
+bag — general purpose container
+ball — throwing around
+bed — turf decoration, seat
+body sprayer — changes color/pattern of avatar
+book — information or amusement for players
+bottle — water for instant objects
+box —  general purpose container
+bridge — scenic object
+building — scenic object, access to other regions
+bush — scenic object
+chair — seat
+changomatic — changes appearance of turf
+chest — general purpose container (stationary)
+club — weapon
+coke machine — joke
+compass — direction sensor
+couch — seat
+countertop — object container (stationary)
+crystal ball — oracular frontend
+display case — object container (stationary)
+door — access to other regions
+dropbox — sending mail
+drugs — highly flexible form of magic
+elevator — special intra-building teleport (costs nothing to use)*
+escape device — teleports avatar back to turf
+fake gun — joke
+fence — scenic object
+flag — scenic object, capture-the-flag prop
+flashlight — portable illumination
+flat — scenic foundation
+floor lamp — stationary illumination
+fortune machine — humor
+fountain — primary oracular frontend
+frisbee — throwing
+game piece — general purpose marker for board games*
+garbage can — makes objects disappear forever
+gemstone — valuable, general purpose magic object
+ghost — icon for indicating presence of ghosts
+glue — internal use object for scenic purposes
+grenade — weapon*
+ground — scenic foundation
+gun — weapon
+head — avatar head
+hole — concealable container
+hot tub — social spot
+house cat — joke
+instant object pill — mystery object
+key — access to locked doors and containers
+knick knack — decoration
+knife — weapon
+magic immobile — general purpose magic item (stationary), also implements switches and buttons
+magic lamp — oracular frontend (grants wishes)
+magic staff — general purpose magic item, weapon
+magic wand — general purpose magic item
+mailbox — sending and receiving mail
+matchbook — joke
+movie camera — hook for “bugging” regions*
+paper — user writable text support
+pawn machine — converts objects to money*
+picture — decoration
+plant — scenic object
+pond — scenic object
+region — internal structuring aid
+rock — scenic object
+safe — lockable container
+security device — exclusion mechanism*
+sensor — general purpose information collector
+sex changer — switches avatars between male and female
+shovel — opens and closes holes
+sign — conveys information
+short sign — conveys information in fewer bytes
+sky — scenic foundation
+street — scenic object
+streetlamp — scenic object
+stun gun — non-lethal weapon
+table — container (stationary)
+teleport booth — gets avatars from place-to-place quickly
+test — internal object for testing system
+ticket — regulates access to special realms
+tokens — money
+trapezoid — general purpose scenic object
+super trapezoid — very general purpose scenic object
+tree — scenic object
+vendo front — half of vending machine, sells things
+vendo inside — other half of vending machine
+wall — scenic foundation
+window — scenic object
+zone — and internal object used in the realm editor
+</pre>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/enddef.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

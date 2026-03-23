@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coming Attractions - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/coming.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Coming Attractions</h1>
+<p class="author">by a status report on things to do and places to go in the Habitat beta world, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division, October 20, 1986, updated</p>
+<p class="date">October 29, 1986</p>
+<p class="doc-number">Habitat Document # 27</p>
+<h2>Introduction</h2>
+<p>In preparation for beta-test we have added or are in the process of adding a number of new realms, regions and activities to the <em>Habitat</em> world.  This document describes these things and discusses the current status of each.</p>
+<h2>Populopolis</h2>
+<p><em>Populopolis</em> is the name of <em>Habitat</em>&#x27;s first town.  In its initial form, it consists of a downtown area together with residential areas holding turves for up to 120 players.  The residential areas of Populopolis are suburban in character.  There are 12 streets of tract houses plus connecting roads.  Downtown contains just under a dozen businesses to serve the population, as well as a central plaza with the Oracle&#x27;s fountain in the middle.</p>
+<h2><em>Enlarged residential area</em></h2>
+<p>To meet the needs of the beta-test population, the residential areas needed to be enlarged.  We expanded the existing neighborhoods and added a couple of entirely new neighborhoods as well, creating 20 new residential streets.  The new residential regions nearly triple the potential population of Populopolis, bringing the residential capacity to 320.</p>
+<p>The new residential regions have been generated as individual streets, disconnected from the rest of the world, though we have mapped where they should be placed.  The region definitions have been run through the various levels of software to produce actual regions in the <em>Habitat</em> host database, but the streets still need to be manually connected (using the <em>Twiddle</em> program) to the rest of the world according to the layout on our map.</p>
+<h2><em>Improved downtown</em></h2>
+<p>With the enlarged population, we concluded that the present downtown was too small to handle the expected traffic.  We therefor decided to enlarge the downtown area.  Since we were adding a number of new storefronts anyway, we took this as an opportunity to improve the entire downtown area, rearranging the collection of businesses and adding a number of new establishments.  The revised plan also includes some empty storefronts available “for lease” to players who wish to establish businesses of their own in the downtown area.</p>
+<p>The new downtown includes the following establishments:</p>
+<ul class="bullet">
+<li><b>\ \ \ \ □\</b> <em>Banks.</em>  There are two of these, one on each side of town, in order to reduce waiting in line.  These each have two ATM&#x27;s from which Avatars can withdraw cash Tokens from their bank accounts.</li>
+<li><b>\ \ \ \ □\</b> <em>News stands.</em>  There are two news stands.  These are the distribution points for the <em>Weekly Rant</em>.  They will also be able to sell maps, guidebooks, TelePort directories, and any other printed material we may wish to put into the world for the players.</li>
+<li><b>\ \ \ \ □\</b> <em>Bars.</em>  There are three of these social spots, differing from one another largely in theme.  “Kelly&#x27;s Bar &amp; Grill” is a typical dive, unpretentious and working class in feel.  “Tivolli&#x27;s Garden” is a ferns-and-wood yuppie hangout, trendy and overpriced.  “Hamlet&#x27;s Place” is a hangout for the after-theater crowd.</li>
+<li><b>\ \ \ \ □\</b> <em>Stores.</em>  There are several of these, selling all manner of artifacts. “The Knick-Knacks Shop” sells miscellaneous, usually useless junk. “Randy&#x27;s Adventure Ymporium” sells adventure supplies. “Body Paints Ltd.” sells body sprayers (devices for changing an Avatar&#x27;s body color/patterns). “Machuta&#x27;s Magic Shop” sells magical items of all sorts, and will be used as a distribution channel for specialized artifacts useful in particular adventures or puzzles.  “The New You” sells heads and also contains a sex change machine that people can use.  “Lefty&#x27;s Locksmithery” sells keys, as well as being a hangout for the local criminal element.  “Fine Furniture” sells new region interiors (for turf customization).  The “General Store” sells useful miscellaneous merchandise.</li>
+<li><b>\ \ \ \ □\</b> <em>Pawnshop.</em>  The pawnshop provides a means whereby players can convert items into ready cash (at a steep discount, of course).</li>
+<li><b>\ \ \ \ □\</b> <em>Theaters.</em>  There are four theater-like places.  “The Bijou” is a forum for plays and shows.  “Costello&#x27;s” is a comedy club.  “Quizshows Inc.” is a place for <em>Habitat</em> game shows to be conducted.  The “Meeting Hall” is a community gathering place for adventure organization/orientation meetings, politicking, and other player organized gatherings.</li>
+<li><b>\ \ \ \ □\</b> <em>Arcade.</em>  The Arcade is a place for <em>Habitat</em>-resident board games like checkers and backgammon.</li>
+<li><b>\ \ \ \ □\</b> <em>Stock Exchange.</em>  The <em>Habitat</em> Stock Exchange is the place where we will put the stock market game that we are working on.  This is described in greater detail below.</li>
+<li><b>\ \ \ \ □\</b> <em>Library.</em>  The Library holds books of all sorts, useful as references by the players.  It is also a place where we bury clues for adventures and a place where we can put books written by the players themselves.</li>
+<li><b>\ \ \ \ □\</b> <em>City Hall.</em>  City Hall is the center of Populopolis&#x27; government.  It contains the various Bureaucrats-In-A-Box as are needed for running the city. Presently there are four of these, representing the Bureau Of Real Estate (to handle transfers of title to turves), the Bureau Of Advertising (to handle public signs), the Bureau Of Scheduling (to handling scheduling of the theater and meeting hall facilities), and the Bureau Of Commerce (to handle allocation of business property).</li>
+<li><b>\ \ \ \ □\</b> <em>Hall of Records.</em>  The Hall of Records is the repository for the Book of Records.  The Book of Records is simply a special book that contains the top <em>N</em> Avatars (or the bottom <em>N</em> Avatars, depending) in a wide variety of categories.  The Hall of Records is simply a place that Avatars can come to consult this book, to find out who&#x27;s on top in any particular dimension.</li>
+<li><b>\ \ \ \ □\</b> <em>For rent.</em>  There are three unallocated commercial properties that are available for the use of the players.  These will be rented by the city to Avatars to use for their own purposes.  If there are more than three players who wish to start businesses, we will have to make a determination of the most appropriate use of the property in terms of gameplay interest and fun for the whole community.  If there are vastly more than three interested players, we will have to consider adding some additional commercial streets to the downtown area, but that is for the future.</li>
+</ul>
+<p>Most of these establishments have required us to create anew both an exterior/street region and an interior region.  Several, of course, are the same as their counterparts in the old (present) downtown design, and so we can use them as they are with little or no change.  The new regions are designed, awaiting upload and installation.</p>
+<h2>Other Places</h2>
+<p>We have already created a number of realms for exploration and minor adventures.  These are:</p>
+<h2><em>Forest Road</em></h2>
+<p>The Forest Road is an outdoors realm consisting of a branching road that goes deep into the heart of a mysterious forest.  Along its branches are a number of sites of interest.  These include a number of fairly mundane businesses (such as <em>The Tavern At The End Of The Road</em> and <em>Rhonda&#x27;s Rhoadside Rhesort</em>) as well as a few enchanted places.  Among the enchantments is a false Oracle (it looks like an ordinary Oracle fountain, but the region it is in is sinister looking) that operates like a regular Oracle but it always tells lies.  There is also a wicked witch&#x27;s house (containing a genuine wicked witch as soon as we find someone who wants to be one) and a hermitage (containing an old guru dispensing the wisdom of the ages).</p>
+<p>The Forest Road is designed and ready for uploading to the host.</p>
+<h2><em>The Really Quite Confusing Desert</em></h2>
+<p>The Really Quite Confusing Desert is a maze puzzle.  It consists of 30 regions connected together in a bizarre and confusing manner, forming a maze that is easy to get into and difficult to get out of.  In the very center of the Desert is a TelePort booth, which is the obvious shortcut for getting to the middle.  Also in the middle is a vending machine selling rare and exotic artifacts, as a reward for those who successfully navigate the maze.</p>
+<p>The Desert is finished and installed.</p>
+<h2><em>The Beach</em></h2>
+<p>The Beach is a simple social area, designed to look like a beach.  There are rumors of buried treasure.  Like the Desert, it too is finished and installed.</p>
+<h2><em>The Back Forty</em></h2>
+<p>The Back Forty is 40 regions of forest, mostly empty, but home to a pair of wizards, Dada Salesh and Sasa Dalesh.  These twin brothers are known to the world as the Wise Man and the Not-So-Wise Man.  The only problem is that nobody, least of all themselves, can agree who is which.  These two individuals inhabit their homes at opposite sides of the forest, dispensing magic and advice to those who seek them out.</p>
+<p>The Back Forty is designed and installed in the world.  Randy Farmer has agreed to fill the role of Dada Salesh, though his counterpart is as yet unknown.</p>
+<h2>Things To Do</h2>
+<p>In addition to the above geographic areas available for general exploration and treasure hunting, we have also designed a number of more specialized things to do, some of which have special places of their own associated with them.  These are in various stages of completion and will be detailed below.</p>
+<h2><em>Randy&#x27;s Region Rally</em></h2>
+<p>This is a “road rally” game set in the <em>Habitat</em> environment.  It is both a puzzle for the players and the excuse for a semi-guided tour of the existing world.  It follows the tradition of all road rally games, having a series of puzzles, each of which leads you to the next.  At each step along the way, the player collects clues that are used to solve the final puzzle. This particular rally is just the first of what we hope will be an ongoing series, since the theme has infinite variations.</p>
+<p>This rally begins at the Oracle in the center of town.  At the appointed time (we will appoint the time), the Oracle begins periodically (i.e., every five minutes) uttering the first clue.  The players follow this clue to another region, where they find a second clue, that leads them to a third region, and so on.  In this particular puzzle there are five intermediate clues to solve, and there are a couple of red herrings for players who take obvious wrong turns.  The intermediate clues are a combination of altered landmarks, signs, and text on special pamphlets dispensed by news-vendo machines.  Correctly solving the final puzzle results in a TelePort address.  Porting to this address places you in a special endgame region containing a magic pushbutton (and TelePort is the <em>only</em> way into this region).  When an Avatar presses the button he wins a prize (e.g., T5,000).  The prize is large for the first player to solve the puzzle, then tapers off with successive winners to a modest but still rewarding amount (e.g., T100).  The game runs for a specified period (e.g., three evenings or until somebody solves the puzzle, whichever comes last) and then ends.</p>
+<p>The clues are all designed, as is the special endgame region.  Installation of the clues requires us to add some objects to a few of the regions in the world at the start of the game (and to clean up after ourselves at the end of the game by removing them again).  The easiest way to do this is to create the objects in a special “holding pen” region from which the objects can be moved when needed using Twiddle.  This we have done.  We will write a Stratus command file to perform all the Twiddle machinations quickly.  The special regions still need to be uploaded to the host and installed, and we still need to do a little bit of special programming on the host to make it work.  This programming includes the special magic function for the “winner” button and a flag-bit enhancement to the Avatar record so that players can&#x27;t win the rally more than once.  This programming represents a few hours effort at most. (The Oracle also needs to be able to broadcast the first clue periodically, but that should be one of the Oracle&#x27;s intrinsic capabilities anyhow.)  In addition, we need to add entries in the text database for the clue pamphlets and in the TelePort directory database for the endgame region.</p>
+<p>Once we are set up to go, all we need to do is run the command file that moves everything into place and set the Oracle to broadcasting.  Once the game has run its course we execute a second command file that moves all the special objects back to the holding pen, and then it&#x27;s over.  The endgame region and all the special programming can be used again in future rallies.</p>
+<h2><em>D&#x27;nalsi Island adventure</em></h2>
+<p>D&#x27;nalsi Island is a classic treasure hunt adventure.  It involves a quest for a stolen magical amulet.  Finding the treasure requires the solution of a set of puzzles.  The initial set of clues will be embedded in an article in the first issue of the <em>Weekly Rant</em>.  The clues ultimately lead the player to D&#x27;nalsi Island, a desert island where the pirates of old used to bury their booty.  The missing amulet is hidden somewhere on the island.</p>
+<p>The D&#x27;nalsi Island adventure consists of a new realm, the island itself, and a set of clues to be placed in the world.  One of the principals in the intrigue is Dada Salesh, one of the wizards who lives in the Back Forty.  When online, Randy Farmer will fill this role, answering questions and dispensing clues. When not online, the wizard leaves behind a vending machine that dispenses pamphlets.</p>
+<p>All of the regions for this adventure are designed and installed.  All of the clues are planned and the article for the <em>Rant</em> that sets things in motion is written.  Some special artifacts (such as the wizard&#x27;s vendo and some books in the Library) still need to be placed in the world.</p>
+<h2><em>Capture The Flag</em></h2>
+<p>Capture The Flag is a game that seems like it will fit in nicely with the <em>Habitat</em> model of interaction.  What we want to do is establish a Capture The Flag arena.  The arena is a set of regions that represent the playing area.  We currently have designs for three such arenas, ranging in size from 5 regions to around 40.  We plan to implement all three, and let market forces choose which is the preferred design.</p>
+<p>The key to making Capture The Flag work is controlling access to the playing field.  The way we plan to do this is to create a special entrance region with three special entrances to the arena: “Blue Team”, “Red Team” and “Spectators”.  The team entrances won&#x27;t allow Avatars to pass if they are carrying anything, either in their hands or their pockets (this prevents cheating, for example by being armed), nor will they allow more than five Avatars on a team to enter.  The team entrances also change the colors on the Avatars of each team so that it is clear who is who when they are playing. The spectator entrance only lets ghosts through, and once through, the playing arena regions don&#x27;t let them change between ghost and Avatar form.  Thus, cheating is automatically prohibited and the spectators are handled in a simple and natural manner.  All of this is accomplished through specialized region exit daemons in the entrance region and it&#x27;s neighbors.</p>
+<p>Once on the playing field, the two teams face off against each other.  The object is to capture the other team&#x27;s flag and bring it back to your team&#x27;s goal.  Winning is signalled using another variant of the magic button.</p>
+<p>We have worked out the mechanism for Capture The Flag and we have designed the layout for the three sizes of playing arena.  We must still design the playing arena regions themselves and the entrance region and we have to program the exit daemons to regulate the play.  Region design is about a day&#x27;s worth of effort, and programming the exit daemons is another day&#x27;s worth.</p>
+<h2><em>Quest for The Tome of Wealth and Fame</em></h2>
+<p>The Quest for The Tome of Wealth and Fame is an ongoing game that pits the players against each other in creating the puzzle.  The Tome itself is a special sort of magical record book (that looks like a stone tablet) that is the McGuffin for this particular adventure.  The Tome is hidden somewhere in the world.  Somewhere else in the world is a clue to where the Tome is hidden. The first object of the game is to find the Tome.  The finder&#x27;s name is then inscribed on the Tome itself, and he or she must then hide it someplace else and leave a clue as to its new location.</p>
+<p>To implement this requires some special behavior code for object class book, creation of the book itself, and some attention from the Oracle/sysop.  We have written the book itself.  It contains a description of the rules of the game and directions for the player to follow:</p>
+<p><code>&gt;&gt;&gt;&gt;&gt; The Tome of Wealth and Fame &lt;&lt;&lt;&lt;&lt;</code></p>
+<p><code>IMPORTANT: Please read ALL of the stones in this tablet.</code></p>
+<p><code>CONGRATULATIONS! You have completed the first step in the Quest for:</code></p>
+<p><code>&gt;&gt;&gt;&gt;&gt; The Tome of Wealth and Fame &lt;&lt;&lt;&lt;&lt;</code></p>
+<p><code>Upon successful completion of the quest, you will receive T5000. Also, for NO EXTRA CHARGE, you will have your name engraved on this tablet for all ETERNITY so treasure seekers will know that YOU have joined the ranks of Master Adventurers.</code></p>
+<p>To collect your prize you must:</p>
+<p>1) READ all of this tablet</p>
+<p>2) HIDE it in a place that will make it hard to find.</p>
+<p>3) NOT show it to ANYONE.</p>
+<p>4) NOT hide it in a turf.</p>
+<p>5) When it is hidden, seek an Oracle and say &quot;Willy Willy Nilly Billy&quot;.</p>
+<p><code>The Oracle will decide how well you obeyed the rules &amp; how well you hid the tome.  To collect your prize you MUST hide it well enough that no one else finds it before the Oracle can respond.</code></p>
+<p><code>The list of MASTER ADVENTURERS:</code></p>
+<p><em>list of names follows...</em></p>
+<p>The mechanism to implement this is relatively simple, but still must be programmed.  In addition, some Oracular sysop will have to be responsible for monitoring the Tome&#x27;s movements.</p>
+<h2><em>Talk Show</em></h2>
+<p>The Talk Show will be based in one of the regions inside the Bijou Theater of the new downtown Populopolis.  No special programming will be required, just a region designed to look like the set of the Tonight Show or David Letterman. Some volunteer work will be required to arrange programing — locating and scheduling guests, making sure the guests are there when they&#x27;re supposed to be, seeing that appropriate notices get placed in the <em>Rant</em> and so on. Also, a volunteer Avatar will act as host.  The Talk Show operates rather like the QuantumLink auditorium, but it is more directed — the host asks questions, insults the guests, and tries to seem witty; the guests answer the questions, insult the host back, and try to seem important.  Also, there may be multiple guests from completely different walks of life, and there may be guests who are there primarily to be entertainers (i.e., comics, poets, and the like).  In short, it operates like a TV talk show.</p>
+<h2><em>Game Show</em></h2>
+<p>The Game Show operates as another theater set, this time in the establishment of Quizshows, Inc. downtown.  The Game Show area is actually designed be able to support several different Game Shows on separate sets.  However, we will only be implementing one game initially.  The Game Show will be run like any other <em>Habitat</em> theater: performers/contestants as Avatars in a set-region, with the audience lurking in the background as ghosts.  We have designed a number of special purpose items to enable us to conduct various TV games: contestant booths with buttons to press, spinning wheels, etc. However, these have not been implemented yet, since the Game Show game itself is still being designed.</p>
+<p>To implement the Game Show, we must design the game, create the set(s), and program any special purpose objects that will be required to moderate the activities.  All totalled, this is probably two or three days&#x27; work.  Once implemented, operations volunteers will be required to select contestants, generate quiz questions, and run the show.</p>
+<h2><em>Theater</em></h2>
+<p>The Bijou Theater is Populopolis&#x27; dramatic center.  It consists of a lobby area connected to some number of stage regions.  Initially there will be two stage regions, one for the Talk Show and the other for regular drama.  The latter will be a mostly blank region, though it may be possible to have special objects put into it as sets and props if prior arrangements are made with the system operators and the operators have time to set it up. Arrangements to use the theater are made by speaking to the Bureau Of Scheduling in City Hall.</p>
+<p>The presentation of dramatic productions is left as an exercise for the players.  The purpose of the theater is simply to make this possible.</p>
+<h2><em>Costello&#x27;s Comedy Club</em></h2>
+<p>Costello&#x27;s Comedy Club is another one of the new downtown&#x27;s theatrical spots. It is intended as a site for online humor of all sorts.  As with the other theatrical realms, it requires no special programming, merely a region to act as the stage.  This region has already been designed and awaits installation with the rest of the new downtown.  Costello&#x27;s will operate like a player run business, and Aric has volunteered to run it.</p>
+<h2><em>Speakers&#x27; Corner</em></h2>
+<p>Speakers&#x27; Corner is a public area downtown where we encourage anyone who feels like it to stand up and air their views on whatever they care to air their views on.  Like its real-life counterpart in London&#x27;s Hyde Park, it should add color and character to the city.  It requires little special design save a sign and a couple of soapboxes on the right street corner.</p>
+<h2><em>Board games</em></h2>
+<p>With the addition of a couple of special types of object, we can implement simple board games such as checkers, chess, othello, go, and backgammon. These special objects are the game piece and the die.  The die is an ordinary six-sided die that can be used to let the host generate random number for the players.  Game piece is an inert marker that can be moved around in the region without requiring Avatars to pick it up, carry it, and then put it down again. With these objects and specially designed regions to act as boards, we can support the above mentioned board games quite easily, since these games largely consist of moving markers around on a board.</p>
+<p>A day&#x27;s programming is needed to implement the behavior for the new objects. Their graphics are already done, as are the region designs for the boards.</p>
+<p>We will place the board games in an arcade in the new downtown.  The arcade lobby will direct the players to one of several corridors, each corridor corresponding to a particular type of game.  Along the corridors will be doors leading into “board rooms”.  Scheduling and allocation of these rooms will be left to the players themselves.  We will design the playing pieces so that they cannot be removed from the rooms they are in, so no maintenance of any sort will be needed once the arcade is set up.</p>
+<h2><em>Cooties</em></h2>
+<p>“Cooties” is sort of a cross between “Assassin” and “Tag”, but with a <em>Habitat</em> twist.  It&#x27;s a simple minded time-waster that&#x27;s easy to play and easy to program.  It works as follows: we “infect” some Avatar in the town. An infected Avatar displays a cootie head instead of his or her regular head. The infected Avatar is also given a Magic Cootie Zapper, a variant on the magic wand.  What the infected Avatar must do is “tag” another Avatar by zapping him with the Magic Cootie Zapper, whereupon the first Avatar regains his regular head and the tagged Avatar inherits the cootie head <em>and</em> the Magic Cootie Zapper (automatically).  Once having had the cootie head, an Avatar is immune to future infection.</p>
+<p>We have the head already.  Implementing the game will require programming the Magic Cootie Zapper on the host, a task of a day or so.  Making the software to do this work hinges on the addition of some general-use state bits in the Avatar record.  However, these bits are also needed to make the region rally work.</p>
+<h2><em>Machiavelli</em></h2>
+<p>Machiavelli is a game of paranoid power politics and secret societies.  The details are described in another document.  Briefly, it involves setting up a secret society inside <em>Habitat</em>, within which the various members strive for power and position.  Machiavelli requires no special programming.  What it does need is a clear set of starting rules (I say “starting rules” because the rules of the game will themselves mutate over the course of the game) and an initial set of players to “prime the pump”.  The initial set of players will be ourselves (i.e., Randy, Aric, myself, possibly Noah, and any of the other LFL or Quantum people who are so inclined).  Part of the game involves recruitment of new players, so it should be self sustaining once it is up and going.  I have written a first draft of the design, and need to spend another couple of days refining the rules before unleashing it upon the unsuspecting world.</p>
+<h2><em>Stock market</em></h2>
+<p>We want to implement a stock market game inside the <em>Habitat</em> economy. The <em>Habitat</em> stock market is a two-level game.  The first level involves trading in fictitious stocks, and is a sort of parimutuel gambling game. Inside the Stock Exchange you can buy and sell these stocks, and the prices fluctuate daily.  If it is legal to do so, we will take the prices of our fictitious stocks from real stocks on the New York Stock Exchange.  If we can&#x27;t do that, we&#x27;ll have to write a simulator to generate fake data.  Inside the <em>Habitat</em> Stock Exchange there will be a ticker-tape display that shows the present prices of the various stocks.</p>
+<p>The second level of stock market game involves the creation of actual <em>Habitat</em> corporations and the trading of stocks in <em>these</em> companies. Since these companies will have actual assets and income or losses within the <em>Habitat</em> framework, their stocks will also have actual value within the <em>Habitat</em> framework as well.</p>
+<p>For both levels of the stock market game, considerable design work is still required.   However, the first level can be designed and implemented in a few days, since it is quite simple.  The legal question about the source of our stock data will still have to be answered however, before we can proceed beyond the design stage.  The second level requires further study, and so we have no concrete plans to implement anything there yet.</p>
+<h2><em>Kingpin</em></h2>
+<p>Kingpin is a power politics game modeled on the Chicago mob of the prohibition era.  Aric is still designing it, and we therefor do not yet have any estimate of the level of effort required to implement it.  However, while we expect it to require some additional region design and a set of rules, we anticipate that little, if any, special-case programming will be required.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/coming.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

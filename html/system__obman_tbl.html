@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Object Manual (Original) - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/obman.tbl" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Object Manual</h1>
+<p class="author">by the MicroCosm Object Set described in excruciating detail</p>
+<p class="institution">Chip Morningstar, Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document # 20</p>
+<h2>Introduction</h2>
+<p>This document describes the basic set of objects from which the <b>MicroCosm</b> fantasy world is constructed.  It both augments and <em>supersedes</em> the earlier document <em>MicroCosm Minimal Object Set</em>. This document describes what the various objects are and specifies them in sufficient detail that they may actually be programmed.</p>
+<h2>The Object Environment</h2>
+<p>Each object is a member of some <em>class</em> of objects, i.e., it is one of a group of objects that are all of the same basic type.  An object&#x27;s class determines what its behavior is going to be and how it is going to look on the screen.  Each class is represented in the <b>MicroCosm</b> system by a <em>class descriptor</em>.  The class descriptor is a collection of data and executable code that defines objects of a given type.  Creating the object set really means creating the class descriptors for all of the classes of objects described in this document.</p>
+<p>Any actual object is an <em>instance</em> of a particular class.  Each object is represented by an <em>instance descriptor</em>.  Instance descriptors are created and destroyed as objects come and go from the system.  Each instance descriptor is simply a small area of memory set aside to contain the data that describes the state of a particular object (as distinguished from other objects of the same class).  The memory address of an object&#x27;s instance descriptor can serve, internally, as a unique identifier for the object itself.</p>
+<p>This abstract model of classes and instances is used both in the home and in the host systems.  The format and content of the class and instance descriptors will differ across systems, of course, depending on the role that each half of the system plays in the object&#x27;s existence.</p>
+<h2>Class Descriptors</h2>
+<p>The information describing a class consists two things: <em>imagery</em> and <em>behavior</em>.  The class descriptor itself is just a data structure that points at these things.  The actual imagery and behavior are stored separately.  This way, classes can share imagery and behavior when they overlap between classes (which, in the case of behavior, is common).</p>
+<p><em>Imagery</em> consists of the animation cels or graphics driver tables required for the graphics software to display the object.  Most objects consist of a single static image.  A few have a small number of images, one of which is displayed at any given time depending on the state of the object. Some have a more complex set of images that are used to vary the appearance of the object according to some parameter (so that all objects of the class will not appear identical on the screen) or to animate the behavior of the object (avatars are the primary example of this).  In any case, the imagery is a set of static data that is used by the graphics routines.  Interpretation of this data may depend on object state information that the graphics routines obtain from the object&#x27;s instance descriptor.</p>
+<p><em>Behavior</em> consists of a set of executable routines that are called by the object database software.  The class descriptor contains a vector of entry points.  Each element in this vector has a particular, pre-assigned meaning. Each entry point corresponds to a particular function that the object can be called upon to perform.  Some of these functions are standard and all classes can perform them.  These include responding to any of the verbs used in the player interface.  Other functions are specific to the class itself and will be called as the result of messages from the opposite end of the communications line (the host if this is the home system, and vice-versa).</p>
+<p>The class descriptor in the home system is laid out as follows:</p>
+<table>
+<tr><th><em>Byte</em></th><th><em>Entry</em></th><th><em>Description</em></th></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>0−1</td><td>length</td><td>Length of the class descriptor</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>2</td><td>image#</td><td>Number of images this class uses</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>3</td><td>sound#</td><td>Number of sounds this class uses</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>4</td><td>action#</td><td>Number of behaviors this class uses</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>5</td><td>imageOff</td><td>Offset in this class descriptor to first image ptr</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>6</td><td>soundOff</td><td>Offset in this class descriptor to first sound ptr</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>7</td><td>actionOff</td><td>Offset in this class descriptor to first behavior ptr</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>8</td><td>objSize</td><td>Length to create objects of this class</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>9</td><td>initSize</td><td>Number of initialization bytes expected from the host</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>10</td><td>capacity</td><td>Number of objects containers of this class can hold</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>11</td><td>maxOccp</td><td>Number of occupants seats of this class can hold</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>12−N-1</td><td><em>images</em></td><td>Image pointers for this class</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>N−M-1</td><td><em>sounds</em></td><td>Sound pointers for this class</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M</td><td>do</td><td>Action for the standard verb <b>do</b></td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M+1</td><td>rdo</td><td>Action for the standard verb <b>reversed do</b></td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M+2</td><td>go</td><td>Action for the standard verb <b>go</b></td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M+3</td><td>stop</td><td>Action for the standard verb <b>stop</b></td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M+4</td><td>get</td><td>Action for the standard verb <b>get</b></td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M+5</td><td>put</td><td>Action for the standard verb <b>put</b></td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M+6</td><td>talk</td><td>Action for the standard verb <b>talk</b></td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M+7</td><td>destroy</td><td>Destroy an instance of this class</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>M+8+</td><td>...</td><td>Asynchronous actions directed by the host</td></tr>
+</table>
+<p>There may be additional entry points beyond this.  These correspond to the class-specific behavior functions discussed above.</p>
+<hr>
+<h2>Instance Descriptors</h2>
+<p>An instance descriptor is a data structure that describes the state of one particular object.  Each instance descriptor is a simple vector of bytes. This vector has two parts: the first ten bytes form the <em>generic part</em> and the remaining bytes (if any) form the <em>class-specific part</em>.  The generic part contains information that is common to all objects, regardless of class. The layout of the generic part of the instance descriptor is the same for all objects, so that external software can manipulate the information it contains without having to know what sort of object it is part of.  The class-specific part contains information that depends on what sort of object the object is. The interpretation of this information is solely at the discretion of the behavior code associated with the particular class of object.</p>
+<p>The instance descriptor in the home system is laid out as follows:</p>
+<table>
+<tr><th><em>Byte</em></th><th><em>Entry</em></th><th><em>Description</em></th></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>0-1</td><td>length</td><td>Length of this instance descriptor</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>2</td><td>noid</td><td>Identifier by which this object is known to host</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>3</td><td>class</td><td>Class of this object</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>4</td><td>grstyle</td><td>Which style of this class of object to display as</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>5</td><td>x</td><td>X-coordinate position within containing object</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>6</td><td>y</td><td>Y-coordinate position within containing object</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>7</td><td>orient</td><td>Orientation to display object in</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>8</td><td>grstate</td><td>Graphic state to display object in</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>9</td><td>aniStart</td><td>Starting graphic state of animation sequence</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>10</td><td>aniEnd</td><td>Ending graphic state of animation sequence</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>11</td><td>container</td><td>Object containing this object</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>12-N</td><td>contents</td><td>Contents of container, if any</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>N+</td><td>...</td><td>Class-specific information</td></tr>
+</table>
+<p>The structure of an instance descriptor in the host system depends on the structure of the host database, which has not yet been defined.  However, the generic information it contains will be the same except for graphic state data (which is obviously not needed in the host).  In the object descriptions that follow, we will speak as if the host instance descriptor was essentially the same as the home instance descriptor, though in actual practice the access methods used will differ.  Class-specific information in the host will depend on the needs of the class&#x27; behavior code, as it does in the home system.</p>
+<hr>
+<h2>The Object Descriptions</h2>
+<p>What follows is a series of object descriptions, one for each class of objects in the basic object set.  Each description has the following form:</p>
+<ul class="bullet">
+<li><b><code>Object:</code></b> </li>
+<p><b>name of object</b></p>
+<p>A brief description of the object.</p>
+<p>The object&#x27;s purpose in the MicroCosm world.</p>
+<p>Anything else that needs to be said about the object.</p>
+<p>Stylistic variations possible for this object.</p>
+<p>The object&#x27;s properties, i.e., the contents of the class-specific part of the home system instance descriptor.</p>
+<p>Properties associated with the object&#x27;s class.</p>
+<p>Additional object properties that are kept only in the host.</p>
+<p>The action to take for the verb <b>do</b>.</p>
+<p>The action to take for the verb <b>go</b>.</p>
+<p>The action to take for the verb <b>stop</b>.</p>
+<p>The action to take for the verb <b>get</b>.</p>
+<p>The action to take for the verb <b>put</b>.</p>
+<p>The action to take for the verb <b>talk</b>.</p>
+<p>The action to take for the verb <b>reversed do</b>.</p>
+<p>The action to take on object initialization.</p>
+<p>The action to take on object destruction.</p>
+<p>Other behavior that the object should be capable of as a result of asynchronous messages from the host or calls from other objects or other parts of the home system.</p>
+<p>The graphics required of the object.</p>
+<p>Behavior functions resident in the host.</p>
+<br>
+<p></p>
+<br>
+</ul>
+<p>Throughout the descriptions we use a <b>C</b>-like pseudo-code to describe specific behaviors.  A few words about the notation are appropriate:</p>
+<p>Object properties (the contents of an instance descriptor), both generic and class-specific, are referred to by name using identifiers in <code>this typewriter-like typeface</code>.  Such references look like <b>C</b> struct references of the form <code>object.property</code>.  The identifier <code>self</code> refers to the object whose behavior we are executing, so that, for example <code>self.class</code> is the object&#x27;s class number and <code>self.x</code> is the object&#x27;s X-coordinate location.  Similarly, the identifier <code>avatar</code> refers to the instance descriptor of the player&#x27;s avatar, <code>region</code> refers to the instance descriptor of the current region, and <code>selfClass</code> refers to the class descriptor of the object <code>self</code>.  Identifiers in <code>CAPITALS LIKE THIS</code> are symbolic constants which should be described in the text.</p>
+<p>One peculiar expression you will see frequently in the home system object behaviors is:</p>
+<pre>
+        <code>@ object!ACTION (arg1, arg2, ...) → (result1, result2, ...)</code>
+</pre>
+<p>This is an instruction to send a message to the host.  <code>object</code> denotes the object to whom the message is addressed.  <code>ACTION</code> denotes the particular action from that object that is desired.  The <code>arg</code>s are any arguments to be sent with the message.  The <code>result</code>s are the identifiers to bind to the successive bytes of the response.  A similar form:</p>
+<pre>
+        <code>ACTION (arg1, arg2, ...) → (result1, result2, ...)</code>
+</pre>
+<p>is used in the host system behavior definitions as a header for a single behavior definition, much like a <b>C</b> function header.</p>
+<p>Some other odd expressions are found in the host system object behaviors:</p>
+<pre>
+        <code>object → ACTION* (arg1, arg2, ...)</code>
+</pre>
+<p>This is an instruction to send a message back to the home system. <code>object</code> denotes the object to whom the message is addressed. <code>ACTION*</code> denotes the particular action the object should take.  The <code>arg</code>s are any arguments to be sent with the message.  Note that there is only a single host system copy of any particular object, since there is only one host.  However, there are as many home system copies of an object as there are avatar&#x27;s in the current region.  This expression indicates that the message indicated should be sent to the computer of the player whose behavior request we are currently processing.  The expression:</p>
+<pre>
+        <code># object → ACTION* (arg1, arg2, ...)</code>
+</pre>
+<p>is similar, except that the message is to be sent to every player in the region <em>except</em> the one whose behavior request we are currently processing.</p>
+<p>Also, in messages to the host, the home system refers to objects using a single byte object identifier.  The expression</p>
+<pre>
+        <code> objectId</code>
+</pre>
+<p>denotes the object instance descriptor for the object to which <code>objectId</code> refers.</p>
+<p>Flow-of-control constructs, function and procedure calls, expressions, and other such things resemble those found in <b>C</b>.</p>
+<hr>
+<h2>Home System Standard Actions and Functions</h2>
+<p>In the object descriptions that follow, these functions are often used for or within object behaviors.  These standard functions are provided because the objects share a common underlying world model and there is much redundancy in the user interface.  They provide both consistency and a significant reduction in the amount of code which must be created and stored.</p>
+<pre><code>adjacent(object)</code>
+{
+    <em>/* Test for adjacency. To be adjacent, object must be within a foot of</em>
+       the avatar but not right where the avatar is. */<code></code>
+    return(object.container==region &amp;&amp; (abs(object.x - avatar.x)==1 ||
+                                        abs(object.y - avatar.y)==1))
+}
+
+adjacentOpenClose()
+{
+    <em>/* If adjacent, open/close door or gate.  Otherwise, depends. */</em><code></code>
+    if (adjacent(self)) {
+        openClose()
+    } else {
+        depends()
+    }
+}
+
+adjacentOpenCloseContainer()
+{
+    <em>/* If adjacent, open/close container.  Otherwise, depends. */</em><code></code>
+    if (adjacent(self)) {
+        openCloseContainer()
+    } else {
+        depends()
+    }
+}
+
+amongContents(object, container)
+{
+    for (i=0; i&lt;(lookupClass(container.class).capacity; ++i) {
+        if (container.contents[i] == object) {
+            return(TRUE)
+        }
+    }
+    return(FALSE)
+}
+
+answer(phone)
+{
+    <em>/* Answer the phone if it is ringing. */</em><code></code>
+    @ phone!ANSWER () → (success)
+    soundEffect(SOUND_CLICK_CLUNK)
+    avatar.action = UNHOOK
+    if (success) {
+        phone.state = PHONE_TALKING
+        soundEffect(SOUND_SILENCE)
+    } else {
+        soundEffect(SOUND_LINE_THUMP)
+        if (phone.class == PHONE_BOOTH_CLASS) {
+            phone.state = PHONE_OFF_HOOK
+        } else {
+            phone.state = PHONE_ACTIVE
+        }
+        soundEffect(SOUND_DIAL_TONE)
+    }
+}
+
+answerOrUnhook(okToProceed, unhookedState)
+{
+    <em>/* Answer the phone if it&#x27;s ringing, otherwise just pick up the</em>
+       receiver. */<code></code>
+    if (okToProceed) {
+        if (self.state == PHONE_RINGING) {
+            answer(self)
+        } else if (self.state == PHONE_READY) {
+            @ self!UNHOOK () → ()
+            self.state = unhookedState
+            avatar.action = UNHOOK
+            soundEffect(SOUND_CLICK_CLUNK)
+            soundEffect(SOUND_DIAL_TONE)
+        }
+    }
+}
+
+balloonMessage(source, format, arg1, arg2, arg3)
+{
+    <em>/* Output text using the Balloon-O-Matic.  </em><code>source</code> denotes
+       the object that is &quot;speaking&quot;, i.e., the object to which the quip
+       should point.  <code>format</code> and the <code>arg</code>s specify the text
+       to print using the conventions of the Unix <code>printf</code> function. */<code></code>
+    <b>/* In Randy&#x27;s Balloon-O-Matic code. */</b><code></code>
+}
+
+broadcast()
+{
+    <em>/* Broadcast typed text to everyone in region */</em><code></code>
+    balloonMessage(avatar, <em>text</em>)
+    @ avatar!SPEAK (NULL, <em>text</em><code>) → ()</code>
+}
+
+cease()
+{
+    <em>/* Stop any on-going action. */</em><code></code>
+    <b>/* *** nop? *** */</b><code></code>
+}
+
+changeContainers(object, newContainer, newX, newY)
+{
+    <em>/* Move </em><code>object</code><em> from wherever it is now to the indicated</em>
+       (x, y) location in the indicated new container. */<code></code>
+    object.container.contents[object.y] = NULL
+    object.container = newContainer
+    object.x = newX
+    object.y = newY
+    newContainer.contents[newY] = object
+}
+
+climbInOrOut()
+{
+    <em>/* If in a vehicle, get out.  If adjacent, get in.  If elsewhere, walk</em>
+       to it.  Only works when vehicle is not moving. */<code></code>
+    if (!self.moving) {
+        if (elsewhere(self)) {
+            goTo()
+        } else {
+            sitOrGetUp()
+        }
+    }
+}
+
+concatenateStrings(s1, s2)
+{
+    <b>/* *** Return the concatenation of the two strings </b><code>s1</code> and
+       <code>s2</code>. *** */<code></code>
+}
+
+createObject(class, container, x, y)
+{
+    <em>/* Create and object of the specified class located at the given</em>
+       (x,y) location within the given container.  Return a pointer to the new
+       instance descriptor. */<code></code>
+    <b>/* In Ron&#x27;s database code. */</b><code></code>
+}
+
+createPaperObject(<em>text</em><code>)</code>
+{
+    <em>/* Create a paper object with text on it. */</em><code></code>
+    object = createObject(PAPER_CLASS, region, avatar.x, avatar.y)
+    object.text = <em>text</em><code></code>
+    return(object)
+}
+
+damageAvatar(who, damage)
+{
+    <b>/* When an avatar is injured, subtract </b><code>damage</code> from his health
+       and apply the appropriate effects accordingly. *** figure out what this
+       means and how to do it. *** */<code></code>
+}
+
+depends()
+{
+    <em>/* Punt to reversed do. */</em><code></code>
+    target = self
+    if (!emptyHanded()) {
+        self = avatar.inHand
+    } else {
+        self = avatar
+    }
+    (self.reversedDo)()
+}
+
+destroyObject(object)
+{
+    <em>/* Destroy the given object.  I.e., delete it and garbage collect</em>
+       all its resources. */<code></code>
+    <b>/* In Ron&#x27;s database code. */</b><code></code>
+}
+
+destroyObjectDramatically(object)
+{
+    <em>/* When we want to blow something up, rather than simply deleting</em>
+       it. */<code></code>
+    (object.destroy)()
+    destroyObject(object)
+}
+
+dialOrTalk(okToProceed)
+{
+    <em>/* If ok to proceed, interpret text as a phone call: first text message</em>
+       is phone number, further messages are conversation with the person at
+       the other end.  When you enter the number, it is dialed.  If there is
+       an answer, you can talk.  If not, the phone is deactivated when you
+       hang up.  If not active, broadcast. */<code></code>
+    if (okToProceed &amp;&amp; self.state == PHONE_ACTIVE) {
+        @ self!DIAL (<em>text</em><code>) → (success)</code>
+        soundEffect(SOUND_DIAL, <em>text</em><code>)</code>
+        if (success) {
+            self.state = PHONE_LINE_RING
+            soundEffect(SOUND_LINE_RING)
+        } else {
+            self.state = PHONE_LINE_BUSY
+            soundEffect(SOUND_BUSY_SIGNAL)
+        }
+    } else if (okToProceed &amp;&amp; self.state == PHONE_TALKING) {
+        balloonMessage(avatar, <em>text</em>)
+        @ self!TALK (<em>text</em><code>) → ()</code>
+    } else {
+        broadcast()
+    }
+}
+
+doMagic()
+{
+    <em>/* If in hand, do magical function.  Otherwise, depends. */</em><code></code>
+    if (holding(self)) {
+        @ self!MAGIC () → ()   <em>/* Works asynchronously. */</em><code></code>
+    } else {
+        depends()
+    }
+}
+
+doMagicIfMagic()
+{
+    <em>/* If magic and in hand, do magical function.  Otherwise, depends. */</em><code></code>
+    if (holding(self)) {
+        if (self.magic) {
+            @ self!MAGIC () → ()   <em>/* Works asynchronously. */</em><code></code>
+        }
+    } else {
+        depends()
+    }
+}
+
+dropAt()
+{
+    <em>/* Drop the object in hand on the ground at the location of self. */</em><code></code>
+    putInto(region, self.x, self.y, DROP)
+}
+
+dropHere()
+{
+    <em>/* Drop the object at the avatar&#x27;s location. */</em><code></code>
+    putInto(region, avatar.x, avatar.y, DROP);
+}
+
+dropInto()
+{
+    <em>/* Drop the object in hand in the container self, if you can. */</em><code></code>
+    putInto(self, NULL, NULL, PUT)
+}
+
+dropIntoIfOpen()
+{
+    <em>/* Drop the object in hand in the container self, if it&#x27;s open. */</em><code></code>
+    if (self.open) {
+        putInto(self, NULL, NULL, PUT)
+    } else {
+        putInto(region, self.x, self.y, DROP)
+    }
+}
+
+dropOnto()
+{
+    <em>/* Drop the object in hand on self, if you can. */</em><code></code>
+    putInto(self, NULL, NULL, PUT)
+}
+
+elsewhere(object)
+{
+    <em>/* Test if object is elsewhere.  To be elsewhere, object must be</em>
+       neither where the avatar is nor adjacent to him nor on his person. */<code></code>
+    return(!here(object) &amp;&amp; !adjacent(object) &amp;&amp; object.container!=avatar)
+}
+
+emptyHanded(who)
+{
+    <em>/* Return </em><code>TRUE</code> iff the avatar is not holding anything. */<code></code>
+    return(who.inHand == NULL)
+}
+
+enterOrExit()
+{
+    <em>/* If not adjacent to self, go to it.  If adjacent, enter it.  If</em>
+       inside, exit it. */<code></code>
+    if (here(self)) {
+        goExit()
+    } else {
+        goOnto()
+    }
+}
+
+explosionAt(x, y, size)
+{
+    <b>/* *** Animate an explosion of the given size at the given</b>
+       location. *** */<code></code>
+}
+
+get(object)
+{
+    <em>/* Tell host to grab the object, then update location and containership</em>
+       if the operation was successful. */<code></code>
+    if (emptyHanded(avatar)) {
+        @ object!GET () → (success)
+        if (success) {
+            changeContainers(object, avatar, NULL, HAND)
+            avatar.action = PICKUP  <b>/* *** What if picking from container? *** */</b><code></code>
+            subjectObject = object
+            return(TRUE)
+        }
+    }
+    return(FALSE)
+}
+
+goAcross()
+{
+    <em>/* Walk to position opposite from present position w.r.t. the object&#x27;s</em>
+       location, if you can. */<code></code>
+    if (here(self)) {
+        return(goPreferred())
+    } else if (adjacent(self)) {
+        return(goXY(oppositeX(self.x), oppositeY(self.y)))
+    } else {
+        return(goTo())
+    }
+}
+
+goEnter()
+{
+    <em>/* Walk into object, via preferred adjacent position. */</em><code></code>
+    return(goTo() &amp;&amp; goPreferred() &amp;&amp; goOnto())
+}
+
+goExit()
+{
+    <em>/* Walk out of object to preferred adjacent position. */</em><code></code>
+    return(goPreferred())
+}
+
+goOnto()
+{
+    <em>/* Walk to the object&#x27;s location, if you can. */</em><code></code>
+    return(goXY(self.x, self.y))
+}
+
+goOntoAndDropAt()
+{
+    <em>/* Put hand-held item at object&#x27;s location. */</em><code></code>
+    if (goOnto()) {
+        dropAt()
+    }
+}
+
+goPreferred()
+{
+    <em>/* Walk to preferred adjacent position. */</em><code></code>
+    goXY(self.preferredX, self.preferredY)
+}
+
+goTo()
+{
+    <em>/* Walk to nearest position adjacent to the object&#x27;s location, if you</em>
+       can. */<code></code>
+    return(goXY(nearestAdjacentX(self.x), nearestAdjacentY(self.y)))
+}
+
+goToAndDropAt()
+{
+    <em>/* Put hand-held item by object&#x27;s location. */</em><code></code>
+    if (holding(self)) {
+        dropHere()
+    } else if (goTo()) {
+        dropAt()
+    }
+}
+
+goToAndDropInto()
+{
+    <em>/* Put hand-held item into object. */</em><code></code>
+    if (holding(self)) {
+        dropHere()
+    } else if (goTo()) {
+        dropInto()
+    }
+}
+
+goToAndDropIntoIfOpen()
+{
+    <em>/* Put hand-held item into object if it&#x27;s open. */</em><code></code>
+    if (holding(self)) {
+        dropHere()
+    } else if (goTo()) {
+        dropIntoIfOpen()
+    }
+}
+
+goToAndDropOnto()
+{
+    <em>/* Put hand-held item onto object. */</em><code></code>
+    if (holding(self)) {
+        dropHere()
+    } else if (goTo()) {
+        dropOnto()
+    }
+}
+
+goToAndFill()
+{
+    <em>/* If the object in the avatar&#x27;s hand is an empty container, tell the</em>
+       host to fill it up and update our state info accordingly. */<code></code>
+    if (goTo()) {
+        if (isEmptyContainer(avatar.inHand)) {
+            @ avatar.inHand!FILL () → (success)
+            if (success) {
+                self.filled = TRUE
+                avatar.action = FILL
+            }
+        }
+    }
+}
+
+goToAndGet()
+{
+    <em>/* Pick object up, put in hand. */</em><code></code>
+    if (holding(self)) {
+        return(TRUE)
+    } else if (goTo()) {
+        return(get(self))
+    } else {
+        return(FALSE)
+    }
+}
+
+goToAndPickFrom()
+{
+    <em>/* General routine to pick stuff up out of containers */</em><code></code>
+    if (goTo()) {
+        get(pickObject(self.contents))
+    }
+}
+
+goToAndPickFromIfOpen()
+{
+    <em>/* General routine to pick stuff up out of open/closable containers. */</em><code></code>
+    if (goTo()) {
+        if (self.open) {
+            get(pickObject(self.contents))
+        }
+    }
+}
+
+goToAndPickFromOrGet()
+{
+    if (!holding(self)) {
+        if (goTo()) {
+            if (self.open) {
+                get(pickObject(self.contents))
+            }
+        }
+    } else {
+        get(self)
+    }
+}
+
+goToCursor()
+{
+    <em>/* Go to location designated by the cursor. */</em><code></code>
+    goXY(cursorX, cursorY)
+}
+
+goToCursorAndDropAt()
+{
+    <em>/* Put hand-held item at cursor location. */</em><code></code>
+    if (goToCursor()) {
+        dropAt()
+    }
+}
+
+goToOrPassThrough()
+{
+    <em>/* If adjacent, go through (opening/closing as needed), else goto. */</em><code></code>
+    haveKey = (holdingClass(KEY_CLASS) &amp;&amp; avatar.inHand.keyNumber == self.key)
+    if (adjacent(self)) {
+        if (self.open || self.unlocked || haveKey) {
+            return(goXY(oppositeX(self.x), oppositeY(self.y)))
+        } else {
+            return(FALSE)
+    } else {
+        return(goTo())
+    }
+}
+
+goXY(x, y)
+{
+    <em>/* Walk to a particular (x, y) location, if you can. */</em><code></code>
+    @ avatar!WALK (x, y) → (destinationX, destinationY)
+    avatar.x = destinationX
+    avatar.y = destinationY
+    <em>/* If we couldn&#x27;t walk anywhere, the destination coordinates will be</em>
+       the same as our current location, and the WALKING activity will
+       terminate immediately */<code></code>
+    avatar.activity = WALKING
+    return (destinationX == x &amp;&amp; destinationY == y)
+}
+
+hangUp()
+{
+    <em>/* Hang up the phone. */</em><code></code>
+    soundEffect(SOUND_THUMP)
+    @ self!HANG () → ()
+    self.state = PHONE_READY
+    soundEffect(SOUND_SILENCE)
+    avatar.action = HANGUP
+}
+
+hangUpOrAnswer(okToProceed) 
+{
+    <em>/* If test passed, hang up phone if not already hung up.  Answer if</em>
+       ringing.  Otherwise, depends. */<code></code>
+    if (okToProceed) {
+        if (self.state == PHONE_OFF_HOOK || self.state == PHONE_TALKING ||
+                self.state == PHONE_LINE_BUSY || self.state ==
+                PHONE_LINE_RING) {
+            if ((self.state == PHONE_LINE_BUSY || self.state ==
+                    PHONE_LINE_RING) &amp;&amp; self.class == PHONE_BOOTH_CLASS) {
+                soundEffect(SOUND_JANGLE)
+                refund(PHONE_CALL_COST, avatar)
+            }
+            hangUp()
+        } else if (self.state == PHONE_RINGING) {
+            answer(self)
+        }
+    } else {
+        depends()
+    }
+}
+
+here(object)
+{
+    <em>/* Test if object is here.  To be here, object must be where the avatar</em>
+       is but not on the avatar&#x27;s person. */<code></code>
+    return(object.container == region &amp;&amp; object.x == avatar.x &amp;&amp;
+        object.y == avatar.y)
+}
+
+holding(object)
+{
+    <em>/* Return </em><code>TRUE</code> iff the avatar is holding the given object. */<code></code>
+    return(avatar.inHand == object)
+}
+
+holdingClass(class)
+{
+    <em>/* Return TRUE iff the avatar is holding an object of class </em><code>class</code> */<code></code>
+    return(!emptyHanded(avatar) &amp;&amp; avatar.inHand.class == class)
+}
+
+load(object)
+{
+    <em>/* Compute the load inside </em><code>object</code>, i.e., how many things it
+       is holding. */<code></code>
+    result = 0
+    for (i=0; i&lt;(lookupClass(object.class).capacity; ++i) {
+        if (object.contents[i] != NULL) {
+            result++
+        }
+    }
+    return(result);
+}
+
+lookupClass(classNumber)
+{
+    <em>/* Return the class descriptor associated with the given class</em>
+       number. */<code></code>
+    <b>/* In Ron&#x27;s database code. */</b><code></code>
+}
+
+mediumExplosion()
+{
+    <em>/* When items of major magic or explosive content are destroyed. */</em><code></code>
+    explosionAt(self.x, self.y, MEDIUM_EXPLOSION)
+}
+
+nearestAdjacentX(x)
+{
+    <em>/* Return X coordinate of nearest adjacent location to object. */</em><code></code>
+    if (avatar.x == x) {
+        return(x)
+    } else if (avatar.x &lt; x) {
+        return(x-1)
+    } else {
+        return(x+1)
+    }
+}
+
+nearestAdjacentY(y)
+{
+    <em>/* Return Y coordinate of nearest adjacent location to object. */</em><code></code>
+    if (avatar.y == y) {
+        return(y)
+    } else if (avatar.y &lt; y) {
+        return(y-1)
+    } else {
+        return(y+1)
+    }
+}
+
+noEffect()
+{
+    <em>/* Action when nothing happens. */</em><code></code>
+    return
+}
+
+nullDestroy()
+{
+    <em>/* Do nothing destruction. */</em><code></code>
+    return
+}
+
+nullInit()
+{
+    <em>/* Do nothing initialization. */</em><code></code>
+    return
+}
+
+openClose()
+{
+    <em>/* Open or close a door or gate, using key if neccessary. */</em><code></code>
+    haveKey = (holdingClass(KEY_CLASS) &amp;&amp; avatar.inHand.keyNumber == self.key)
+    if (!self.open &amp;&amp; (haveKey || self.unlocked)) {
+        @ self!OPEN () → (success)
+        if (success) {
+            self.open = TRUE
+            self.unlocked = TRUE
+            avatar.action = OPEN
+        }
+    } else if (self.open) {
+        @ self!CLOSE () → (success)
+        if (success) {
+            self.open = FALSE
+            if (haveKey) {
+                self.unlocked = FALSE
+            }
+            avatar.action = CLOSE
+        }
+    } else {
+        soundEffect(SOUND_THUMP)
+    }
+}
+
+openCloseContainer()
+{
+    <em>/* Open or close a container, using key if neccessary. */</em><code></code>
+    haveKey = (holdingClass(KEY_CLASS) &amp;&amp; avatar.inHand.keyNumber == self.key)
+    if (!self.open &amp;&amp; (haveKey || self.unlocked)) {
+        @ self!OPENCONTAINER () → (success, <em>contentsVector</em><code>)</code>
+        if (success) {
+            unpackContentsVector(self, <em>contentsVector</em><code>)</code>
+            self.open = TRUE
+            self.unlocked = TRUE
+            avatar.action = OPEN_CONTAINER
+        }
+    } else if (self.open) {
+        @ self!CLOSECONTAINER () → (success)
+        if (success) {
+            purgeContents(self)
+            self.open = FALSE
+            if (haveKey) {
+                self.unlocked = FALSE
+            }
+            avatar.action = CLOSE_CONTAINER
+        }
+    }
+}
+
+oppositeX(x)
+{
+    <em>/* Return the X coordinate on the opposite side of X from the</em>
+       avatar. */<code></code>
+    if (avatar.x == x) {
+        return(x)
+    } else if (avatar.x &lt; x) {
+        return(x+1)
+    } else {
+        return(x-1)
+    }
+}
+
+oppositeY(y)
+{
+    <em>/* Return the Y coordinate on the opposite side of Y from the</em>
+       avatar. */<code></code>
+    if (avatar.y == y) {
+        return(y)
+    } else if (avatar.y &lt; y) {
+        return(y+1)
+    } else {
+        return(y-1)
+    }
+}
+
+payCoinOpOrDrop(cost, soundCoinDrop, soundSucceed, soundFail, goFunction)
+{
+    <em>/* Handle coin operated devices.  Take the money, if you can, make the</em>
+       appropriate sounds, and return a boolean that tells whether or not we
+       were successful in getting the device to operate. */<code></code>
+    if (goFunction()) {
+        if (holdingClass(TOKEN_CLASS)) {
+            if (avatar.inHand.denomination &gt;= cost) {
+                soundEffect(soundCoinDrop)
+                @ self!PAY () → (success, <em>text</em><code>)</code>
+                avatar.action = PAY
+                if (success) {
+                    spend(cost)
+                    soundEffect(soundSucceed)
+                    return(TRUE)
+                } else {
+                    soundEffect(soundFail)
+                    return(FALSE)
+                }
+            }
+        } else {
+            dropAt()
+        }
+    }
+    return(FALSE)
+}
+
+payMe(amount)
+{
+    if (emptyHanded(avatar)) {
+        createObject(TOKEN_CLASS, avatar, NULL, HAND)
+        avatar.inHand.denomination = amount
+    } else if (holdingClass(TOKEN_CLASS) {
+        avatar.inHand.denomination += amount
+    } else {
+        newObject = createObject(TOKEN_CLASS, region, avatar.x, avatar.y)
+        newObject.denomination = amount
+    }
+}
+
+playMusic(<em>score</em><code>)</code>
+{
+    <b>/* *** Start up the sound driver playing the sequence of musical notes</b>
+       denoted by <em>score</em> *** */<code></code>
+}
+
+playSpeech(<em>text</em><code>)</code>
+{
+    <b>/* *** Start up the sound driver playing the “speech” denoted by</b>
+       <em>text</em>. *** */<code></code>
+}
+
+putInto(container, posX, posY, action)
+{
+    <em>/* Put the object in the avatar&#x27;s hand into the specified container at</em>
+       the specified location in the specified manner. */<code></code>
+    if (emptyHanded(avatar) &amp;&amp; load(container) &lt; lookupClass(container.class).
+            capacity) {
+        @ avatar.inHand!PUT (container.noid, posX, posY) → (success)
+        if (success) {
+            avatar.action = action
+            subjectObject = avatar.inHand
+            changeContainers(avatar.inHand, container, posX, posY)
+        }
+    }
+}
+
+pickObject(contentsList)
+{
+    <b>/* *** Pop into rummage mode, rummaging among the items in</b>
+       <code>contentsList</code>, let the player pick one object (or delve deeper as
+       suits him), and return a pointer to this object. *** */<code></code>
+}
+
+purgeContents(object)
+{
+    <em>/* Remove all knowledge of the contents of </em><code>object</code>. */<code></code>
+    for (i=0; i&lt;(lookupClass(object.class).capacity; ++i) {
+        purgeContents(object.contents[i])
+        destroyObject(object.contents[i])
+        object.contents[i] = NULL
+    }
+}
+
+refund(amount, client)
+{
+    <em>/* Give some money back in hand. */</em><code></code>
+    if (emptyHanded(client)) {
+        createObject(TOKEN_CLASS, client, NULL, HAND)
+        client.inHand.denomination = amount
+    } else if (client.inHand.class == TOKEN_CLASS) {
+        client.inHand.denomination += amount
+    } else {
+        newToken = createObject(TOKEN_CLASS, region, client.x, client.y)
+        newToken.denomination = amount
+    }
+}
+
+remove()
+{
+    <em>/* If wearing, take off, else go and drop. */</em><code></code>
+    if (wearing(self)) {
+        if (emptyHanded(avatar)) {
+            changeContainer(self, avatar, NULL, HAND)
+            avatar.action = undress
+        }
+    } else if (holding(self)) {
+        dropHere()
+    } else {
+        goToAndDropAt()
+    }
+}
+
+sendMail(checkAddress)
+{
+    <em>/* If avatar is carrying a letter (i.e., a piece of paper with</em>
+       (presumably) an address and a message on it) it is taken from the
+       avatar&#x27;s hand and mailed away.  If carrying anything else, it is
+       dropped in front of the mailbox. */<code></code>
+    if (holdingClass(PAPER_CLASS) &amp;&amp; (checkAddress==NO_ADDRESS_CHECK ||
+                self.address==avatar.address) {
+        if (goTo()) {
+            @ self!SENDMAIL (avatar.inHand.noid, avatar.inHand.<em>text</em><code>) → ()</code>
+            destroyObject(avatar.inHand)
+        }
+    } else {
+        goToAndDropAt()
+    }
+}
+
+setDownOrGetUp(posture)
+{
+    <em>/* If sitting in seat, stand up.  If standing up, sit down if you can.</em>
+       Handles multiple place seating (couch, hot tub, etc.). */<code></code>
+    <b>/* *** should reflect slot pointed to; add host interaction *** */</b><code></code>
+    for (i=0; i&lt;selfClass.maxOccupants; ++i) {
+        if (self.occupants[i] == NULL) {
+            theSlot = i
+        } else if (self.occupants[i] == avatar) {
+            theSlot = i
+            break
+        }
+    }
+    if (adjacent(self) &amp;&amp; i!=selfClass.maxOccupants) {
+        if (goOnto()) {
+            avatar.activity = posture
+            self.occupants[theSlot] = avatar
+        }
+    } else if (here(self)) {
+        if (goPreferred()) {
+            avatar.activity = STANDING
+            self.occupants[theSlot] = NULL
+        }
+    } else {
+        depends()
+    }
+}
+
+shoot()
+{
+    <em>/* Attack somebody or something with a firearm. */</em><code></code>
+    if (!self.safetyOn) {
+        soundEffect(SOUND_BANG)
+        avatar.action = SHOOT
+        if (target.class == AVATAR_CLASS) {
+            @ self!ATTACK (target.noid) → (damage)
+            soundEffect(SOUND_ATTACK)
+            damageAvatar(target, damage)
+        } else {
+            @ self!BASH (target.noid) → (success)
+            soundEffect(SOUND_BASH)
+            if (success) {
+                destroyObjectDramatically(target)
+            }
+        }
+    } else {
+        soundEffect(SOUND_DUD)
+    }
+}
+
+sitOrGetUp()
+{
+    <em>/* If sitting in seat, stand up.  If standing up, sit down if you can. */</em><code></code>
+    setDownOrGetUp(SITTING)
+}
+
+smallExplosion()
+{
+    <em>/* When items of minor magic or volatile content are destroyed. */</em><code></code>
+    explosionAt(self.x, self.y, SMALL_EXPLOSION)
+}
+
+smallExplosionIfMagic()
+{
+    <em>/* Certain items are only sometimes magical, and only the magical ones</em>
+       explode when you destroy them. */<code></code>
+    if (self.magic) {
+        smallExplosion()
+    } else {
+        smash()
+    }
+}
+
+smash()
+{
+    <em>/* When ordinary items are destroyed. */</em><code></code>
+    explosionAt(self.x, self.y, SMASH_UP)
+}
+
+smashWithContents()
+{
+    <em>/* When a container is destroyed, we have to destroy the stuff in it</em>
+       to, so if it is carrying a explodable that should explode. */<code></code>
+    for (i=self.contents; i!=NULL; i=i-&gt;next) {
+        (i.destroy)()
+    }
+    smash()
+}
+
+soundEffect(sound)
+{
+    <em>/* Emit a particular sound. */</em><code></code>
+    <b>/* In Randy&#x27;s sound driver code. */</b><code></code>
+}
+
+spend(amount)
+{
+    <em>/* Spend some number of tokens out of hand. */</em><code></code>
+    avatar.inHand.denomination -= amount
+    if (avatar.inHand.denomination == 0) {
+        destroyObject(avatar.inHand)
+    }
+}
+
+strike()
+{
+    <em>/* Attack somebody or something with a close-range melee weapon. */</em><code></code>
+    if (!elsewhere(target)) {
+        avatar.action = STRIKE
+        subjectObject = self
+        targetObject = target
+        if (target.class == AVATAR_CLASS) {
+            @ self!ATTACK (target.noid) → (damage)
+            soundEffect(SOUND_ATTACK)
+            damageAvatar(target, damage)
+        } else {
+            @ self!BASH (target.noid) → (success)
+            soundEffect(SOUND_BASH)
+            if (success) {
+                destroyObjectDramatically(target)
+            }
+        }
+    }
+}
+
+textEdit(paper)
+{
+    <b>/* *** Pop into text editor mode to view and edit the text on</b>
+       <code>paper</code>. *** */<code></code>
+}
+
+textEditReadOnly(<em>text</em><code>)</code>
+{
+    <b>/* *** Pop into text editor mode to view </b><em>text</em>, but don&#x27;t let the
+       player alter what he sees. *** */<code></code>
+}
+
+throw()
+{
+    <em>/* Throw hand-held item at object&#x27;s location.  Throw is called from</em>
+       under a <b>reversed-do</b><em>, so the we are now the object being thrown,</em>
+       and target tells us the destination.  It is rather like <code>drop</code><em>,</em>
+       except we don&#x27;t know for sure where the object will land until the host
+       tells us, and hitting something can do damage. */<code></code>
+    @ self!THROW (target.noid) → (newTarget, newX, newY, hit)
+    avatar.action = THROW
+    subjectObject = self
+    changeContainers(self, newTarget, newX, newY)
+    if (hit) {
+        soundEffect(SOUND_HIT)
+        <b>/* *** effect of hit? *** */</b><code></code>
+    }
+}
+
+toggleSwitch(okToProceed)
+{
+    <em>/* Turn the object on or off. */</em><code></code>
+    if (okToProceed) {
+        if (self.on) {
+            self.on = FALSE
+            @ self!OFF () → ()
+            soundEffect(SOUND_OFF)
+        } else {
+            self.on = TRUE
+            @ self!ON () → ()
+            soundEffect(SOUND_ON)
+        }
+        return(TRUE)
+    } else {
+        return(FALSE)
+    }
+}
+
+unpackContentsVector(object, <em>contentsVector</em><code>)</code>
+{
+    <em>/* Decode </em><em>contentsVector</em> as the new contents of the given
+       object. */<code></code>
+    <b>/* In Randy&#x27;s communications code. */</b><code></code>
+}
+
+wear()
+{
+    <em>/* If holding, put it on.  If not, go get it. */</em><code></code>
+    if (!wearing(self)) {
+        if (!holding(self)) {
+            goToAndGet()
+        } else {
+            changeContainer(self, avatar, NULL, selfClass.location)
+            avatar.action = WEAR
+        }
+    }
+}
+
+wearing(clothing)
+{
+    <em>/* Return true if avatar is wearing the item of clothing. */</em><code></code>
+    return(amongContents(clothing, avatar))
+}
+
+wearOrUnpocket()
+{
+    <em>/* If wearing, remove item from pockets, else wear. */</em><code></code>
+    if (!wearing(self)) {
+        wear()
+    } else {
+        get(pickObject(self.contents))
+    }
+}
+
+writeTo(paper, <em>text</em><code>)</code>
+{
+    <em>/* Add the given text to the text on </em><code>paper</code>. */<code></code>
+    paper.text = concatenateStrings(paper.text, <em>text</em><code>)</code>
+}
+
+
+ANSWER* (avatar, success)
+{
+    avatar.action = UNHOOK
+    if (success) {
+        self.state = PHONE_TALKING
+        soundEffect(SOUND_SILENCE)
+    } else {
+        soundEffect(SOUND_LINE_THUMP)
+        if (self.class == PHONE_BOOTH_CLASS) {
+            self.state = PHONE_OFF_HOOK
+        } else {
+            self.state = PHONE_ACTIVE
+        }
+        soundEffect(SOUND_DIAL_TONE)
+    }
+}
+
+ANSWERED* ()
+{
+    self.state = PHONE_TALKING
+    soundEffect(SOUND_SILENCE)
+}
+
+DIAL* (success)
+{
+    if (success) {
+        self.state = PHONE_LINE_RING
+        soundEffect(SOUND_LINE_RING)
+    } else {
+        self.state = PHONE_LINE_BUSY
+        soundEffect(SOUND_LINE_BUSY)
+    }
+}
+
+DRIVE* (x, y)
+{
+    <em>/* Asynchronous function when directed to move to another location and</em>
+       traveling in a powered vehicle. */<code></code>
+    self.targetX = x
+    self.targetY = y
+    self.moving = TRUE
+    soundEffect(SOUND_ENGINE)
+}
+
+HANG* ()
+{
+    if (self.class == PHONE_BOOTH_CLASS &amp;&amp; (self.state == PHONE_LINE_BUSY ||
+            self.state == PHONE_LINE_RING)) {
+        soundEffect(SOUND_JANGLE)
+        refund(PHONE_CALL_COST, self.container)
+    }
+    soundEffect(SOUND_THUMP)
+    soundEffect(SOUND_SILENCE)
+    self.state = PHONE_READY
+    self.container.action = HANGUP
+}
+
+HUNGUP* ()
+{
+    <em>/* Asynchronous message from host when the party at the other end hangs</em>
+       up.  If we have answered we should get disconnected.  If we have not,
+       then the phone should just stop ringing */<code></code>
+    if (self.state == PHONE_TALKING) {
+        soundEffect(SOUND_LINE_THUMP)
+        if (self.class == PHONE_BOOTH_CLASS) {
+            self.state = PHONE_OFF_HOOK
+        } else {
+            self.state = PHONE_ACTIVE
+        }
+        soundEffect(SOUND_DIAL_TONE)
+    } else {
+        self.state = PHONE_READY
+        soundEffect(SOUND_SILENCE)
+    }
+}
+
+OFF* ()
+{
+    self.on = FALSE
+}
+
+OFFLIGHT* ()
+{
+    self.on = FALSE
+    lightLevel--
+}
+
+ON* ()
+{
+    self.on = TRUE
+}
+
+ONLIGHT* ()
+{
+    self.on = TRUE
+    lightLevel++
+}
+
+ORACLESPEAK+ (<em>text</em><code>)</code>
+{
+    <em>/* Asynchronous message from host when an oracle says something */</em><code></code>
+    <b>/* *** Trigger this. *** */</b><code></code>
+    balloonMessage(self, &quot;%s&quot;, <em>text</em><code>)</code>
+}
+
+RING* ()
+{
+    <em>/* Asynchronous message from host when the phone should ring.  Host</em>
+       makes sure we don&#x27;t get this happening when the phone is not ready, so
+       it *should* be safe to assume that the phone is in the PHONE_READY
+       state */<code></code>
+    self.state = PHONE_RINGING
+    soundEffect(SOUND_BELL_RING)
+}
+
+SPEAK* (<em>text</em><code>)</code>
+{
+    <em>/* Asynchronous message from host when player somebody says</em>
+       something. */<code></code>
+    balloonMessage(self, &quot;%s&quot;, <em>text</em><code>)</code>
+}
+
+UNHOOK* (avatar)
+{
+    if (self.class == PHONE_BOOTH_CLASS) {
+        self.state = PHONE_OFF_HOOK
+    } else {
+        self.state = PHONE_READY
+    }
+    avatar.action = UNHOOK
+    soundEffect(SOUND_CLICK_CLUNK)
+    soundEffect(SOUND_DIAL_TONE)
+}
+
+WALK* (x, y)
+{
+    <em>/* Asynchronous function when directed to move to another location. */</em><code></code>
+    self.targetX = x
+    self.targetY = y
+    self.moving = TRUE
+    self.activity = WALKING
+}</pre>
+<h2>Host System Standard Actions and Functions</h2>
+<p>The home system object behavior code includes messages to the host which direct certain actions.  The below functions are shared among several different classes of objects and so are collected here, rather than with the descriptions of the objects themselves.</p>
+<pre><code>ANSWER () → (success)</code>
+{
+    if (!elsewhere(self) &amp;&amp; self.state == PHONE_RINGING) {
+        if (self.caller != NULL) {
+            self.state = PHONE_TALKING
+            self.caller.state = PHONE_TALKING
+            talker = avatar
+            success = TRUE
+            # self → ANSWER* (avatar.noid, TRUE)
+            self.caller → ANSWERED* ()
+        } else {
+            success = FALSE
+        }
+    } else {
+        success = FALSE
+    }
+}
+
+ASKORACLE (<em>text</em><code>) → ()</code>
+{
+    if (self.live) {
+        askQuestionLive(<em>text</em><code>)</code>
+    } else {
+        newQuestion = alloc(QUESTION_ENTRY)
+        newQuestion-&gt;question = <em>text</em><code></code>
+        newQuestion-&gt;previousQuestion = self.questions
+        self.questions = newQuestion
+    }
+}
+
+ATTACK (targetId) → (damage)
+{
+    target = targetId
+    <b>/* *** handle path check on ranged weapons *** */</b><code></code>
+    if ((!elsewhere(target) || isRangedWeapon(self)) &amp;&amp; target.class ==
+            AVATAR_CLASS) {
+        damage = damageAvatar(target, self)
+        # avatar → ATTACK* (targetId, damage)
+    } else {
+        damage = 0
+    }
+}
+
+BASH (targetId) → (success)
+{
+    target = targetId
+    <b>/* *** handle path check on ranged weapons *** */</b><code></code>
+    if ((!elsewhere(target) || isRangedWeapon(self)) &amp;&amp; target.class !=
+            AVATAR_CLASS) {
+        success = damageObject(target, self)
+        # avatar → BASH* (targetId, success)
+    } else {
+        success = FALSE
+    }
+}
+
+CLOSE () → (success)
+{
+    haveKey = (holdingClass(KEY_CLASS) &amp;&amp; avatar.inHand.keyNumber == self.key)
+    if (!elsewhere(self) &amp;&amp; self.open) {
+        success = TRUE
+        self.open = FALSE
+        self.unlocked = !haveKey
+        # avatar → CLOSE* (self, self.unlocked)
+    } else {
+        success = FALSE
+    }
+}
+
+CLOSECONTAINER () → (success)
+{
+    haveKey = (holdingClass(KEY_CLASS) &amp;&amp; avatar.inHand.keyNumber == self.key)
+    if (!elsewhere(self) &amp;&amp; self.open) {
+        disappearContents(self)
+        self.open = FALSE
+        self.unlocked = !haveKey
+        # avatar → CLOSECONTAINER* (self, self.unlocked)
+        success = TRUE
+    } else {
+        success = FALSE
+    }
+}
+
+DIAL (<em>text</em><code>) → (success)</code>
+{
+    success = FALSE
+    if (!elsewhere(self) &amp;&amp; self.state == PHONE_ACTIVE) {
+        self.talker = avatar
+        self.caller = lookupPhoneNumber(<em>text</em><code>)</code>
+        if (self.caller != NULL) {
+            if (self.caller.state == PHONE_READY) {
+                self.caller.state = PHONE_RINGING
+                self.caller.caller = self
+                self.state = PHONE_LINE_RING
+                self.caller → RING* ()
+                if (self.caller.owner.container != self.caller.container) {
+                    if (self.caller.beeper != NULL) {
+                        self.caller.beeper → BEEP* ()
+                    }
+                    if (self.caller.answeringMachine != NULL) {
+                        answerPhoneWithMachine(self.caller.answeringMachine)
+                    }
+                }
+                success = TRUE
+            } else {
+                self.state = PHONE_LINE_BUSY
+            }
+        } else {
+            success = FALSE
+        }
+        # self → DIAL* (success)
+    } else {
+        success = FALSE
+    }
+}
+
+GET () → (success)
+{
+    if (emptyHanded(avatar) &amp;&amp; accessible(self)) {
+        changeContainers(self, avatar, NULL, HAND)
+        if (self.class == BEEPER_CLASS) {
+            avatar.homePhone.beepr = self
+        } else if (self == avatar.homePhone.answeringMachine) {
+            avatar.homePhone.answeringMachine = NULL
+        }
+        success = TRUE
+        # avatar → GET* (self.noid)
+    } else {
+        success = FALSE
+    }
+}
+
+HANG () → ()
+{
+    if (!elsewhere(self) &amp;&amp; self.state != PHONE_READY) {
+        self.state = PHONE_READY
+        talker = NULL
+        if (self.caller != NULL) {
+            self.caller.caller = NULL
+            self.caller → HUNGUP* ()
+        }
+        # self → HANG* ()
+        self.caller = NULL
+    }
+}
+
+MAGIC () → ()
+{
+    (*magicBehavior[self.magicType])() <b>/* *** expand *** */</b><code></code>
+}
+
+OFF () → ()
+{
+    if (!elsewhere(self) &amp;&amp; self.on) {
+        self.on = FALSE
+        # self → OFF* ()
+    }
+}
+
+OFFPLAYER () → ()
+{
+    if (!elsewhere(self) &amp;&amp; self.on) {
+        self.on = FALSE
+        # self → OFF* ()
+        dequeuePlayer(self)
+    }
+}
+
+ON () → ()
+{
+    if (!elsewhere(self) &amp;&amp; !self.on) {
+        self.on = TRUE
+        # self → ON* ()
+    }
+}
+
+ONPLAYER () → ()
+{
+    if (!elsewhere(self) &amp;&amp; !self.on) {
+        self.on = TRUE
+        # self → ON* ()
+        enqueuePlayer(self)
+    }
+}
+
+OPEN () → (success)
+{
+    haveKey = (holdingClass(KEY_CLASS &amp;&amp; avatar.inHand.keyNumber == self.key)
+    if (!elsewhere(self) &amp;&amp; !self.open &amp;&amp; (haveKey || self.unlocked)) {
+        self.open = TRUE
+        self.unlocked = TRUE
+        success = TRUE
+        # avatar → OPEN* (self)
+    } else {
+        success = FALSE
+    }
+        
+}
+
+OPENCONTAINER () → (success, <em>contentsVector</em><code>)</code>
+{
+    haveKey = (holdingClass(KEY_CLASS) &amp;&amp; avatar.inHand.keyNumber == self.key)
+    if (!elsewhere(self) &amp;&amp; !self.open &amp;&amp; (haveKey || self.unlocked)) {
+        <em>contentsVector</em><code> = vectorize(self.contents)</code>
+        self.open = TRUE
+        self.unlocked = TRUE
+        success = TRUE
+        # avatar → OPENCONTAINER* (self, <em>contentsVector</em><code>)</code>
+    } else {
+        success = FALSE
+        <em>contentsVector</em><code> = &quot;&quot;</code>
+    }
+}
+
+PUT (containerId, posX, posY) → (success)
+{
+    container = containerId
+    if (holding(self) &amp;&amp; available(container, posX, posY) &amp;&amp; load(container) &lt;
+            lookupClass(container.class).capacity) {
+        changeContainers(self, container, posX, posY)
+        success = TRUE
+        # avatar → PUT* (self.noid, containerId, posX, posY)
+        if (self.class == BEEPER_CLASS) {
+            avatar.homePhone.beeper = NULL
+        } else if (self.class == ANSWERING_MACHINE_CLASS) {
+            if (self.container == avatar.homePhone.container) {
+                avatar.homePhone.answeringMachine = self
+            }
+        }
+    } else {
+        success = FALSE
+    }
+}
+
+SENDMAIL (paperId, <em>text</em><code>) → ()</code>
+{
+    paper = paperId
+    if (paper.class == PAPER_CLASS) {
+        sendMailMessage(<em>text</em><code>)</code>
+        destroyObject(paper)
+    }
+}
+
+TALK (<em>text</em><code>) → ()</code>
+{
+    if (!elsewhere(self) &amp;&amp; self.state == PHONE_ACTIVE &amp;&amp; self.caller != NULL) {
+        self.caller → SPEAK* (<em>text</em><code>)</code>
+    }
+}
+
+THROW (targetId) → (newTarget, newX, newY, hit)
+{
+    target = targetId
+    if (holding(self)) {
+        checkPath(target, target.x, target.y, &amp;newX, &amp;newY)
+        hit = (newX == target.x &amp;&amp; newY == target.y)
+        if (hit) {
+            newTarget = targetId
+            # avatar → THROW* (targetId, newX, newY, hit)
+        } else {
+            newTarget = region.noid
+            # avatar → THROW* (region.noid, newX, newY, hit)
+        }
+    } else {
+        newX = self.x
+        newY = self.y
+        hit = FALSE
+    }
+}
+
+UNHOOK () → ()
+{
+    if (!elsewhere(self) &amp;&amp; self.state == PHONE_READY) {
+        if (self.class == PHONE_BOOTH_CLASS) {
+            self.state = PHONE_OFF_HOOK
+        } else {
+            self.state = PHONE_ACTIVE
+        }
+        # self → UNHOOK* (avatar.noid)
+    }
+}
+
+accessible(object)
+{
+    <b>/* *** Return </b><code>TRUE</code> if avatar can get <code>object</code>.  Needs, among
+       other things, to handle interlock used for countertop and display
+       case. *** */<code></code>
+}
+
+alloc(type)
+{
+    <em>/* Allocate storage for an entity of the given type, and return a</em>
+       pointer to this storage. */<code></code>
+    <b>/* Built into PL/1. */</b><code></code>
+}
+
+announceObject(object)
+{
+    <b>/* *** Announce the existence of </b><code>object</code> and its state to
+       everybody in the region except the ourselves. *** */<code></code>
+}
+
+answerPhoneWithMachine(phone, machine)
+{
+   <b>/* *** Somebody is trying to call </b><code>phone</code>, but nobody&#x27;s home, so
+       have <code>machine</code> answer, play its message, and take a message from
+       the caller. *** */<code></code>
+}
+
+askQuestionLive(<em>text</em><code>)</code>
+{
+    <b>/* Send </b><em>text</em> to the system person currently playing
+       oracle. *** Ask JH *** */<code></code>
+}
+
+atWater()
+{
+    <b>/* *** Return </b><code>TRUE</code> if there is water at the avatar&#x27;s present
+       location. *** */<code></code>
+}
+
+available(container, x, y)
+{
+    <em>/* Return </em><code>TRUE</code> if there is not already an object occupying
+       the given (x,y) location inside <code>container</code>. */<code></code>
+    return(container.contents[y] == NULL)
+}
+
+cancelEvent(eventId)
+{
+    <b>/* Cancel the previously scheduled event indicated by</b>
+       <code>eventId</code>. *** Ask JH *** */<code></code>
+}
+
+changeContainers(object, newContainer, newX, newY)
+{
+    <em>/* Move </em><code>object</code><em> from wherever it is now to the indicated</em>
+       (x, y) location in the indicated new container. */<code></code>
+    object.container.contents[object.y] = NULL
+    object.container = newContainer
+    object.x = newX
+    object.y = newY
+    newContainer.contents[newY] = object
+}
+
+checkPath(target, x, y, newx, newy)
+{
+    <b>/* Check for a path from the avatar&#x27;s present location to the</b>
+       object <code>target</code> at the given (x,y) location in the region.  Set
+       <code>newx</code> and <code>newy</code> to the (x,y) location of the farthest point
+       from the avatar along that path which can be reached in a straight line
+       (of course, if the way is completely clear, <code>newx=x</code> and
+       <code>newy=y</code>. *** Discuss with JH *** */<code></code>
+}
+
+createObject(class, container, x, y)
+{
+    <b>/* Create and object of the specified class located at the given</b>
+       (x,y) location within the given container.  Return a pointer to the new
+       instance descriptor. *** Ask JH *** */<code></code>
+}
+
+damageAvatar(who, damage)
+{
+    <b>/* *** When an avatar is injured, subtract </b><code>damage</code> from his health
+       and apply the appropriate effects accordingly. *** */<code></code>
+}
+
+damageObject(object, weapon)
+{
+    <b>/* *** Return </b><code>TRUE</code> iff attacking <code>object</code> with <code>weapon</code>
+       damages it. *** */<code></code>
+}
+
+dequeuePlayer(player)
+{
+    <b>/* Remove the given player object (radio or tape deck) from the</b>
+       queue of things receiving PLAY+() messages. *** Ask JH *** */<code></code>
+}
+
+destroyContents(object)
+{
+    <em>/* Destroy all the objects that </em><code>object</code> contains. */<code></code>
+    for (i=0; i&lt;(lookupClass(object.class).capacity; ++i) {
+        destroyObject(object.contents[i])
+        object.contents[i] = NULL
+    }
+}
+
+destroyObject(object)
+{
+    <b>/* Destroy the given object.  I.e., delete it and garbage collect</b>
+       all its resources. *** Ask JH *** */<code></code>
+}
+
+disappearContents(container)
+{
+    <b>/* *** As far as the players are concerned, delete all the objects</b>
+       contained in <code>container</code>.  As far as we are concerned, these
+       objects continue to exist. *** */<code></code>
+}
+
+disappearObject(object)
+{
+    <b>/* *** As far as the players are concerned, delete </b><code>object</code>.  As
+       far as we are concerned, it continues to exist. *** */<code></code>
+}
+
+elsewhere(object)
+{
+    <em>/* Test if object is elsewhere.  To be elsewhere, object must be</em>
+       neither where the avatar is nor adjacent to him nor on his person. */<code></code>
+    return(!here(object) &amp;&amp; !adjacent(object) &amp;&amp; object.container!=avatar)
+}
+
+emptyHanded(who)
+{
+    <em>/* Return </em><code>TRUE</code> iff the avatar is not holding anything. */<code></code>
+    return(who.inHand == NULL)
+}
+
+enqueuePlayer(player)
+{
+    <b>/* Add the given player (radio or tape deck) to the queue of things</b>
+       that need to be send PLAY+() messages every so often. *** Ask JH *** */<code></code>
+}
+
+holding(object)
+{
+    <em>/* Return </em><code>TRUE</code> iff the avatar is holding the given object. */<code></code>
+    return(avatar.inHand == object)
+}
+
+holdingClass(class)
+{
+    <em>/* Return TRUE iff the avatar is holding an object of class </em><code>class</code> */<code></code>
+    return(!emptyHanded(avatar) &amp;&amp; avatar.inHand.class == class)
+}
+
+goToNewRegion(avatar, region)
+{
+    <b>/* Transport </b><code>avatar</code> to region <code>region</code>. *** Ask JH *** */<code></code>
+}
+
+isRangedWeapon(object)
+{
+    <b>/* *** Return </b><code>TRUE</code> iff <code>object</code> is a ranged weapon (e.g., a
+       gun). *** */<code></code>
+}
+
+load(object)
+{
+    <em>/* Compute the load inside </em><code>object</code>, i.e., how many things it
+       is holding. */<code></code>
+    result = 0
+    for (i=0; i&lt;(lookupClass(object.class).capacity; ++i) {
+        if (object.contents[i] != NULL) {
+            result++
+        }
+    }
+    return(result);
+}
+
+lookupClass(classNumber)
+{
+    <em>/* Return the class descriptor associated with the given class</em>
+       number. */<code></code>
+    <b>/* *** Ask JH *** */</b><code></code>
+}
+
+lookupPhoneNumber(<em>text</em><code>)</code>
+{
+    <b>/* *** Try to interpret </b><code>text</code> as a phone number and return a
+       pointer to the telephone object that the number corresponds to.
+       (NULL if there is none.) *** */<code></code>
+}
+
+lookupSelection(musicList, listLength, <em>text</em><code>)</code>
+{
+    <b>/* *** </b><code>Text</code> is a jukebox selection.  Figure out which piece in
+       <code>musicList</code> it is and return a pointer to it. *** */<code></code>
+}
+
+lookupTeleportAddress(<em>text</em><code>)</code>
+{
+    <b>/* *** Try to interpret </b><code>text</code> as a teleport number and return a
+       pointer to the teleport object that the number corresponds to.
+       (NULL if there is none.) *** */<code></code>
+}
+
+payMe(amount)
+{
+   <em>/* Pay the given amount to the avatar. */</em><code></code>
+   payTo(avatar, amount)
+}
+
+payTo(player, amount)
+{
+    <em>/* Pay the given amount to the designated player. */</em><code></code>
+    if (emptyHanded(player)) {
+        createObject(TOKEN_CLASS, player, NULL, HAND)
+        player.inHand.denomination = actualWithdrawal
+        announceObject(player.inHand)
+    } else if (player.inHand.class == TOKEN_CLASS) {
+        player.inHand.denomination += actualWithdrawal
+    } else {
+        newObject = createObject(TOKEN_CLASS, region, player.x, player.y)
+        newObject.denomination = actualWithdrawal
+        announceObject(newObject)
+        }
+    }
+}
+
+random()
+{
+    <b>/* Return a random integer. *** Ask JH *** */</b><code></code>
+}
+
+randomTimeInTheFuture()
+{
+    <b>/* *** Return some random time in the future. *** */</b><code></code>
+}
+
+scheduleEvent(eventProcedure, delay)
+{
+    <b>/* Set things up so that the procedure </b><code>eventProcedure</code> will be
+       called <code>delay</code> time units from now.  Return an identifier of some
+       sort so we can cancel this in the future if we so desire.
+       *** Ask JH *** */<code></code>
+}
+
+sendMailMessage(<em>text</em><code>)</code>
+{
+    <b>/* Interpret </b><em>text</em> as a mail message and send it off.  We
+       extract the address from the text itself. *** Ask JH *** */<code></code>
+}
+
+spend(cost)
+{
+    <em>/* Have the avatar spend the given amount out of pocket or bank</em>
+       account, if he can.  Return a boolean indicating how successful this
+       was. */<code></code>
+    if (holdingClass(TOKEN_CLASS) &amp;&amp; avatar.inHand.denomination &gt;= cost) {
+        avatar.inHand.denomination -= cost
+        if (avatar.inHand.denomination == 0) {
+            destroyObject(avatar.inHand)
+        }
+        return(TRUE)
+    } else if (holdingClass(CREDIT_CARD_CLASS) &amp;&amp; avatar.bankAccountBalance &gt;=
+            cost) {
+        avatar.bankAccountBalance -= cost
+        return(TRUE)
+    } else {
+        return(FALSE)
+    }
+}
+
+vectorize(contentsList)
+{
+    <b>/* Take the given contents list and turn it into a byte vector</b>
+       suitable for transmission to the players. *** Ask JH *** */<code></code>
+}</pre>
+<h2>The Objects</h2>
+<p>The object descriptions follow on the proceeding pages:</p>
+<hr>
+<p>amulet</p>
+<p>A hang-around-the neck type amulet.</p>
+<p>Generic magic talisman.</p>
+<p>Amulets are always magical.  An amulet will do something special and powerful. The magical function may vary. <b>*** The set of magical functions needs thought. ***</b>  Amulets are particularly rare and contain unusually powerful forms of magic.  The general function of an amulet will be to confer some particular power or ability on the avatar wearing it.</p>
+<p>None.</p>
+<p>No properties.</p>
+<p>location = NECK /* Where on the body this is worn. */</p>
+<p>magicType       /* What sort of magic this amulet contains.  Used as case switch for execution of magical behavior. */</p>
+<p>doMagic()</p>
+<p>goTo()</p>
+<p>cease()</p>
+<p>wear()</p>
+<p>remove()</p>
+<p>broadcast()</p>
+<p>throw()</p>
+<p>nullInit()</p>
+<p>smallExplosion()</p>
+<p>None.</p>
+<p>Single static image of amulet sitting by itself.  Cels for amulet around avatar&#x27;s neck in front and side views.</p>
+<p>GET MAGIC PUT THROW</p>
+<p>answering machine</p>
+<p>A telephone answering machine.</p>
+<p>Handle your phone calls when you&#x27;re not at home.</p>
+<p>The answering machine operates in conjunction with a telephone (of the non-pay and non-portable variety, of which there may be only one per region).  Most of the answering machine&#x27;s guts reside in the host.  The answering machine has a light on it that is lit if there are messages waiting.</p>
+<p>None.</p>
+<p>waitingMessages /* A flag telling if there are waiting messages.  TRUE if there are. */</p>
+<p>No class properties.</p>
+<p>messageQueue    /* The waiting messages themselves, if there are any, in FIFO order. */ owner           /* The avatar who belongs to this machine. */</p>
+<pre>{
+    if (holding(self)) {
+        self.windLevel++
+        @ self!WIND () → ()
+        if (self.windLevel == 1) {
+            soundEffect(SOUND_WIND_1)
+        } else if (self.windLevel == 2) {
+            soundEffect(SOUND_WIND_2)
+        } else if (self.windLevel == 3) {
+            soundEffect(SOUND_WIND_3)
+        } else {
+            soundEffect(SOUND_SPROING)
+            self.windLevel = 4
+        }
+    } else {
+        depends()
+    }
+}
+.Go
+goTo()
+.St
+cease()
+.Ge
+goToAndGet()
+.Pu
+goToAndDropAt()
+.Ta
+broadcast()
+.Re
+throw()
+.In
+nullInit()
+.Dy
+smash()
+.As
+WIND* ()
+{
+    self.windLevel++
+    if (self.windLevel == 1) {
+        soundEffect(SOUND_WIND_1)
+    } else if (self.windLevel == 2) {
+        soundEffect(SOUND_WIND_2)
+    } else if (self.windLevel == 3) {
+        soundEffect(SOUND_WIND_3)
+    } else {
+        soundEffect(SOUND_SPROING)
+        self.windLevel = 4
+    }
+}
+.Gr
+Single static image of wind-up toy for each style.
+.Hb
+GET
+PUT  <b>/* *** Need special put to handle toy walking away. *** */</b><code></code>
+THROW
+WIND () → ()
+{
+    if (holding(self)) {
+        self.windLevel++
+        if (self.windLevel &gt; 4) {
+            self.windLevel = 4
+        }
+        # self → WIND* ()
+    }
+}
+.En
+</pre>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/obman.tbl" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

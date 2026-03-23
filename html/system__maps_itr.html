@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Layout Guidelines - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/maps.itr" style="font-size:0.85em;">View source</a></div>
+<h1>A Mapmaker&#x27;s Guide to the MicroCosm™</h1>
+<p class="author">by Rules and Regs for laying out the world, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document # 17</p>
+<h2>Introduction</h2>
+<p>This document is a guide for people creating the <b>MicroCosm</b> world map. It describes the underlying physical organization of the world as it relates to the art of creative cartography.</p>
+<h2>Regions</h2>
+<p>The basic building block of <b>MicroCosm</b> geography is a thing called the <em>region</em>.  A region is a flat rectangular area with the sides oriented east-west and north-south.  Its dimensions can vary from 1 foot to 255 feet. The east-west and north-south dimensions can be different, i.e., it does not have to be a square.</p>
+<h2>Connectivity</h2>
+<p>Each edge of a region may be connected to one edge of another region.  It need not connect to an adjacent region; it can connect to any region at all or to no region.  It need not connect to an oppositely facing edge, e.g., the east edge of one region does not have to be connected to the west edge of another region.  A region <em>can</em> be connected to itself.  Connections need not be bidirectional, e.g., if the east edge of region A is connected to the west edge of region B, there is no requirement that the west edge of region B be connected to the east edge of region A.  In general, the connectivity of regions does not have to obey the restrictions of Euclidean geometry, though for stylistic reasons it <em>usually</em> should.</p>
+<h2>Viewpoints</h2>
+<p>Each region has exactly one <em>viewpoint</em>.  The viewpoint is the position from which the graphic display of the region is rendered.  It is located a few feet back from the center of one of the edges, looking in towards the region&#x27;s center.  There are no exceptions.  Designating the viewpoint for a region consists of indicating which edge the region is to be viewed from.</p>
+<h2>Backdrops</h2>
+<p>Each region has a <em>terrain type</em> associated with it that is used to generate a <em>backdrop</em>.  A backdrop is simply a flat image that is used as the base for rendering the scene.  Backdrops are generated stochastically whenever the viewpoint (i.e., the region being displayed) shifts.  There are a variety of possible backdrops reflecting a variety of possible terrain types: mountains, hills, forest, desert, swamp, seascape, cityscape, suburbia, and, of course, blank.</p>
+<h2>Buildings</h2>
+<p>A building is a region (or regions) surrounded by walls.  The walls coincide exactly with the edges of the region making up the building.  Other regions that connect to the building region are displayed with images of the walls as their backdrops.  A building can be constructed out of multiple regions, in which case each region constitutes a “room”.  Each room has its own interior wall images that are used as the backdrop when displaying indoor scenes.</p>
+<h2>Turf</h2>
+<p>A player&#x27;s <em>turf</em> is one or more regions that he “owns”.  Ownership in this case means that the player is the one entitled to determine the region&#x27;s interior.  Generally speaking, we do not simply create new regions for turf as people join the game.  Rather, regions are treated like real estate — an area is set aside for “development” and the regions in it are allocated as needed.  Presumably the area will be laid out in a manner that will help us do this.  Also, a player&#x27;s turf is inaccessible to any avatar except for its owner&#x27;s, unless the owner&#x27;s avatar is present to let other avatars in.  What this means to the world builder is that regions set aside to become people&#x27;s turf should never be located in such a fashion that they would create obstructions should they become uncrossable.</p>
+<h2>Scenic Objects</h2>
+<p>Various sorts of object may be placed in a region as scenic or structural features of the region itself.  This includes such things as trees, bushes, roads, rivers, ponds, fountains, fences, and so on.  Within reason you are free to make up new such object types as needed.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/maps.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

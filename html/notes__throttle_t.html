@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telecomm Throttle - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/throttle.t" style="font-size:0.85em;">View source</a></div>
+<h1>What&#x27;s this &quot;throttle&quot; thing?</h1>
+<pre>		What&#x27;s this &quot;throttle&quot; thing?</pre>
+<p>The throttle is a mechanism to limit the amount of message traffic that each Commodore is receiving from the host.  The idea is that a user&#x27;s Commodore can get swamped by the messages from the other players in his region if there is simultaneously 1) any event that requires large amounts of message retransmission (notably line noise and region transitions, but also includes extraction of items from containers) and 2) a lot of activity going on in the region.  Ideally, we would like the host to know to stop sending things when the Commodore isn&#x27;t ready, but there currently is no way to do this.  Instead, we limit the number of requests that users can send to the host in the first place.  We do this by making the C64 command interface require a minimum delay of D jiffies between commands.</p>
+<p>The tricky part is figuring out what the delay should be.  The simplest thing would be to simply pick an arbitrary constant, say 10 seconds.  There are two problems with this: first, in most circumstances this is too long a time and simply results in irritation to the user; second, in some circumstances it isn&#x27;t long enough and thus doesn&#x27;t fix the problem that it was put in to solve.  What we want to do is compute D on the basis of the amount of message traffic that we expect to be receiving during the next few seconds.  There is no way to predict this, of course, but we can still build an adaptive feedback system that balances itself according to the load.</p>
+<p>The general mechanism for the throttle:</p>
+<p>We maintain both long-term and short-term floating averages of the message volume received.  If the short-term average is larger than the long-term average, we conclude that message traffic is increasing and increase the delay time D.  If the opposite is the case, we reduce D (down to a minimum of 0, of course!).  This system has negative feedback in that a large delay will substantially reduce the number of requests going to the host and eventually reduce the volume of traffic being received by the Commodores.  Similarly, a sudden increase in activity by the players will result in more messages to the, and therefore more messages to the Commodores and therefore increase the delay time.</p>
+<p>An important point to note is that the delay is counted from the time a command is issued and includes any host response time within it.  Since heavy load means a longer host response time anyway, the action of the throttle mechanism is masked most of the time.  When the system is lightly loaded or if you are the only player in a region, the delay will tend to hover around 0 and will not be apparent.</p>
+<p>The specific details of our implementation of this mechanism:</p>
+<p>We keep 32 counts, one for each of the past 32 seconds, of the number of message bytes received from the host.  Each second, the average of the 32 1-second samples is compared to the average of the most recent 4 1-second samples.  If the 4-second average is greater than the 32-second average, the delay is increased by 1/2 second (30 jiffies); if it is less, the delay is correspondingly decreased.</p>
+<p>We can therefore tune the mechanism by adjusting these parameters: sample duration -- currently 1 second (60 jiffies) long-term sample count -- currently 32 (we will probably change this to 64) short-term sample count -- currently 4 delay increment -- currently 1/2 second (30 jiffies) delay decrement -- currently 1/2 second (30 jiffies)</p>
+<p>Note that the delay increment and decrement values are separate, so we can make the delay grow faster than it shrinks (or vice-versa).  With these parameters, the maximum throttle delay is 16 seconds.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/throttle.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

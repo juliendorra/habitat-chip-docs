@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NF LNet Notes - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/old.lnetnotes/nf.t" style="font-size:0.85em;">View source</a></div>
+<h1>Random, slightly sorted maunderings about Lucasnet   10/17/84</h1>
+<pre>	Random, slightly sorted maunderings about Lucasnet   10/17/84</pre>
+<p>Target Systems:  68000 based home computers (Mac, Amiga, Mindset, Phillips)</p>
+<p>Generic Description:	Multiplayer games based on local processing with occasional connection (phone lines or cable) for data transmission.</p>
+<p>Lucasfilm Games Alliance:  A master computer (non-evil variety) that maintains a huge (1000+ players) database(s) for games.  The game universe in the computer would be updated by players whenever they logged in.  The computer would do the database manipulation, and simply accept and transmit data to players without letting them actually run programs on the main computer.</p>
+<p>Lucasnet Games:  A series of games, strongly related in internal structure, loosely related in external (visible) structure, unrelated and unique in theme.  These games would be multiplayer games set up for people to run on their home computers.  The games would be played in phases:</p>
+<pre>	Phase one:	Order entry phase.  Player enters new orders
+	for his units.  Units are ordered to move, fight, explore,
+	build, destroy, change.  Extensive user-friendly graphics
+	and forecasts of the effects of the moves are provided on
+	the screen.</pre>
+<pre>	Phase two:	Order transmission.  All players exchange
+	orders, either by calling one player, or circulating them
+	in a chain until everyone has everyone else&#x27;s orders.</pre>
+<pre>	Phase three:	Update.  Each computer updates the state of
+	the game universe, based deterministically on orders of units
+	and a shared random seed.  Update is depicted graphically, with
+	the same displays as in order entry but with final results
+	affecting the database.  Public key encryption and various
+	copy protection tricks are used to avoid cheating.  Winner
+	is announced if one or more players have achieved victory
+	conditions.  If not, play proceeds to phase one.</pre>
+<p>Possible themes:</p>
+<pre>	Historical battles (actual and hypothetical)
+	Exploration (of America, of the Solar System, of our Galactic Arm)
+	Politics (elections, running countries, revolutions)
+	Economic (running countries, running businesses, world trade, lemonade
+		stands, interstellar trade)</pre>
+<pre>	All of the above  (PSL&#x27;s Empire is a good example)</pre>
+<p>Program Structure:</p>
+<pre>	The programs would have three parts to them:</pre>
+<pre>	1. A standard 68000 &quot;game&quot; with data base and programs to
+	   manipulate it, with &quot;black box&quot; interfaces to the other</pre>
+<h3>parts of the program -</h3>
+<pre>	2. An I/O-graphics package, computer specific, that displays the
+	   game information colorfully (or, in Mac, shadefully) and</pre>
+<h3>clearly,</h3>
+<pre>	3. A communications interface that standardizes the inter-machine
+	   communications (so any of the target machines can play with</pre>
+<h3>any other, and part 1 can be machine independent).</h3>
+<p>Game Structure</p>
+<pre>	Games would be played in the afformentioned phases, with three
+	very general types of play (irregardless of theme):</pre>
+<pre>	1.  &quot;Automatic&quot; games where the player sets up some high level
+	    goals or &quot;doctrines&quot;, E.G. a military doctrine of shoot first,
+	    ask questions later, an exploration doctrine of send in a few
+	    military, and if unopposed send in civilians, otherwise more
+	    military.  Updates will take care of actual movement and
+	    interactions.  ROBOTWAR is an example of this kind of game,
+	    although with only one round.  Political multiplayer team
+	    games with each player being a cabinet minister (or co-dictator)
+	    and setting up a doctrine independently, then submitting them
+	    together and playing several teams against each other are
+	    another possibility.  You could win as a team, or as an
+	    individual (based on what the computer-generated populace</pre>
+<h3>thought of your policies).</h3>
+<pre>	2.  &quot;Semi-Automatic&quot;, which can range from automatic games with
+	    a few special orders that can effect the database without
+	    an update, through games with internal economics and politics
+	    under your control, but with interactions between players
+	    happening only at updates and according to preplanned doctrines,
+	    to games like Flying Buffalo&#x27;s STARWEB, with almost everything
+	    being ordered explicitly, and only a few special situations
+	    (ambush, retreats, conditional attacks) being mediated by
+	    the computer during update.  An example of this sort of game
+	    would be one of interstellar exploration.  Each player would
+	    have real-time control over their home planet, building and
+	    exploring their home system, sending out colony ships and
+	    explorers and warships on missions.  If the stars in this
+	    world are a minimum of four light years apart, the updates
+	    would take place every four years.  At that time any new
+	    missions would be transferred between players&#x27; computers,
+	    with the computers keeping the information secret until the
+	    time that ships arrive at the opponent&#x27;s home planets, probably
+	    during the off-line phase.  These missions would be controlled
+	    by the computer, according to whatever doctrine the player
+	    sending the ship out had determined at time of launch.  Speed
+	    of light would limit communications as well as transport - if
+	    an explorer went to a system 6 lightyears away, it would take
+	    12 years (game years of course) to find out if there were any
+	    planets there.  Once a colony has been established and reaches
+	    a certain technology level, they can build an ansible, an
+	    instantaneous communications device that works only between
+	    planets.  Then the colony would be controlled by the player
+	    when offline, and new doctrines could be established instantly.
+	    Changing technology would make a great difference in this game,
+	    and situations like Haldeman&#x27;s &quot;The Forever War&quot; would easily</pre>
+<h3>happen.</h3>
+<pre>	3.  &quot;Manual&quot; games, where the game mechanics are simple and players
+	    can proceed with full control over what happens, exchanging
+	    information at updates but resolving attacks, building, etc.
+	    independently.  An example of this sort of game is SLAG, by
+	    Stewart Eastman for the TRS-80.  This game started 2-12 players
+	    with identical forces consisting of industry, bombers, ICBM&#x27;s,
+	    ABM&#x27;s, Subs, Sub missiles, Anti-sub planes, and a spy network.
+	    Each turn the players decide what to build with their indust-
+	    rial output (any of the forces mentioned except spys), and
+	    whether to move their spy network to a different country.
+	    Then they decide whether to launch an attack, and what forces
+	    to use.  Sub missile attacks are not identified by country.
+	    Bomber attacks take two turns to complete, and can be called
+	    off on the second turn (keeping the bomber circling over
+	    enemy countries).  ICBM attacks come through in one turn,
+	    so bomber attacks must be launched the turn before to
+	    co-ordinate.  After the build/attack phase, an update would
+	    occur.  Before seeing industrial output for that turn, the
+	    players would find out if they were under attack that turn,
+	    and attempt to fight it off if they were.  This is done in
+	    an arcade style game with missiles and bombers passing overhead
+	    and ABM&#x27;s being used to shoot them down.  Bombers hit only once
+	    will drop their bombs and crash.  Hit twice, they are destroyed
+	    before attacking.  Missiles must only be hit once.  ICBM and
+	    Bomber attacks identify the attacking country, sub missile attacks
+	    do not.  If the player survives the attack phase with any industry
+	    the player&#x27;s ASW planes can try to spot subs, and go into an
+	    arcade game for that phase, sub against plane.  Then another
+	    build phase, started off with a spy report from the country your
+	    spy network is in.   This game was lots of fun as a single
+	    computer game with many players taking turns, and would go faster
+	    with multiple computers.  Similar game play with an original</pre>
+<h3>game is of course possible.</h3>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/old.lnetnotes/nf.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

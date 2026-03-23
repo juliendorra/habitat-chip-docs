@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extensions Sep 29 - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/extensions.Sep29.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Habitat™ Extensions</h1>
+<p class="author">by further directions for Habitat development, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">September 29, 1986</p>
+<p class="doc-number">Habitat Document # 25</p>
+<h2>Introduction</h2>
+<p>There is a wide variety of different directions that we could plausibly take <em>Habitat</em>.  The purpose of this document is to outline the options available for extension, both for the short-term and the long-term.</p>
+<p>The directions that <em>Habitat</em> could be extended fall into four general categories:</p>
+<ul class="bullet">
+<li><b>\ \ \ \ □\</b> Enhancements to the fundamental <em>Habitat</em> software to improve performance and ease of use.</li>
+<li><b>\ \ \ \ □\</b> Addition of new objects to the basic object set to allow new activities that were previously not possible.</li>
+<li><b>\ \ \ \ □\</b> Extension of the present <em>Habitat</em> world with the addition of new realms and new adventures.</li>
+<li><b>\ \ \ \ □\</b> Creation of entirely new worlds using the same underlying software.  This involves the creation of whole new object sets and realms to go with them.</li>
+</ul>
+<p>I will discuss each of these in turn.</p>
+<h2>Enhancements to existing software</h2>
+<p>Since the <em>Habitat</em> effort began, we have learned a good deal more about the construction of such systems than we previously knew.  Our experiences suggest a number of areas in which the existing software, both on the host and on the Commodore 64, could be improved or extended.</p>
+<h2><em>Better graphics</em></h2>
+<p>We would like to add a few additional graphics primitives to the present rendering engine to allow greater flexibility and improved aesthetic appeal in the backgrounds we generate.  The major thing we would like to attempt is spline curves.  These would allow us to display arbitrary, idiosyncratic shapes.  This would be useful for shorelines, caves, and other natural features that do not lend themselves readily to portrayal with the orderly, geometric primitives we currently support.  We would additionally like to add circles and lines, memory space permitting.</p>
+<h2><em>Rewrite the choreography engine</em></h2>
+<p>The present choreography engine (the software component that sequences the animation for anything that an Avatar&#x27;s body does) is a compromise in several respects, having evolved in an environment of constantly changing design demands.  We would like to rewrite it from scratch, now that we have a clear understanding of what it must do.  This would provide us with cleaner and more flexible Avatar motion sequencing.  The new choreography engine would definitely be smaller than the old, freeing up program memory space for other enhancements.  The Avatar object instance would also be smaller, so that the amount of “heap” memory available for objects within the region would also be increased.</p>
+<h2><em>Improved spatial model</em></h2>
+<p>The present <em>Habitat</em> world is what is colloquially known as “2-D”. In other words, objects, though they have a position in three dimensions, are simply flats, like pieces of cardboard cut and painted like the things they represent and stood on edge.  While this is ideal for many of the items found in the world, it is not quite right for others.  In particular, there are a number of objects which represent things that cover the ground, such as ponds and other bodies of water.  It would be nice to have a somewhat more sophisticated spatial model that enabled these things to be represented without resort to the sort of excessive (and error prone) trickery that we currently must use.  This entails some changes to the host database representation of all objects (though no changes to the way the host database itself operates) to add a sense of depth.  The host collision-detection and movement restriction routines would, of course, also have to be updated to use this additional information.</p>
+<h2><em>Better coordination of objects with choreography</em></h2>
+<p>There is currently a single motion that is used to illustrate an Avatar bending over to pick something up.  Although this is usually just right, as when the Avatar picks something off of the ground, it is sometimes wildly inappropriate, as when the Avatar picks something off of a table.  Avatars sometimes don&#x27;t position themselves ideally with respect to other objects for certain actions, such as opening or closing doors.  This is due to the method by which we determine where to position an Avatar with respect to another object.  The solution to all of this is to include with each object&#x27;s imagery a couple of bytes that specify how the Avatar should stand and move with respect to that particular object.  This is a relatively simple change, but requires a lot of attention to the painstaking details of each particular kind of object.</p>
+<h2><em>Support for additional memory hardware</em></h2>
+<p>In particular, the extra 64K of memory available in the Commodore 128 and the extra 512K of memory available in the Commodore 1750 Ram Expansion Module. These could substantially enchance the performance of the home system by drastically reducing or even eliminating the need for disk access (and consequent delays) after initial program loading.  Though the market for such an extension is relatively small, this enhancement would be relatively easy (a week or two of effort for one person).  If nothing else, it could improve the appearance of demonstrations enormously.</p>
+<h2><em>Music driver</em></h2>
+<p>The original design called for a music driver to implement such things as jukeboxes, tape players and so on.  This has not proved practical in the time available to us, especially given our program memory constraints.  However, we would still like to implement this mechanism along with such objects as would make use of it.</p>
+<h2>Additions to the basic object set</h2>
+<p>There are a number of classes of objects that would be nice to add to the existing set, since they would greatly enhance the space of possibilities within the world at relatively low cost.</p>
+<h2><em>Knobs, dials, switches and buttons</em></h2>
+<p>These would be a collection of semi-magical objects.  “Magical”, in the context of <em>Habitat</em>, simply means that the host has a large leeway in determining what they do, rather than having their behavior embedded in the Commodore 64 software.  These objects would let us construct control panels and other machines for various purposes.  For example, we could build complicated alchemical apparatus, a nerve center for a nuclear power plant, spaceship control panels, mysterious alien machines of unknown purpose, and so on.  There is a wide range of puzzles and situations we could set up with some general building blocks of this sort and a little custom code on the host end to glue it all together.</p>
+<h2><em>Game playing pieces</em></h2>
+<p>Dice, checkers, chess pieces, and so on would allow us to carry on all manner of conventional games within <em>Habitat</em>.  We already have the geometric graphics primitives to lay out such things as chess or checker boards, backgammon fields, and so on.  All we need to add are the playing pieces to use them.</p>
+<h2><em>Animals</em></h2>
+<p>There seems to be a strong demand for additional sorts of animals than house cats and anonymous dead squished rodents.  It would be relatively simple to add dogs, parrots, and the like, giving them the simple to non-existent behavior that our present, limited menagerie possesses.  However, a much more interesting idea is to take this as an opportunity to give them all some more sophisticated and interesting behavior.  In addition to the imagery and (relatively simple) software for the Commodore 64, this would require some enhancements of uncertain scope to the host, in order to allow it to control its own assortment of autonomous automata.</p>
+<h2><em>Robots</em></h2>
+<p>Robots could fill a number of potential niches within <em>Habitat</em>.  The most notable of these is shopkeeper:  vending machines have such inhumanity that even the addition of a fairly stupid, obviously automated but nonetheless anthropomorphic shopkeeper would go a long way towards alleviating.  Robots could also interact with players in other interesting ways, especially if they could obey simple commands or move around.  As with animals, the Commodore 64 software required is relatively simple, but the control mechanism on the host end would need to be carefully crafted in order to operate effectively without overly taxing the resources of the Stratus.</p>
+<h2><em>Elevators</em></h2>
+<p>Elevators are a special class of TelePort booth that only carry you to a limited number of places and don&#x27;t cost any money.  They can be used to construct apartment buildings, which in turn can be used to enable us to generate large numbers of turf regions without significant human intervention. It will be important to be able to do this when the new-player enrolement rate gets high.</p>
+<h2><em>Horizon objects</em></h2>
+<p>These would be background scenery to be placed on the horizon of a region to indicate what lies in the distance.  These objects would be strips about  the width of a screen representing objects in the distance, such as mountains, skylines, treelines, and so on.  These would substantially enhance the depth of outdoor scenes.  They require virtually no programming time, though they do require a lot of artwork to be generated.</p>
+<h2><em>Other graphic styles of existing object classes</em></h2>
+<p>We would like to add a lot of additional imagery to vary the present mix of scenic objects.  In particular, we would like to add a large number of additional styles of trees, plants, rocks, bushes, doors, windows, buildings, mountains, and so on.  These do not require any additional programming at all, since they are merely new faces for types of objects that are already implemented.  However, they will require the time and effort of one of our artists to generate them.</p>
+<h2>Extension of the existing world</h2>
+<p>There is virtually no limit to the ways that the present <em>Habitat</em> world could be extended — expandability was a primary design goal.  The principle unfinished task is to define a complete global framework for future expansion. In other words, to create a “map” of the entire world with places reserved for future towns, wilderness areas, playing fields, and other functions yet to be determined.  Along with this map there should be a plan for the orderly growth of the world, particularly the residential zones, and for reclamation of inactive areas.  Once this plan is formulated, we can begin an orderly program of expansion and extension.</p>
+<h2>New worlds</h2>
+<p>The existing <em>Habitat</em> software is very general in its structure.  It can be used with little or no change to realize other worlds with different visual style and different game play than the original <em>Habitat</em>.  The first extensions of this sort would want to use the existing main <em>Habitat</em> program as is, thus it would not be possible to change certain fundamental things, such as the set of choreography available for Avatar movement or the set of graphics primitives that scenes are rendered with.  However, it is quite practical to create an entirely new object disk that realizes a different world with different objects, different characters, and different possibilities.</p>
+<p>Since the original <em>Habitat</em> world is designed to be a flexible and general place that allows all sorts of things to happen, the object set has also been designed to be very general and flexible.  However, it seems reasonable to adopt a different approach when developing add-on object sets. New object sets could be adapted to a small number of specialized adventures or activities.  This would restrict the range of things that could be done with the new object sets, but would also let them be more focused on delivering a particular gaming experience.  The number of directions to go in this genre is almost unlimited.  However, let&#x27;s suggest a couple of the more obvious directions here as a starting point for further discussion:</p>
+<h2><em>Space World</em></h2>
+<p>The <em>Space World</em> object disk lets us create realms that are the interiors of spaceships, space stations, and other futuristic structures.  Space World is a trading and adventure game.  It is basically an adventure game, but more cerebral than violent.  The object is to build up an interstellar trading fortune, travelling around the galaxy in your space ship, stopping at various worlds to trade, hire (or get rid of) crew members, have your ship upgraded, and so on.  Naturally there are the usual sorts of hazards that are found in such universes, such as Space Pirates, unscrupulous business dealers, shady characters found in sleazy spaceport bars, and the like.  But, if you&#x27;re smart, you can get rich.  If you&#x27;re not, you can get killed.</p>
+<h2><em>Hack-N-Slash</em></h2>
+<p><em>Hack-N-Slash</em> corresponds to the more traditional “Dungeons and Dragons” sort of role playing game.  The setting is Hollywood Medieval, i.e., not the way the middle ages really were but the way various romantic imaginations would like to think it had been.  The level of technology is low, but there is lots of magic.  Avatars have numerous specialized attributes, since that is what seems to appeal to the D&amp;D types.  The emphasis is on combat, magic use and treasure gathering.  Life in the <em>Hack-N-Slash</em> world tends to be violent, focused on killing nasty monsters (of which there are plenty) and trying to accumulate a larger hoard of plunder than the next guy.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/archives/extensions.Sep29.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

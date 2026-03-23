@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gateway Commentary - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/gateway.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Gateway Development</h1>
+<p class="author">by products and activities that extend Habitat, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">October 13, 1986</p>
+<p class="doc-number">Habitat Document # 24</p>
+<h2>Introduction</h2>
+<p>What we have been calling a <em>Gateway Developer&#x27;s Toolkit</em> is a package of software and documentation to allow third-party developers to develop new products based on the <em>Habitat</em> system.  As I see it, there are actually three levels of involvement to consider.  These are:</p>
+<ul class="bullet">
+<li><b>\ \ \ \ □\</b> Realm Development</li>
+<li><b>\ \ \ \ □\</b> World Development</li>
+<li><b>\ \ \ \ □\</b> Universe Development</li>
+</ul>
+<p>I&#x27;ll talk about each of these in turn.</p>
+<h2>Realm Development</h2>
+<p>A <em>realm</em>, in our terminology, is a collection of <em>Habitat</em> regions sharing a common theme and purpose.  <em>Realm development</em> is the creation of new realms for use within the existing <em>Habitat</em> world.  The <em>Realm Developer&#x27;s Toolkit</em> will be a package to enable third parties to do this. New realms use the existing <em>Habitat</em> software (both host and Commodore 64) and an existing <em>Habitat</em> data disk.</p>
+<p>Realm development involves the following activities:</p>
+<ul class="bullet">
+<li><b>\ \ \ \ □\</b> Design, definition, and generation of regions.</li>
+<li><b>\ \ \ \ □\</b> Definition and assignment of inter-region connectivity and topology.</li>
+<li><b>\ \ \ \ □\</b> Definition, creation, and placement of objects (using an existing object set).</li>
+<li><b>\ \ \ \ □\</b> Definition and distribution of “printed matter” (books, notes, signs, etc.).</li>
+<li><b>\ \ \ \ □\</b> Definition of various ancillary databases (e.g., TelePort addresses).</li>
+</ul>
+<p>Realm development requires the developer to create a set of entries for each of the various host system <em>Habitat</em> databases.  Collectively, these database entries describe everything about a set of regions and their contents.</p>
+<p>Realm developers will create new realms using the <em>Realm Developer&#x27;s Toolkit</em>.  This is a package of software and documentation that makes it possible for them to generate the appropriate files, suitable for uploading to QuantumLink.  The toolkit consists of a special editor program, the <em>Realm Editor</em>, an ordinary <em>Habitat</em> object data disk, and a thick manual, the <em>Realm Developer&#x27;s Guidebook</em>.</p>
+<p>The <em>Realm Editor</em> is an editor program that runs on the Commodore 64.  It generates, on a Commodore 64 diskette, a standard set of data files in a standard format.  These files collectively describe a realm in all the specificity that the host requires to generate the correct set of <em>Habitat</em> database entries for it.  The Realm Editor is dual-moded.</p>
+<p>In <em>Realm Mode</em> it allows the developer to manipulate the global properties of a realm — what regions it contains, their interconnectivity and their orientations with respect to each other.</p>
+<p>In <em>Region Mode</em> it allows the developer to manipulate the individual regions themselves.  A region is defined by its contents: a set of objects and their properties.  The developer can create and delete these objects, and modify their state information, such as location, color, graphic state, and so on.  The editor displays the composite image that results from putting all these objects together, so that the developer can see what he has wrought.</p>
+<p>Once the developer has created a realm definition using the Realm Editor, he must transfer his creation to the host system so that it can be installed in the world.  This is accomplished by uploading the files that were output by the Realm Editor, together with any additional supporting material, such as text for books and documentation for the system operators (these text files may be created with whatever conventional Commodore 64 text-editing program the developer cares to use).  A special program on the host, called the <em>Realm Database File Translator</em>, converts the uploaded files into the appropriate host database entries, which can then be examined, tested, or installed in the running system.</p>
+<p>The <em>Realm Developer&#x27;s Guidebook</em> is the developer&#x27;s bible, documenting both the Realm Editor itself and the whole process of realm development.  This will include various “tricks of the trade”, rules of thumb, and general guidelines for making a realm that is interesting and self-consistent.  As part of the <em>Guidebook</em>, there will be one or more <em>Object Manuals</em> — one for each object disk that we support (initially, of course, there will be only one of these).  An <em>Object Manual</em> is a reference guide that describes each of the objects on an object disk: what it looks like, what it does, what its state variables are and how they are used, and what sorts of things the object can be used for.</p>
+<p>The current incarnation of the Realm Editor runs on a Commodore 64 connected via Fastlink to a Sun Workstation.  Most of the region editing functions are performed by the Commodore 64, but the realm editing functions, as well as long-term file storage, are handled by the Sun.  To make it run as a standalone utility will require the addition of a few Region Mode functions (such as the creation of new objects) which are currently achieved by poking around the machine with Fastlink, and a means of saving the results to (and reading them back in from) a Commodore disk file.  The Realm Mode functions will also have to be coded.  Fortunately, we can build on top of the existing components for most of this.  In addition, since it must work from a regular <em>Habitat</em> object disk, we must add the appropriate interactive functions to handle disk swapping as needed.</p>
+<p>Realm definitions currently pass through a variety of Unix utilities that eventually produce files suitable for transmission to Quantum.  These files are passed through a utility named <em>Genesis</em> that runs on the Stratus, producing the actual database entries.  The file format, though readily manipulated by both Unix- and Stratus-resident utility programs, is not suitable for use in the Realm Developer&#x27;s Toolkit package because it is far too bulky for implementation on a Commodore 64.  This means that the <em>Realm Database File Translator</em> utility must still be written for the host system.</p>
+<h2>World Development</h2>
+<p>What we call <em>World Development</em> is the creation of new object sets that function within the existing <em>Habitat</em> universe.  This in turn results in the creation of new worlds with completely different imagery and game play but which build on top of the present software foundation.  In particular, these new worlds use the same main <em>Habitat</em> program and the same host region processor.  They replace the Commodore 64 object disk and the host object behavior routines.  World development involves the following activities:</p>
+<ul class="bullet">
+<li><b>\ \ \ \ □\</b> Design of new artwork and animation.</li>
+<li><b>\ \ \ \ □\</b> Design of new sound effects.</li>
+<li><b>\ \ \ \ □\</b> Programming of new object behaviors.</li>
+<li><b>\ \ \ \ □\</b> Integration of newly generated elements into a complete Commodore 64 object disk.</li>
+<li><b>\ \ \ \ □\</b> Generation of new realms utilizing the new object set.</li>
+</ul>
+<p>Essentially, world development requires the developer to create a set of entries for each of the various Commodore 64 system <em>Habitat</em> databases that reside on the object disk, and then to create one or more realms to match.  Since each object also has a software component that resides on the host, programming the host computer is also required.</p>
+<p>World development subsumes realm development, since any new object disk will require a new set of realms to go with it.  Furthermore, the same set of software tools for realm generation may be applied to a new object disk without change.  However, world development requires more effort and results in a more invasive change to the system since it <em>does</em> require additional programming (to implement the object behaviors) both for the Commodore 64 and for the host, whereas realm development requires no special programming.</p>
+<p>Given detailed specifications for the Commodore 64 disk database formats, the data formats and capabilities of the cel animation engine, the choreography engine and the sound effects driver, the specifics of both the host and the Commodore 64 object behavior execution environments, and the object-message communications protocol, it is conceivable that one could generate a new “world” without special assistance (a new world, in this context, is a functioning Commodore 64 object disk and a set of host object behavior routines to match).  However, the complexity of this task would be somewhat daunting, since a developer would have to spend a while developing some specialized software tools.  We have such specialized utilities for our development system, but they are not likely to port easily to other environments.  These utilities include:</p>
+<ul class="bullet">
+<li><b>\ \ \ \ □\</b> <em>Animation Cel Editor</em> — a utility that enable the creation of cel images for objects and avatars.  It is essentially a graphics editor with a built-in animation capability that mirrors that found in the <em>Habitat</em> main program.</li>
+<li><b>\ \ \ \ □\</b> <em>Habitat Sound Effects Editor</em> — a utility that enables the creation of sound effects for objects.  It is essentially an interactive front-end for the <em>Habitat</em> sound driver that lets the user manipulate the contents of a sound effect definition directly.</li>
+<li><b>\ \ \ \ □\</b> <em>Macross</em> — a very powerful macro assembler, for which we have developed a set of macros to ease coding of object behaviors.</li>
+<li><b>\ \ \ \ □\</b> <em>Muddle</em> — a utility that takes the various images, sound effects and fragments of object behavior code and generates the tables and files that go on a <em>Habitat</em> object disk.</li>
+</ul>
+<p>In addition we understand how the various pieces of the system fit together. In sum, the mechanisms of world creation are not readily transferred to other developer&#x27;s, though it would not be impossible given copious documentation.</p>
+<p>Host object behaviors are coded in PL/1 using the conventional Stratus software development tools.  They are then compiled and bound directly into the region processor program.  Each world must therefor have a separate region processor that combines the generic region processing part of the program with a set of world-specific object behavior routines.  Coding these routines also requires specialized knowledge, though it can be simplified by use of certain utility subroutines which we have developed.  Since world development does require programming the host, world developers would have to be carefully screened and any world development efforts could only take place within the enclosure of appropriate, detailed legal agreements between Quantum, ourselves, and the developers.</p>
+<h2>Universe Development</h2>
+<p>By <em>Universe Development</em> we mean the creation of entirely new systems based on some or all of the underlying <em>Habitat</em> structural components. Universe development involves the creation of complete systems that do not necessarily have to be compatible with the existing <em>Habitat</em> system in any way (although they could be if we so desired).  Components of the existing system would simply be used to reduce the amount of work required and to minimize “reinventing the wheel”.</p>
+<p>Commodore 64 software components of the existing system that could be useful in <em>Habitat</em>-technology spinoff products include the RS-232 port driver, Q-Link message protocol handler, Habitat object-message protocol handler, Habitat user interface routines, cel animation engine, high-speed interruptible disk I/O routines, sound effects driver, and object database/memory manager.  Useful host software components include the message I/O routines, region processor and object database engine, as well as the entire support infrastructure of the broader Q-Link system.</p>
+<p>While these are all useful building blocks, they do not lend themselves readily to being individually separated for distribution to other developers. Instead, they represented the cumulative expertise of the Lucasfilm and QuantumLink technical staffs in the implementation of systems of this type. In other words, it would be <em>very</em> difficult to make these components available to another developer, but they are readily available to us if we choose to implement additional systems based on <em>Habitat</em>, and they will considerably reduce the time and expense of developing such systems if we use them.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/gateway.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

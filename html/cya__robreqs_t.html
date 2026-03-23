@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rob Requirements - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/robreqs.t" style="font-size:0.85em;">View source</a></div>
+<h1>Email from Chip Morningstar</h1>
+<div style="background:#f0ebe4; border:1px solid #d4c4b0; border-radius:4px; padding:10px 14px; margin:1em 0; font-size:0.9em;">
+<div><b>From:</b> Chip Morningstar</div>
+<div><b>To:</b> Steve Arnold</div>
+<div><b>Date:</b> December 11, 1987</div>
+</div>
+<p>As you requested, here is an item-by-item status report in response to Rob &amp; Janet&#x27;s memo of 12/7/87: (I&#x27;ve quoted the memo literally on the lines beginning with &quot;&gt;&quot;.)</p>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Here is a list of all outstanding items we have on record, not including
+&gt;three of the four &quot;meta-problems&quot; (heartbeat/protocol disconnect, PC
+&gt;loader, memory hits) or manifestations of them as near as we can judge.
+&gt;The fourth meta-problem, &quot;messages to non-existing noids,&quot; we believe to
+&gt;be a problem with auto-teleport, which we&#x27;ll continue to test
+</pre></blockquote>
+<p>The &quot;messages to non-existing noids&quot; problem was indeed in the auto-teleport routine and is fixed as of 10/30 (version 6.4).  Of the other three, the &quot;memory hits&quot; problem turned out to be a bug in the bottle object and was also fixed as of 10/30 in version 6.4.</p>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;SYSTEM
+</pre></blockquote>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Needs testing
+&gt;-------------
+&gt;Auto-teleport -- dying, some Choke machines, wands
+</pre></blockquote>
+<pre>	As mentioned above, this is fixed in version 6.4 as of 10/30 (ver 6.4</pre>
+<pre>	release notes, 11/10)</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;GO/F3 collision (next rev)
+</pre></blockquote>
+<pre>	Fixed in version Beta 1.0 as of 12/9</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Error recovery for disk routines (next rev)
+</pre></blockquote>
+<pre>	Installed in version Beta 1.0 as of 12/9</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;FE3 (JoeyT1)
+</pre></blockquote>
+<pre>	Since we do not have a dump disk for this problem, we cannot give a</pre>
+<pre>	100% assured diagnosis.  However, reasoning from the circumstances</pre>
+<pre>	surrounding it, our hypothesis is that it is the same problem as the</pre>
+<pre>	GO/F3 collision bug mentioned above and the FE#13 that RJScott had.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;FE13 (RJScott)
+</pre></blockquote>
+<pre>	This turned out to be a result of the very same problem as the GO/F3</pre>
+<pre>	collision bug, and so is fixed.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Requires disk change (status uncertain)
+&gt;---------------------------------------
+</pre></blockquote>
+<pre>	Almost all of these are host problems or changes, not disk based.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;PUTing to a sitting Avatar makes it stand (9/10; #62)
+</pre></blockquote>
+<pre>	This is a host only bug, fixed as of 11/11</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;New entries to regions don&#x27;t show the state of an avatar
+</pre></blockquote>
+<pre>	There was a problem with this once upon a time (prior to our keeping</pre>
+<pre>	the current bug database).  We believe it is fixed (was host bug).</pre>
+<pre>	There have been	no reports of this happening for as far back as our</pre>
+<pre>	database goes.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Lamps are awfully wide (9/10; #94 sorta)
+</pre></blockquote>
+<pre>	We aren&#x27;t sure what this means.  If Quantum wants us to change the</pre>
+<pre>	collision detection parameters for the streetlamp we can do so easily.</pre>
+<pre>	If so, it would be a host only change.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Ticket DO hangs 64 (9/10; #85)
+</pre></blockquote>
+<pre>	Our records show this as being fixed as of 9/2</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Grenade doesn&#x27;t work (9/10; #81)
+</pre></blockquote>
+<pre>	Working as of 11/11 (host only change).</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Ring looks like a pill (9/10; #86)
+</pre></blockquote>
+<pre>	We decided that the ring is sufficiently different that we don&#x27;t need</pre>
+<pre>	to mess with changing the image.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Cursor turned into PUT icon in text interface (11/4; #500)
+</pre></blockquote>
+<pre>	We wrote this one off as a mystery on 10/12.  Lord Bolan (to whom this</pre>
+<pre>	happened) had a number of odd things happen to only him, leading us to</pre>
+<pre>	suspect his machine.  We have kept our eyes open for recurrences;</pre>
+<pre>	there haven&#x27;t been any.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Command lockout turing GO while able to receive ESP, etc. (11/4; #374)
+</pre></blockquote>
+<pre>	Another weird Lord Bolan thing.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Blank paper with written graphic state (9/10; #128)
+</pre></blockquote>
+<pre>	Fixed (on host) as of 10/12</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Random sign appearances (12/2; #696)
+</pre></blockquote>
+<pre>	Operator boo-boo while using Ghu; accidently moved wrong item.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Shrunk to smallest size on &#x27;porting home (12/2; #691)
+</pre></blockquote>
+<pre>	Currently on our working bug list.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Grab from left-hand side doesn&#x27;t always work (9/10; #26)
+</pre></blockquote>
+<pre>	Confusion resulting from collision detection; not a bug.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Disk questions
+&gt;--------------
+&gt;On DOs that include GO, should avatars face cursor on arrival? (9/10; #64)
+</pre></blockquote>
+<pre>	GO is set up so that avatar is always facing in proper direction on</pre>
+<pre>	arrival.  Sometimes this is facing cursor, sometimes not.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Should all DOs include GOs? (9/10; #95)
+</pre></blockquote>
+<pre>	No.  In many cases the semantics of the DO operation makes this</pre>
+<pre>	impossible.  Where it is possible, we do so.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Do chairs work easily (i.e., GO from chair with one push?)
+</pre></blockquote>
+<pre>	Yes.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Does Help work while seated? (9/10; #31)
+</pre></blockquote>
+<pre>	No.  The only thing you can do while seated is talk or GO.  It would</pre>
+<pre>	be nice if you could do HELP while seated, but this would require some</pre>
+<pre>	fairly hairy changes to the command interface routines, so we decided</pre>
+<pre>	not to, in the interest of moving things forward.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Follow command? (12/2; #190)
+</pre></blockquote>
+<pre>	This has been an on-again/off-again feature.  We need to make a final</pre>
+<pre>	decision as to whether or not to implement this.  Our feeling here is</pre>
+<pre>	that it is probably not needed, and we have the impression that the</pre>
+<pre>	consensus at Quantum is similar; however, we need to decide.  If we do</pre>
+<pre>	decide to implement this, the changes will be entirely host based.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Does adding the ability to make objects prompt users require disk changes?
+&gt;(9/10; #9)
+</pre></blockquote>
+<pre>	Yes, but the changes have already been made.  They were installed in</pre>
+<pre>	version 6.4 and have been tested.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Host problems
+&gt;-------------
+&gt;Lights (both floor and flash/torch) do not consistently work (12/2,
+&gt;		comments -- 9/2, #96, #109 -- 11/4, #305)
+</pre></blockquote>
+<pre>	They should work now.  There were a couple of weird interacting host</pre>
+<pre>	software problems, the last of which was fixed 11/19, as well as a</pre>
+<pre>	systematic error in the database which was corrected on 12/4</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Cloning &amp; prices on vendos -- are we sure they&#x27;re right?
+</pre></blockquote>
+<pre>	We did a thorough check on all vendo prices and they are all correct.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Title page/index for books (12/2; #104)
+</pre></blockquote>
+<pre>	It was the Book of Records in particular that required the index</pre>
+<pre>	(which needed to be generated by the program that generates that</pre>
+<pre>	particular document).  Janet implemented this as of 12/8.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Finish &#x27;port, town and region help names for regions (10/12; #9)
+</pre></blockquote>
+<pre>	(Actually item #194).  Port and town help arrows are in as of 11/19;</pre>
+<pre>	we currently have the testers hunting for the inevitable mistakes.</pre>
+<pre>	Names are installed in the residential areas and are being added to</pre>
+<pre>	the other areas incrementally.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Fix &#x27;port directory
+</pre></blockquote>
+<pre>	We have an all-new teleport directory as of 11/14</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Drugs need to have help effect, pill count (9/10; #79)
+</pre></blockquote>
+<pre>	Done as of 11/11</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Heads have no resale value (9/10; #30)
+</pre></blockquote>
+<pre>	Fixed</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Some turfs have flowers on dressers which can be GETed but not PUT (9/10;
+&gt;		#72)
+</pre></blockquote>
+<pre>	Our records show this being fixed as of 9/3.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Should Costello&#x27;s be hooked to sewers? (9/10; #56)
+</pre></blockquote>
+<pre>	No it shouldn&#x27;t.  Our records show it was disconnected as of 9/2.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Move sewer so de-ghosts don&#x27;t stand on it (9/10; #101)
+</pre></blockquote>
+<pre>	Our records show this being fixed as of 9/3.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Should we de-ghost on login? (12/2; #29)
+</pre></blockquote>
+<pre>	We think we should, but a decision needs to be made.  If we do it,</pre>
+<pre>	Janet is the one who will have to implement it.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Add a type field to &#x27;crats to allow customized responses (9/10; #202)
+</pre></blockquote>
+<pre>	Upon reflection we concluded that this was unnecessary.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Put apartment tape online and test (10/12; #11)
+</pre></blockquote>
+<pre>	Final rev. of apartement installed on 12/9.  Requires Beta 1.0</pre>
+<pre>	software to work properly (there was a bug in the elevator).</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Change all countertops to...something else (10/12; #82)
+</pre></blockquote>
+<pre>	As of 11/11 all countertops work just like tables.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Two mail in pocket messages for one piece of mail (10/12; #222)
+</pre></blockquote>
+<pre>	Fixed as of 10/30 (host change by Janet).</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Manual changes
+&gt;--------------
+&gt;Revise to be current with Beta Release
+</pre></blockquote>
+<pre>	Version of manual sent 12/7 accurately describes Beta 1.0 system.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Include graphic symbols/CTRL keys
+&gt;Index
+</pre></blockquote>
+<pre>	These can be added.  We&#x27;ll need to redesign the page layout however,</pre>
+<pre>	since these will add a few pages.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Is there a current map of downtown?
+</pre></blockquote>
+<pre>	Yes, but not in a distributable form.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Should we explain how tables, bookcases and dressers are containers?
+</pre></blockquote>
+<pre>	I don&#x27;t know.  Should we?</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Should Jan gather as much as we know about configuration requirements?
+</pre></blockquote>
+<pre>	This would probably be wise.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;A little clearer about &#x27;port booths, mebbe
+</pre></blockquote>
+<pre>	We will take a look at it.  What in particular needs clarification?</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Ghu
+&gt;---
+&gt;QL Rep (Rob) proficient enought to implement basic programming (10/12)
+</pre></blockquote>
+<pre>	Rob is the judge of this.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Are there any docs on the macro language?
+</pre></blockquote>
+<pre>	Yes.  The document we sent to Quantum describes the macro features</pre>
+<pre>	fully.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Make Oracle fully functional &amp; accessible
+&gt;Can GHU handle Oracle requests?
+</pre></blockquote>
+<pre>	Oracle handling is now implemented in Ghu.  We will send a revised</pre>
+<pre>	edition of the manual that describes the relevent commands.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Can GHU hand Rant publishing?
+</pre></blockquote>
+<pre>	Yes.  Text handling features are now implemented.  These will also be</pre>
+<pre>	described in the new edition of the manual.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Is it, in short, fully functional?
+</pre></blockquote>
+<pre>	Yes.  However, we would like to consult with Quantum about what</pre>
+<pre>	protection features are required, if any, to prevent unauthorized</pre>
+<pre>	mangling of the database or invasions of privacy accomplished via Ghu.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Can (does?) GHU show memory usage in a region?
+</pre></blockquote>
+<pre>	No.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Loops
+</pre></blockquote>
+<pre>	The version of Ghu originally released to Quantum had a looping</pre>
+<pre>	feature.  We have since made this feature somewhat more general and</pre>
+<pre>	this improvement is described in the latest edition of the manual.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Can I search for items of a specific class?
+</pre></blockquote>
+<pre>	Yes, but it is very inefficient, since it requires iterating through</pre>
+<pre>	the entire database.  If we were to make the class field a database</pre>
+<pre>	key then we could do this more efficiently.  Janet?</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Things to do (Definition of Public Release Habitat System Document)
+&gt;-------------
+&gt;D&#x27;nalsi Island
+</pre></blockquote>
+<pre>	Ready to go on 30 seconds notice.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Capture the Flag
+</pre></blockquote>
+<pre>	We are awaiting a chance to test this on a limited scale before</pre>
+<pre>	pursuing a larger development effort.  Testing it, however, requires</pre>
+<pre>	more users than we have typically had on.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Cooties
+</pre></blockquote>
+<pre>	Working.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Machiavelli
+</pre></blockquote>
+<pre>	Could use further design work.  Does not require any software</pre>
+<pre>	developement, however.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Stock Market
+</pre></blockquote>
+<pre>	We have a design, but need to set priorities since it will require</pre>
+<pre>	some host software work.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Talk Shows
+&gt;Game Shows
+&gt;Bijou Theatre
+&gt;Costello&#x27;s Comedy Corner
+</pre></blockquote>
+<pre>	These are ready to go.  We have designed some magic items that will</pre>
+<pre>	make the operation of theatrical activities a little easier, but they</pre>
+<pre>	are luxuries.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Items
+&gt;-----
+&gt;copy machine (12/2; #11 -- 4/29; #27)
+&gt;book binder (12/2; #11 -- 4/29; #28)
+</pre></blockquote>
+<pre>	These require host software that does not yet exist.  The C64 end is</pre>
+<pre>	in as of version Beta 1.0</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Customizer: 4-5 selections of heads -- host chooses vector (4/29; #23)
+</pre></blockquote>
+<pre>	Done in hatchery long, long ago.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Determine powers and privileges of Adventure Masters (3/2; #28)
+&gt;Write Guidebook to the Oracle (3/2; #48)
+&gt;Design batch transactions (3/2; #71)
+</pre></blockquote>
+<pre>	We need to work out operations plans in order to determine the</pre>
+<pre>	relevence of these items.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Make region entry smarter (doors, etc.) (3/2; #110)
+&gt;Add textual error messages (3/2; #117)
+&gt;Write help messages for magic items (3/2; #118)
+</pre></blockquote>
+<pre>	Ancient history; done.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Implement Apartment Generator (3/2; #55)
+</pre></blockquote>
+<pre>	Done.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Implement Adventure Master support software (3/2; #63)
+</pre></blockquote>
+<pre>	See above comment on Adventure Masters.</pre>
+<blockquote style="border-left:3px solid #d4c4b0; margin:0.5em 0; padding:4px 12px; color:#666;"><pre style="border:none; background:none; padding:0; margin:0;">
+&gt;Position on compatibility with 1581 (10/12; #2)
+</pre></blockquote>
+<pre>	We need a 1581 and detailed documentation on it.</pre>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/robreqs.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

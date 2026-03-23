@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avatar Death - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/death.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Avatar Death</h1>
+<p class="author">by Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">December 10, 1986</p>
+<p class="doc-number">Habitat Document # 37</p>
+<h2>Introduction</h2>
+<p>The purpose of this document is to clarify the nature, purpose and implementation of “Avatar death”.</p>
+<h2>What does it mean for an Avatar to “die”?</h2>
+<p>Death is supposed to be the worst thing that can happen to an Avatar (otherwise we&#x27;d have to figure out how to implement “a fate worse than death”).  Our intent is that it should be the ultimate catastrophe that a player tries to avoid.  Of course, we don&#x27;t want to kill Avatars permanently, in the way that real world death operates — it would clearly be foolish to drive willing, paying subscribers away by forcibly removing them from the system just because somebody mugged them in a back alley.  It is therefore necessary that reincarnation be a part of the process, whatever that process may be.</p>
+<h2>What happens when an Avatar dies?</h2>
+<p>When an Avatar dies, it reappears someplace else.  The two obvious possible places we could make it reappear are its Turf or a “reincarnation station” of some sort.  We decided against the latter because it really would serve no purpose.  The Avatar has just been forcibly removed from where it was, so it&#x27;s not going to be getting back there any time soon; further dislocation seems senseless.</p>
+<p>To prevent death from being used simply as a convenient, instantaneous return-to-Turf operator, there need to be some further consequences to the event.  We wish these consequences to have both local and global effects on the player.  We want to effect both the course of whatever activity he was in the midst of at the time and his overall situation in the world.</p>
+<p>The simple and intuitive local effect that we have chosen is to take away any possessions that the Avatar may have been carrying.  The item in his hands, if any, is dropped on the ground at the spot where he met his demise, while the objects in his pockets, if any, vanish into “limbo” (we may, in the future, wish to provide a means for an Avatar to go on a quest to recover such possessions, but for the time being they will just be gone).  The Avatar will arrive at his Turf empty handed; those who did him in may have an opportunity to steal what he was carrying.</p>
+<p>Choosing a global effect is trickier, however.  We have chosen to fine the Avatar, penalizing him some fraction of his bank account balance (down to some irreducible minimum fine) and some proportion of the cash Tokens stored in his Turf.  This has a couple of interesting consequences.  One is that impoverished Avatars will have nothing to lose.  The other is that Avatars who choose dangerous occupations may look for ways to store their funds as cash Tokens hidden outside their Turves.  Since there are no ultimately safe ways to do this, all sorts of secondary game play effects may result.  To start with, we will set the bank account penalty at 20% or T100, whichever is greater, and the in-Turf cash penalty at 50%.  As with other global parameters, these may ultimately need to be adjusted up or down on the basis of operational experience.</p>
+<h2>How can an Avatar die?</h2>
+<p>Each Avatar has a <code>health</code> property that is a measure of the Avatar&#x27;s relative physical well being.  Various implements (notably weapons) lower the <code>health</code> value, while others (notably drugs) raise it.  If <code>health</code> drops to zero or below, the Avatar dies.  Newly hatched or reincarnated Avatars have their <code>health</code> set to the maximum value, 255.</p>
+<p>Guns subtract 50 points from <code>health</code>, knives subtract 25, and clubs 10. For one Avatar to attack another with a knife or a club, the attacker must be adjacent to the victim.  Guns, on the other hand, are ranged weapons and the attacker may be anywhere within the region.  A grenade takes off 100 points from the <code>health</code> of every Avatar in the region where it explodes.</p>
+<p>Different types of drugs have different effects.  The most common drug (I suppose it&#x27;s the <em>Habitat</em> analog to aspirin) adds 50 points to <code>health</code>.  Less common drugs variously restore <code>health</code> to the maximum value (the miracle cure pill) or subtract from it (poison).  In addition, each Avatar recovers 25 points of <code>health</code> each day it logs in, up to the maximum.  This process driving this healing operation can be the same one that makes trust fund payments, since the algorithm is the same.</p>
+<h2>Is death necessary?</h2>
+<p>A significant design question, completely aside from the issues of the mechanism itself, is whether there should be such a thing as death at all.  We feel that there should be, because there needs to be a means by which Avatars can forcibly influence each other, threaten each other and so on.  In the real world this would not be desirable, of course, but all drama hinges on conflict and so we require a way to make conflict possible.</p>
+<p>To avoid overemphasis on the violent aspects of the world, and to provide an alternative for those players whose idea of fun does not include violent conflict, we will designate certain important public areas (such as the downtowns of cities and most residential areas) as weapons-free zones.  In these areas, weapons will not work and Avatars will be immune to the violence of others.  The boundaries of these areas will be marked with signs as a warning to persons travelling in either direction.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/death.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

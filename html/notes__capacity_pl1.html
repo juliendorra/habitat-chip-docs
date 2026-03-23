@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capacity Monitor (PL/1) - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/capacity.pl1" style="font-size:0.85em;">View source</a></div>
+<h1>/* Storage Capacity Handling */</h1>
+<pre>		/* Storage Capacity Handling */</pre>
+<p>/* Presently, the following holds: */ %replace MAX_CLASS_NUMBER by 157;	/* Max possible is  256 */ %replace NUMBER_OF_RESOURCES by 437;	/* Max possible is 1024 */</p>
+<p>/* This is the how the tables are structured:</p>
+<p>The &#x27;classes&#x27; table contains one entry for each possible object class. Each entry contains the size of an instance of that class, the size of the class descriptor, a pointer to an array of resource numbers, and a reference count.  The reference count tells the number of objects of the class that have been allocated in the region.  The resources pointer points to a variable length array of bin(15)&#x27;s, each of which is the number of a resource that the class uses.  This array is terminated by a 0 entry.</p>
+<p>The &#x27;resources&#x27; table contains one entry for each possible resource (action, image, sound or head).  Each entry contains a size (how many bytes of memory that resource requires) and a reference count.  The reference count tells how many classes have been allocated that require that resource.</p>
+<p>What we are trying to do is keep track of the number of bytes of memory that the C64 is using for allocated objects.  The basic algorithm to use when creating an object of a given class is follows:  Add to the total space usage the number of bytes required for an instance descriptor of an object of that class and increment the class&#x27;s reference counter.  If there are already any objects of that class, we are done.  If not, add to the total space usage the number of bytes required for a class descriptor for that class.  Then iterate through the list of resources.  For each resource, increment its reference count.  If it is not already present, add its size to the total.  To delete an object, perform exactly the same operation in reverse, subtracting sizes and decrementing reference counts.</p>
+<p>Note that there is one obvious inefficiency in these data structures which I left in for the sake of clarity: the resource and size entries of the &#x27;classes&#x27; table and the size entries of the &#x27;resources&#x27; table are static. Only one copy need be kept for the whole process.  A separate set of class and resource reference counts must be kept for each active region.</p>
+<p>By my count (assuming 4-byte pointers) the static information in these tables occupies 2130 bytes and the dynamic information occupies 1188 bytes per region, given the current number of classes and resources.  Maximum possible sizes are 4096 bytes and 2560 bytes respectively. */</p>
+<p>declare 1 classes(MAX_CLASS_NUMBER) init(/* Class info here */),</p>
+<pre>        1 class based(class_ptr),	/* I&#x27;m not sure of the syntax here */
+         2     resources         pointer,
+         2     instance_size     binary(15),
+         2     class_size        binary(15),
+         2     ref_count         binary(15);</pre>
+<p>declare class_ptr pointer;</p>
+<p>declare 1 resources(NUMBER_OF_RESOURCES) init(/* Resource info here */),</p>
+<pre>        1 resource based(resource_ptr),
+         2     size              binary(15),
+         2     ref_count         binary(15);</pre>
+<p>declare resource_ptr pointer;</p>
+<p>declare space_usage binary(15) init(0);	/* This is the important number */</p>
+<p>create_object: procedure(class_number);</p>
+<h3>declare class_number binary(15);</h3>
+<pre>     declare resource_array(1) based(resource_number_ptr) binary(15);
+     declare resource_number_ptr pointer;
+     declare a(1) based binary(15);</pre>
+<h3>declare i binary(15);</h3>
+<pre>     class_ptr = classes(class_number);
+     space_usage = space_usage + class.instance_size;
+     class.ref_count = class.ref_count + 1;
+     if (class.ref_count = 1) then do;
+          space_usage = space_usage + class.class_size;
+          resource_number_ptr = class.resources;
+          i = 1;
+          do while (resource_array(i) ^= 0);
+               resource_ptr = resources-&gt;a(resource_array(i));
+               i = i + 1;
+               resource.ref_count = resource.ref_count + 1;
+               if (resource.ref_count == 1) then
+                    space_usage = space_usage + resource.size;
+          end;
+     end;</pre>
+<p>end create_object;</p>
+<p>delete_object: procedure(class_number);</p>
+<h3>declare class_number binary(15);</h3>
+<pre>     declare resource_array(1) based(resource_number_ptr) binary(15);
+     declare resource_number_ptr pointer;
+     declare a(1) based binary(15);</pre>
+<h3>declare i binary(15);</h3>
+<pre>     class_ptr = classes(class_number);
+     space_usage = space_usage - class.instance_size;
+     class.ref_count = class.ref_count - 1;
+     if (class.ref_count = 0) then do;
+          space_usage = space_usage - class.class_size;
+          resource_number_ptr = class.resources;
+          i = 1;
+          do while (resource_array(i) ^= 0);
+               resource_ptr = resources-&gt;a(resource_array(i));
+               i = i - 1;
+               resource.ref_count = resource.ref_count - 1;
+               if (resource.ref_count == 0) then
+                    space_usage = space_usage - resource.size;
+          end;
+     end;</pre>
+<p>end delete_object;</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/capacity.pl1" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

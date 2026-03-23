@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MicroCosm™ Object Protocol - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/protocols.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Object Protocol</h1>
+<p class="author">by how MicroCosm simulates the world using objects, and messages betwixt players and host, Chip Morningstar, <code><b>The Protocols of The Elders of MicroCosm</b></code></p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document # 14</p>
+<h2>Introduction</h2>
+<p>This document presents the object model used to simulate reality in the <b>MicroCosm</b> system together with the communications protocol used to realize this model.  Understanding the object model is the key to understanding the entire operation of the system.  Implementing the protocol is the key to making the system actually work.</p>
+<p>This document does not discuss the details of actually getting bits from one place to another (the so called “link level” protocol).  We presume that these problems are already taken care of by the system in which <b>MicroCosm</b> is embedded.  Rather, this document concerns the remote-procedure-call conventions for manipulating objects and requesting information.</p>
+<h2>The Object Model</h2>
+<p>The <b>MicroCosm</b> world model is object based.  Everything in the world is an “object” — a small unit of program and data that simulates a particular entity in the universe.  For example, avatars, trees, automobiles, walls and doors are all objects in <b>MicroCosm</b>.  An avatar&#x27;s actions (and thus a player&#x27;s actions) are expressed entirely in terms of objects.</p>
+<p>Each object has a <em>home system part</em> and a <em>host system part</em>.  Each of these parts in turn consists of a <em>data section</em> and a <em>code section</em>.  The code section is an executable program fragment that simulates the object&#x27;s behavior.  The data section is simply a chunk of memory that its respective code section is entitled to manipulate.  The contents of the data section determine the object&#x27;s <em>state</em>.  The host system part and the home system part may (and usually will) contain duplicate information in their respective data sections.  In such a case, the host system part is considered the “master” part.  Its data section is always considered to represent the “true” state of the object, no matter what the state represented by the home system might be.  This is because the home system representation of an object is not necessarily unique: more than one home system could be maintaining its own version of that object.  Furthermore, the host system&#x27;s representation is the only one which can be trusted to remain “honest”.</p>
+<p>One might ask, “Why have the home system keep such a representation at all? Why not just keep it all in the host all the time?”.  There are two reasons. First, we don&#x27;t want to keep the host busy just answering requests for state information, let alone make the player wait while we transmit this information (at 300 baud!) every time it&#x27;s needed.  Second, many objects possess “secondary” state information that is not functionally relevant to the rest of the world, but which is necessary or helpful to the home system in displaying the object on the screen or in processing player input.</p>
+<p>In order for the player to see a model of the world that is accurate, however, there must be constant exchange of information between the home system and the host.  This is because the world is not static.  Change is happening all the time.  The host must be able to update its internal representation of an object according to the actions that the object participates in.  For this to happen, the player&#x27;s system must inform the host of the player&#x27;s actions as regards that object.  Similarly, the player&#x27;s system must be kept apprised of actions taken by the host that are the result of other players&#x27; behavior as regards that object.</p>
+<h2>Requests and Responses</h2>
+<p>We thus come to <b>The Prime Directive of MicroCosm Object Modeling</b>: <em>The host will take no unsolicited actions.  All behavior originates with the players.  All object state changes in the host are the direct results of player requests.</em></p>
+<p>The communications protocol linking the home system and the host is <em>request based</em>.  That is, all communications canonically take this form: 1) the home system realizes that it needs some information from the host that it does not have or that it needs some action taken on its behalf by the host; 2) the home system transmits to the host a <em>request message</em> asking for the necessary information or action; 3) the host processes this request somehow; 4) the host transmits back to the home system a <em>response message</em> providing the information or indicating the results of the action.  If it were a just world (the real world I mean, not the <b>MicroCosm</b> world!) this would be all that there is to it.  However, technical and structural considerations force the following qualifications to the description of the canonical host-home exchange:</p>
+<ul class="bullet">
+<li><em>The response can be empty.</em>  The home system can send a request that the host receives and processes, but which the host does not respond to. Obviously there are two ways that this can happen.  The first is if something goes wrong: a message gets garbled in transmission or lost in the packet switching network.  The other is by design: the request is such that it simply doesn&#x27;t need a response.  The only way for the home system to distinguish between the two is its own expectations.  It has to know whether it is expecting a response.  If it is expecting a response and doesn&#x27;t get one after some time passes, then it knows something is wrong.  If it isn&#x27;t expecting a response then it never cares that one never comes.  This means that we have to construct the home system to distinguish between these two types of requests. We do intend to use responseless requests wherever possible to cut down on communications overhead.  There is an added complication that a request may be one with no expected response, but if something goes wrong a response may come anyway (perhaps, “hey, that one got garbled, send it again”).  The home system must be prepared to deal with a response even though it isn&#x27;t expecting one — it can&#x27;t just send a request and then immediately forget it.</li>
+<li><em>The request can be empty.</em>  The host can send a response to a request that the home system never issued.  Again, there are two ways this can happen: by error or by design.  We eliminate the possibility of errors of this sort by constructing the host to always send response messages to the right places and then hoping that our host software doesn&#x27;t have the wrong sorts of bugs in it. Thus, all response messages can be assumed to be “real”.  “What about the ones with no requests to go with them?”, you ask, “Isn&#x27;t that a little odd?”.  We actually have a use for such things.  They are called <em>asynchronous notification messages</em> and serve to inform the home system about external actions that are relevant to it.  An asynchronous notification is the result of a request that some <em>other</em> player made which affects you.  This other player&#x27;s request initiated some action in some object in the host, and the code simulating that object in the host sent you a message about it.  Such messages arrive at the home system as responses to the <em>phantom request</em> which the home system must be prepared to pretend that it sent even though it didn&#x27;t really.  This phantom request can be thought of as a request to “tell me something interesting or important”.  The standard message protocol allows the host to be very specific about what the home system should know or do as the result of an asynchronous notification.</li>
+<li><em>The communications medium is not ideal.</em>  In fact, it&#x27;s downright awful. What we have are 300 baud modems connected to a packet switching network.  300 baud means the time required to transmit information is substantial, so we must try to minimize the amount of transmission we need.  The packet switching network means that there may be substantial delays (50 milliseconds to 5 seconds, though typically 100 to 200 milliseconds) between request and response, even if the host responds instantaneously.  If the player is doing lots of things, we don&#x27;t want to keep him waiting as we send out one request, wait for the response, send out another, wait for the response to <em>it</em>, send out a third, etc.  What we want to do is send a stream of requests continuously while concurrently processing a stream of responses.  In other words, we can send out a request without having in hand the responses to previous ones.  This means that the home system must keep a list of pending requests.  Probably this list will be small (say 4 to 8 items) and when it is full we actually do have to wait for some response before sending out anything further.  This smooths out the player interaction a great deal, but adds considerable complication to the home system software.  Things we will have to worry about include: requests that depend on one another and therefore really do have to be serialized, requests that get lost on the way to the host and therefore never get responses, and responses that get lost on the way back from the host and therefore the home system gets confused about whether certain actions were actually taken.  So it goes.</li>
+</ul>
+<h2>Messages</h2>
+<p>As discussed above, all actions in <b>MicroCosm</b> are expressed in terms of the behavior of objects.  A communication between the home system and the host system is actually a communication between the home-resident part of an object and the matching host-resident part <em>of the same object</em>.  In other words, all communications are internal to particular objects.  Although each object has its own code and data space, all the objects must share a single common communications channel to link their halves.</p>
+<p>Thus, a message consists of three parts: 1) a <em>header byte</em> for sorting out asynchronous messages, 2) an <em>object identifier</em>, indicating the object whose internal communication the message is carrying and 3) the communication itself.  The communication itself in turn consists of a <em>request number</em> and, optionally, some <em>request parameters</em>.  The request number indicates what action or information one half of an object wishes from its counterpart.  The request parameters, if there are any, provide additional information whose interpretation depends on the request number.</p>
+<h2>Message Format</h2>
+<p>The format of a message is thus:</p>
+<table>
+<tr><th>cfB cfB</th></tr>
+<tr><td>cp-2 | c | .</td></tr>
+<tr><td>Byte</td><td>Contents</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>0</td><td>header byte</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>1</td><td>object identifier</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>2</td><td>request number</td></tr>
+<tr><td></td><td>_</td></tr>
+<tr><td>3-N</td><td>parameters</td></tr>
+<tr><td></td><td>_</td></tr>
+</table>
+<p>This format does not address lower level protocols which may have to wrap additional information around this packet to insure that the bits travel successfully from one place to another.  These will undoubtedly tack additional bytes on the front or rear of the message packet.  Such link-level protocols are outside the scope of this document.</p>
+<p>A few comments are in order.</p>
+<h2>Bidirectionality</h2>
+<p>This protocol serves messages traveling in both directions: requests <em>and</em> responses.  The home systems assign <em>sequence numbers</em> (contained in the header byte) to outgoing requests however they like (probably using a ring counter, but I don&#x27;t <em>think</em> it really matters).  Each home system has its own set of sequence numbers — the numbers one player&#x27;s system uses have no effect on any other player&#x27;s system.  A response message contains the sequence number of the request that it is a response to.  A special sequence number is reserved for the phantom request, that is, for asynchronous notification messages.</p>
+<h2>Header bytes</h2>
+<p>The header byte has the following form:</p>
+<pre>
+	<code>01c0xxxx</code>
+</pre>
+<p>where <code>c</code> is the <em>message continued</em> flag bit.  A <code>0</code> bit means that this is the final packet of a message while a <code>1</code> bit means that more packets follow.  The <code>xxxx</code> is a sequence number in the range 0 to 15 (it wraps around at 15).  The resulting codes are printable ASCII:</p>
+<pre>
+	<code>@ABCDEFGHIJKLMNO</code>		for “not continued” packets
+	<code>`abcdefghijklmno</code>		for “continued” packets
+</pre>
+<p>The special header byte for responses to the phantom request (asynchronous notification messages) uses the sequence number 26 (decimal) so that the header byte is “<code>Z</code>” or “<code>z</code>”.</p>
+<p>The sequence number is only four bits.  This means that there may be no more than 16 unrespondent requests pending at any given time.  In actual practice, this limit may be even smaller, say 4 or 8.  Even with the smaller limit, the full space of 16 request numbers should be available to give greater time separation between uses of any one number.  Such separation may help in error recovery when things get <em>really</em> messed up.</p>
+<h2>Object identifiers</h2>
+<p>The object identifier is a single byte.  This will be the byte identifier for objects which the host established when the player&#x27;s avatar entered the region that it currently occupies.</p>
+<h2>Request numbers</h2>
+<p>The request number is a single byte.  This means that there can be no more than 256 distinct requests that you can give to a particular object.  That&#x27;s a hard limit and the objects themselves will have to be designed with this in mind.  In practice this should not be an important constraint, because the objects themselves will be quite simple (and thus so will their behavior).  In fact, we are setting aside the first 128 request numbers for <em>generic requests</em>.  Generic requests are requests that all objects in the universe are expected to be able to respond to, and they will all have conventional, pre-assigned meanings that are the same across objects.  These requests will include things like “transmit the image set describing this object”, “transmit a complete copy of this object&#x27;s current state data”, “send me this object&#x27;s noid”, and so on.  The second 128 request numbers are reserved for object-specific requests.  These are requests that relate to the particular characteristics of the object, such as “open this object” (directed at an object which is a container), “turn this object color <code>X</code>” (directed at an object which can change color), or “shoot at player <code>Y</code>” (directed at a weapon object).</p>
+<p>There are actually two interpretations of the request numbers for any given object: one for requests and one for responses.  Most of the above discussion concerns requests.  The request numbers in responses also must be dealt with. In most response messages, a request number <code>R</code> simply means “response to a request of type <code>R</code>”.  The relevant information, if any, is contained in the request parameters, and the object behavior code associated with the object in the home system should know what to do.  Sometimes, though, a response contains a different request number than the corresponding request. This means that the object behavior code is being directed in some fashion by the host, and the home system must comply appropriately.  Consistent with the rest of the object model, the appropriate action in such a case is a function of the object and the request number.</p>
+<h2>Request parameters</h2>
+<p>These parameters are provided because some requests require arguments.  For example, moving an object is accomplished by a “move” request, but you must specify the location to move to in the request parameters.  Whether the request parameters are interpreted as single byte values, character strings, noids, multiple precision numbers, or anything else, and what these values in turn <em>mean</em>, depends entirely on the object to which the request is directed and what the request is.  There may be any number of bytes of request parameter information, up to the limits imposed by the link-level communications protocol (i.e., maximum packet length minus the number of overhead bytes in a message).</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/protocols.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

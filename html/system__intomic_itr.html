@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Third Party Software - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/intomic.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Other Systems on MicroCosm™</h1>
+<p class="author">by A “LUCASFILM UNIVERSE” DOCUMENT, some comments on putting third-party software into the <b>MicroCosm</b> environment, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document #10</p>
+<h2>Introduction</h2>
+<p>This document discusses the issues associated with installing third-party software in the <b>MicroCosm</b> environment.  This includes both adding independently created objects and interactions to enhance the fantasy of the <b>MicroCosm</b> universe and using <b>MicroCosm</b> as a gateway into other (relatively unrelated) processes running on the network host alongside it.</p>
+<p>One of the problems in the construction of an elaborate system such as <b>MicroCosm</b> is the volume of creative material which much be produced to give the resulting world a feeling of depth and a sense of variety.  The homogeneity of a single mind&#x27;s particular creative rut, even if the creator is quite imaginative, can result in a sameness to all things that is quite unlike the real world.  The real world has variety because the number of independent minds working to shape it is large.  We can obtain variation in the same manner by having a variety of outside developers create world elements.</p>
+<h2>Third-Party Objects</h2>
+<p>The first and most obvious way of enriching the depth and texture of the world is to allow third-parties to add objects to the world object database. Broadly speaking, objects can be said to consist of two components: image and behavior.  <em>Image</em> is the way the object <em>appears</em> on the screen. <em>Behavior</em> is what the object <em>does</em>.</p>
+<p>An object&#x27;s image is displayed on the home system&#x27;s screen.  There may be a number of different home systems in use and each of these will require images for each object.  One possible strategy for achieving this is to create a separate image for each object for each machine.  This is the “brute force” approach.  Unfortunately, as the number of objects increases the process of adding a new machine to the system becomes more and more unwieldy (since all the images will have to be created anew for the new machine).  Similarly, as the number of machines supported increases, the process of adding a new object to the system becomes more and more unwieldy (since an image will be required for each possible home system).  Clearly some sort of device-independent image representation scheme is in order, and that is exactly what we are going to develop.  The details of the device-independent image representation are outside the scope of this document.  We merely wish to point out that such a representation will be required.</p>
+<p>An object&#x27;s behavior happens in both the home system and the host system at once.  This is because the aspects of object behavior which relate to display control, decision making, and direct interaction with the player must take place in the home system because of the host/home communications bottleneck. Aspects of object behavior which involve alterations to the permanent state of the object or that of other objects or which involve access to “privileged” information must take place in the host system because of security considerations.  An object&#x27;s behavior is thus implemented by two separate (but interlocking) pieces of program code, one of which runs in the home system and the other of which runs in the host.</p>
+<p>The portion of an object&#x27;s behavior programming which must reside in the home system suffers from the same problem that the images do:  a separate implementation is required for each machine on which it must run.  There are two strategies for coping with this.  The first is to program the object behavior routines in a higher-level language of some sort, so that only one version has to be written.  For each target machine there is a compiler or interpreter which deals with the language.  This is the conventional means of dealing with a proliferation of target systems for a piece of software.  There is a problem however, and that is that a number of the target systems that we are contemplating are so primitive in their computational power that the overhead associated with a higher-level language would adversely effect performance to the point where the system would not be able to function successfully in the manner we require.  The second approach is to realize that the range of potential target processors is quite a bit smaller than the range of target machines in general.  For example, the Apple II, the Commodore 64, and the Atari 800 all have a 6502 CPU in them.  As long as the behavior software does not have to deal with any system-dependent aspects of these machines, the same identical object software can run on all three.  We will design the run-time environment of the home system so that this will be the case.</p>
+<p>During system operation, objects may be kept stored one of two places: in the long-term storage of the home system or in the host database itself.  The advantage of keeping the objects in the home system is that we do not have to wait through the delays while they are transferred (at 300 baud!) from the host to the home when actual use is required.  The advantage of keeping the objects in the host database is that the set of objects can grow arbitrarily large, free of the restriction that it fit withing the few hundred kilobytes of storage available on the typical home system.  Also, the object set can be expanded and modified at will without the active participation of the players.</p>
+<p>Since both schemes have major advantages and disadvantages, we will employ a compromise hybrid.  We will store as many objects as we can in the home system.  Any additional objects that the home system needs it gets from the host system.  The home systems use conventional cacheing techniques to select the particular set of objects that they will store locally.  Objects will be chosen for local storage on the basis of their frequency of use.  Each home system will have its own individually selected cache of objects chosen to be most appropriate for its player&#x27;s situation in the universe.  The host will keep a complete set of all objects and make them available on demand.  The idea, then, is that most of the time the home system uses objects out of local storage and only has to wait to get an object from the host when it encounters a new object for the first time.  It then downloads this new object and keeps it, throwing out some other, older object that hasn&#x27;t been referenced in a while if it has to make room.</p>
+<p>One pleasant consequence of this scheme is that it provides a built-in distribution system for the addition of new objects to the system.  Adding an object to the universe consists of inserting a new entry in the host system database which describes the object and then putting instances of this object into the world where people will find them.  Whenever people encounter these instances and try to interact with them, their home systems download a copy of the relevant parts of the object into their machines, and away they go.</p>
+<p>Thus, to create a new object, the following pieces must be created: an image to display the object with (which should be expressed in our <b>MicroCosm</b> device-independent image format), an object behavior program module for the host, and a set of object behavior program modules for the home (one for each target processor).  These components must then be entered into the host database so the players can get at them.</p>
+<p>To allow the creation of objects by third-parties, we will need the following: a programmer&#x27;s library and toolkit for programming objects on the host, a matching toolkit for the various home systems, a graphics tool for composing the object images, and a package of documentation describing the various programming environments and setting forth conventions, standards and procedures for the creation and installation of new objects.</p>
+<p>Potentially, the interface for making additions to the host database could be provided through the <b>MicroCosm</b> universe itself, by means of a special privileged object which we give to developers.  This object would be an upload tool that would enable the developer cum player to take objects defined inside his “home” machine and give them to the host for incorporation into the world.</p>
+<h2>Gateways</h2>
+<p>The second avenue to enriching the detail and texture of the <b>MicroCosm</b> universe is a feature we are calling a <em>gateway</em>.  A gateway is a very special sort of object which is placed at a fixed location somewhere in the simulated world.  The host resident end of this object behaves very differently from they way conventional objects do.  What it does is transfer responsibility for communications with the player from the <b>MicroCosm</b> system software in the host to some other program that might be running in the host at the same time.  As far as <b>MicroCosm</b> is concerned, the player temporarily disappears into a sort of limbo.  The alternate software to which the player has been handed then interacts with him completely independent of <b>MicroCosm</b>.  Presumably, at the same time this occurs, the piece of the gateway object which resides in the player&#x27;s home system similarly hands control over to a matching piece of software which is loaded there.</p>
+<p>The function of this independent exchange can be just about anything.  It can be something entirely independent of the <b>MicroCosm</b> world.  For example, it might be a completely conventional database access service for the stock exchange.  It can also be something related to or synergistic with the <b>MicroCosm</b> universe.  For example, two players entering a gateway together could be connected to each other via a two-player strategy game that simply uses the network host as a communications channel between the players. This game could be something that the players just play, with <b>MicroCosm</b> simply acting as an access mechanism.  Alternatively, the game could in some way effect the players&#x27; situations in the fantasy.  For example, the gateway might put the players into a mode where they can joust, using completely different software for the graphics and communications, but the outcome of their battle could alter their avatars&#x27; health property in the <b>MicroCosm</b> world.  This is accomplished by allowing external processes in the host to make requests of the <b>MicroCosm</b> database processer just as players may. Since these processes are running in the host they may be presumed to be trustworthy and can therefore be allowed to request things that they players themselves would not be allowed to do directly (such as altering the health property of an avatar).</p>
+<p>The installation of such software on the host is readily accomplished.  All that is needed is an appropriate library of routines to enable the independent software to communicate with <b>MicroCosm</b> itself.  The usual documentation describing methods and standards will be needed, of course, and some sort of organizational procedure will be required of the operators of the host system to ensure that third-party installed software does not violate the integrity or the spirit of the <b>MicroCosm</b> system.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/intomic.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

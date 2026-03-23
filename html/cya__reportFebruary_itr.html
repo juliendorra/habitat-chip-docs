@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report February - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/reportFebruary.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Report March 10, 1986</h1>
+<p class="author">by “Because we thought you&#x27;d want to know”</p>
+<p class="institution">Chip Morningstar, Lucasfilm Ltd. Games Division</p>
+<h2>Introduction</h2>
+<p>This is the fourth in a series of monthly reports detailing the progress on the <b>MicroCosm</b> project at Lucasfilm.  This report describes events and achievements during the month of February, 1985.</p>
+<h2>Work In Progress/Tasks Accomplished</h2>
+<p>The Project Schedule calls for us to meet one deliverable for mid-February. This to provide a videotape showing the completed artwork and animation for a portion of the MicroCosm object set.  This deliverable has been met.  We had planned to deliver artwork for approximately half of the objects, and we ended up with something more like 85% of them, so corresponding deliverable for mid-March calling for the other half of the object artwork will be somewhat smaller due to things being slightly ahead of schedule in this particular area.</p>
+<p>Aric Wilmunder has completed the first-draft version of the graphics sub-system.  He is now working on the motion control sequencer that will drive the complex motions of the avatars on the screen.</p>
+<p>Gary Winnick, our artist in residence, has designed a large volume of imagery for the many different kinds of objects.  By now you will have seen most of these on the mid-February demo tape.  The design process resulted in a lot of ideas for new objects, which are being incorporated into our plans.  Imagery for some of these new objects will appear in the mid-March demo tape.</p>
+<p>Randy Farmer has finished the sound-effects driver routines and the primitive sound-effects editor CHEESE.  We have discovered some deficiencies in the communications routines as supplied and he is now in the process of correcting and optimizing them.  This should result in a communications package that is both smaller by nearly a half and substantially faster and less CPU intensive.</p>
+<p>Ron Gilbert has designed and coded the object-oriented database system that will handle memory and disk space management and the various critical data structures that hold the whole system together.  He is presently debugging it.</p>
+<p>I have nearly completed the detailed specification of the internal behavior of the entire object set.  This has proven to be a massive undertaking.  Though the resulting document is enormous (150 pages at last count), it has already proven a useful aid in clarifying the underlying functions of the system.</p>
+<h2>Tasks For March</h2>
+<p>The essential task for March is system integration.  We intend to merge the three streams of development (communications, graphics and database) into a single functioning system with each part working in concert with the others.</p>
+<p>In addition, we intend to finish formal definition of the behavior of the objects and begin actual implementation of them.  During late March or early April I plan to use this definition to produce the actual host-system behavior code for the basic object set.</p>
+<p>The development schedule lists three milestones for us to reach by March 15. The first is completion of the animation and graphics sub-system, demonstrated by a videotape of the software in action.  We will reach this goal without difficulty (we have essentially reached it already).</p>
+<p>The second milestone is further imagery and artwork for the objects.  This we will also have.  Included in this will be the more-or-less complete package of animations that define the motions and actions which avatars can perform.  It is becoming clear, however, that we will continue to think up new kinds of objects for as long as the project lasts, and we will continue to incorporate these into the system for as long as we have the time and the resources to do so.  Thus, until the final delivery, there will continue to be new imagery appearing from time to time.</p>
+<p>The final milestone is to have some functional objects.  This implies system integration, since for objects to function we must have a complete causal chain from player to internal definition to the host internal definition and back to the Commodore and finally to state changes and visible action on the screen.  However, we are not going to have a working host database system to interact with until (at best) a few days before the delivery deadline, so what we are going to deliver will be a demonstration of an integrated system that communicates with the host but which does not actually have interactions with host objects.</p>
+<h2>Quantum Comments</h2>
+<p>We were hoping to see a preliminary host database processor working at the Quantum end of the network by the end of February.  For various reasons, this has not come to pass.  However, for the time being we are satisfied that the host work is proceeding and that we will have something that we can work with at the Quantum end by the time we <em>really</em> need it.  If the host system is ready for the incorporation of actual object behavior code by the end of the month, the overall schedule should not be significantly perturbed.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/reportFebruary.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

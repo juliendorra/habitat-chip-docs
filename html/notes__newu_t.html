@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New User Protocol - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/newu.t" style="font-size:0.85em;">View source</a></div>
+<h1>This is the protocol for the newuser signup/customization feature:</h1>
+<p>This is the protocol for the newuser signup/customization feature:</p>
+<p>Whenever a player is logging into Habitat, the C64 sends the request</p>
+<pre>	&lt;REGION&gt; &lt;I&#x27;m alive&gt; &lt;program disk version&gt;</pre>
+<p>Where &lt;REGION&gt; is always noid 0 and the &lt;I&#x27;m alive&gt; request byte is 3. &lt;program disk version&gt; is two bytes identifying the software version number of the player&#x27;s program disk (NOT his object data disk).</p>
+<p>If the version number is out of date (or the player is for some other reason deemed by the host to be unacceptable) the host responds with</p>
+<pre>	&lt;REGION&gt; &lt;I&#x27;m alive&gt; &lt;FAILURE&gt; &lt;error message&gt;</pre>
+<p>Where the &lt;FAILURE&gt; byte is 0 and &lt;error message&gt; is a string that is displayed that tells the player why his computer is hanging up on him.  The C64 then returns to People Connection.</p>
+<p>If the player is an established user the host responds with</p>
+<pre>	&lt;REGION&gt; &lt;I&#x27;m alive&gt; &lt;SUCCESS&gt; &lt;object disk type&gt; &lt;object disk prompt&gt;</pre>
+<p>Where the &lt;SUCCESS&gt; byte is 1, &lt;object disk type&gt; is a byte indicating what sort of object disk is to be used, and &lt;object disk prompt&gt; is a string used to prompt the player to put in his object disk (initially, &quot;Insert Habitat data disk, press any key&quot;).  After receiving the &lt;SUCCESS&gt; response, the C64 initiates normal interaction in the manner currently supported, i.e., by sending a &lt;Describe&gt; request for the present region.</p>
+<p>If the player is a new user, the host responds with</p>
+<pre>	&lt;REGION&gt; &lt;I&#x27;m alive&gt; &lt;NEWUSER&gt; &lt;contents vector&gt;</pre>
+<p>Where the &lt;NEWUSER&gt; byte is 2 and the &lt;contents vector&gt; is a regular region initialization contents vector containing a ground, a sky, an avatar and a bunch of heads.  This contents vector will be some constant string stored somewhere in the host.  It may be one of several constants strings chosen at random to vary the selection of heads provided.  (We will provide a suitable string to begin with.)</p>
+<p>After going through the customization dialog, the C64 sends the request</p>
+<pre>	&lt;REGION&gt; &lt;Customize&gt; &lt;data&gt;</pre>
+<p>Where the &lt;Customize&gt; request byte is 4 and the &lt;data&gt; consists of</p>
+<pre>	&lt;head style&gt; &lt;head pattern&gt; &lt;custom1&gt; &lt;custom2&gt; &lt;custom3&gt;</pre>
+<p>Where &lt;head style&gt; and &lt;head pattern&gt; are &#x27;style&#x27; and &#x27;orientation&#x27; bytes of the new player&#x27;s avatar&#x27;s head (respectively) and &lt;custom1&gt; &lt;custom2&gt; and &lt;custom3&gt; are the so named state bytes of the new player&#x27;s avatar.</p>
+<p>The host responds with either</p>
+<pre>	&lt;REGION&gt; &lt;Customize&gt; &lt;SUCCESS&gt;</pre>
+<p>or</p>
+<pre>	&lt;REGION&gt; &lt;Customize&gt; &lt;FAILURE&gt;</pre>
+<p>If a &lt;FAILURE&gt; response is given, the C64 should go through the customization dialog again and try once more.  If a &lt;SUCCESS&gt; response is given the C64 should initiate normal operation like an established user (i.e., send the &lt;Describe&gt; request for the current region).</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/notes/newu.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

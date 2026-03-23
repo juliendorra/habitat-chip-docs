@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Griddle Region Tools - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/regiontools.t" style="font-size:0.85em;">View source</a></div>
+<h1>Griddle: Ghu&#x27;s Region Internal Database Description LanguagE</h1>
+<p>Griddle: Ghu&#x27;s Region Internal Database Description LanguagE</p>
+<p>July 23, 1987</p>
+<p>This is the definition of the formats for Griddle.  There are two formats. One is nominally the input format, which we call &quot;griddle&quot; format.  The other is a compressed output format, which we are calling &quot;raw&quot; format.  These are considerably simplified from the older &quot;riddle&quot; and &quot;genesis&quot; formats.  The new formats should greatly simplify tools programming, as well as reducing the bandwidth required to transmit region definitions around.</p>
+<h3>&quot;GRIDDLE&quot; FORMAT:</h3>
+<p>A Griddle file consists of one or more Griddle statements.  There are five types of statements: include, assignment, macro-assignment, object-use and object-definition.</p>
+<p>The include statement has the form:</p>
+<pre>	include &quot;&lt;filename&gt;&quot;</pre>
+<p>where &lt;filename&gt; is the name of a file to include, expressed as a string constant.  It does what you expect.</p>
+<p>The assignment statement has the form:</p>
+<pre>	&lt;name&gt; = &lt;expression&gt;</pre>
+<p>while the macro-assignment statement has the form:</p>
+<pre>	&lt;name&gt; @= &lt;expression&gt;</pre>
+<p>The two are similar in that they both assign a value to an identifier, &lt;name&gt;. However, the nature of the value is different:  The ordinary assignment statement computes the value of &lt;expression&gt; and makes that computed value the value of &lt;name&gt;.  Further references to &lt;name&gt; result in this value.  The macro-assignment statement, on the other hand, merely assigns the expression &lt;expression&gt; itself to be the value of name, and each time &lt;name&gt; is referenced, &lt;expression&gt; is recomputed and the resulting value used.  In other words, macro-assignment defers the computation of &lt;expression&gt; and always results in the value that &lt;expression&gt; would have if it were substituted directly for &lt;name&gt;.  If the values of any of the terms in &lt;expression&gt; change between references to &lt;name&gt;, then the corresponding value that results from a reference to &lt;name&gt; will also change.</p>
+<p>The object-use statement describes an instance of an object which is to be created and placed in the database.  Its form is:</p>
+<pre>	use &lt;className&gt; [ &lt;tag&gt; ] [ = &lt;globalId&gt; ] {
+		&lt;properties&gt;
+	}</pre>
+<p>The interpretation of this is: create an object of class &lt;className&gt;.  If expression &lt;globalId&gt; is present, use its value as the new object&#x27;s global identifier, otherwise generate an identifier internally.  If &lt;tag&gt; (an identifier) is present, set its value to be the new object&#x27;s identifier number.</p>
+<p>&lt;properties&gt; consists of zero or more statements of the form:</p>
+<pre>	&lt;fieldName&gt;: &lt;data&gt;</pre>
+<p>where &lt;fieldName&gt; is a symbol that is the name of one of the fields of class &lt;className&gt;, and &lt;data&gt; is one or more expressions, separated by commas, giving values for the named field of the new object.</p>
+<p>The object-definition statement has the form:</p>
+<pre>	define &lt;classNumber&gt; &quot;&lt;className&gt;&quot;
+		&lt;fields&gt;
+	enddefine</pre>
+<p>This says to define class number &lt;classNumber&gt; to have name &lt;className&gt; and the designated fields.  &lt;fields&gt; consists of zero or more statements of the form:</p>
+<pre>	&lt;fieldName&gt; [ ( &lt;dimension&gt; ) ] : &lt;type&gt;</pre>
+<p>where &lt;fieldName&gt; is a symbol that is to be the name of the field. &lt;dimension&gt;, if given, is a number greater than 0 that is the array dimension of an array field (if omitted, it defaults to 1 -- i.e., not an array). &lt;type&gt; is the data type of the field.  The following types are recognized:</p>
+<pre>	bin15		two-byte integers
+	integer		synonym for bin15
+	bin31		four-byte integers
+	long		synonym for bin31
+	byte		one-byte integers
+	character	characters stored in single bytes
+	words		characters stored in two-byte words
+	varstring	pl1-style variable length string stored as a two-byte
+			length followed by the string itself; dimension
+			indicates maximum possible length of string
+	bit		single bits
+	avaid		(four-byte) avatar global ids
+	objid		(four-byte) object global ids
+	regid		(four-byte) region global ids
+	entity		entity specifiers: 2-byte type followed by 4-byte
+			global id; type values 0, 1 and 2 correspond to
+			regions, avatars and objects respectively
+	fatword		a two-byte integer stored as pairs of two-byte words,
+			the first containing the low-order byte and the second</pre>
+<h3>the high-order byte</h3>
+<p>Expressions can take the following forms:</p>
+<pre>	&lt;name&gt;					the value of identifier &lt;name&gt;
+	&lt;number&gt;				a numeric constant
+	&lt;string&gt;				a string constant
+	&lt;bitstring&gt;				a bitstring constant
+	( &lt;expression&gt; )			the value of the expression
+	~ &lt;expression&gt;				bitwise complement
+	- &lt;expression&gt;				arithmetic negation
+	a &lt;expression&gt;				create avatar id
+	o &lt;expression&gt;				create object id
+	r &lt;expression&gt;				create region id
+	&lt;expression&gt; + &lt;expression&gt;		addition
+	&lt;expression&gt; - &lt;expression&gt;		subtraction
+	&lt;expression&gt; * &lt;expression&gt;		multiplication
+	&lt;expression&gt; / &lt;expression&gt;		integer division
+	&lt;expression&gt; % &lt;expression&gt;		integer modulus
+	&lt;expression&gt; &amp; &lt;expression&gt;		bitwise AND
+	&lt;expression&gt; | &lt;expression&gt;		bitwise OR
+	&lt;expression&gt; ^ &lt;expression&gt;		bitwise XOR</pre>
+<p>A &lt;name&gt; can be any string of alphabetic characters, digits, and &#x27;_&#x27;, that does not start with a digit.</p>
+<p>A &lt;number&gt; can be any of the standard number formats we use: a decimal number (any sequence of decimal digits that does not start with 0), an octal number (any sequence of octal digits preceded by &#x27;0&#x27;), a hex number (any sequence of hexadecimal digits preceded by &#x27;0x&#x27; or &#x27;0X&#x27;), a binary number (any sequence of 0 and 1 preceded by &#x27;0b&#x27; or &#x27;0B&#x27;), a quarter (any sequence of base-4 digits preceded by &#x27;0q&#x27; or &#x27;0Q&#x27;) or an ascii character enclosed in single quotes (with the usual \ escape sequences).</p>
+<p>A &lt;string&gt; is any sequence of characters enclosed in double quotes, with the usual \ escape sequences.</p>
+<p>A &lt;bitstring&gt; is a PL/1 style bit string: a series of 1&#x27;s and 0&#x27;s enclosed in apostrophes and followed by &#x27;b&#x27;.  For example:</p>
+<pre>	&#x27;100101010011&#x27;b</pre>
+<p>Also, of course, whitespace may be freely used for formatting, and comments, bracketed by &quot;/*&quot; and &quot;*/&quot;, may be inserted at almost any point.</p>
+<h3>&quot;RAW&quot; FORMAT:</h3>
+<p>A &quot;raw&quot; file consists of 1 or more lines.  Each line has the same format, a decimal class number, followed by a space, followed by a hex string (an even number of hexadecimal digits, each of which represents a byte of data).  A number of physical lines may be combined into a single logical line by ending all but the last with a backslash (&quot;\&quot;) character as a continuation marker.</p>
+<p>Each line specifies the data to fill the fields of a database descriptor of an object, region or avatar.  Which of these (and what class, if an object) can be determined by examining the class number.  The hex string is an ASCII representation of the binary form of an in-core database record of the given type.</p>
+<p>Certain fields in the hex data will be global database identifiers.  These should be interpreted by the program reading the data relative to the class definitions (as laid out by Ghu &#x27;define&#x27; statements).  A positive value P in one of these fields indicates that the value P should be used for the identifier.  A negative value N, however, is interpreted.  If N is in the range -1 to -1000 (inclusive), just use the value N itself.  However, if N is less than -1000, use the identifier assigned to the thing defined by the -(N+1000)th line of the file (e.g., -1001 is the first item in the file, -1002 is the second, and so on).</p>
+<h3>THE GRIDDLE AND FRED PROGRAMS:</h3>
+<p>Griddle and Fred are the two incarnations of a program that reads and writes region descriptions in the above formats.  Griddle is primarily a translation tool while Fred is an interactive editor.  Griddle reads some files and then writes some files, as directed by the command line options.  Fred allows you to interactively edit one region at a time using a Commodore 64 and Fastlink.</p>
+<p>These are the command line options:</p>
+<p>filename 	Read the object descriptions (in either of the above formats)</p>
+<pre>		contained in the given file (Griddle only).  You can specify
+		multiple input files.  They will be read in the order
+		specified.</pre>
+<p>-R		Assign relative ids to the regions generated, even if the are</p>
+<pre>		specified with absolute ids in the input.</pre>
+<p>-c filename	Read a contents vector file (Griddle only).  Contents vector</p>
+<pre>		files are an obsolete representation, but we still have old
+		data that we may want to get at.</pre>
+<p>-v filename	Write a contents vector file (Griddle only).  The input should</p>
+<pre>		contain exactly one region plus contained objects.</pre>
+<p>-g filename	Output a griddle format file (Griddle only) containing all the</p>
+<pre>		objects in the various inputs.</pre>
+<p>-r filename	Output a raw format file (Griddle only) containing all the</p>
+<pre>		objects in the various inputs.</pre>
+<p>-i filename	Run Griddle in indirect mode.  In indirect mode, Griddle reads</p>
+<pre>		&quot;indirect lines&quot; from the specified file, each of which
+		specifies a file to read together with connectivity and
+		parameter information.  These indirect control files are the
+		output of Plex.</pre>
+<p>-m number	Set the maximum number of objects that this run of Griddle can</p>
+<pre>		deal with.  The default value is 256, which is fine for Fred,
+		but large realms need to have more room allocated.</pre>
+<p>-t		Run Fred in &quot;test mode&quot;.  In test mode, Fred doesn&#x27;t use the</p>
+<pre>		Fastlink port and none of the visual editing aids that use the
+		C64 are available.</pre>
+<p>Any and all of the output file options may be used at the same time.  I.e., you can generate both &#x27;raw&#x27; and &#x27;griddle&#x27; format output with one command.</p>
+<p>In addition to the command options, the programs also read a few environment variables.</p>
+<p>GHUDEFINES is the name of a file containing a series of &#x27;define&#x27; statements. This file is read in first before any other processing takes place to define all the basic object classes.  By default it is &quot;/u0/habitat/defines.ghu&quot;.</p>
+<p>CLASSINFO is the name of a &quot;class.dat&quot; file produced by Muddle.  It is used to obtain information about class representation in the C64.  By default it is &quot;/u0/habitat/class.dat&quot;.</p>
+<p>FREDPATH is the name of a default path for Fred to use when reading and writing files.  By default it is &quot;./&quot;, i.e., the current working directory. Fred also looks for a file named &quot;.fredpaths&quot; in the user&#x27;s home directory for a list of other paths to choose from.</p>
+<p>FASTPORT is the conventional variable that holds information about what Fastlink port to connect to the C64 with.</p>
+<h3>MORE ABOUT FRED:</h3>
+<p>Fred is an interactive utility that works with a C64 over Fastlink.  It loads Aric&#x27;s Reno program into the C64 from the file &quot;/u0/habitat/reno.out&quot; and then provides a screen and keystroke oriented front-end.</p>
+<p>These are the key commands that Fred understands:</p>
+<p>b	Moves the current object into the background (i.e., clears the</p>
+<pre>		high-bit of the object&#x27;s Y-coordinate).</pre>
+<p>B	Tells the C64 to suppress display of the background objects, thus</p>
+<pre>		highlighting the foreground objects.  The display remains thus
+		until refreshed by the RETURN command or some other operation.</pre>
+<p>^B	Toggles the border display bit on the currently selected object (which</p>
+<pre>		should be a trapezoid).</pre>
+<p>c	Creates a new object.  You are prompted for the class.  You can enter</p>
+<pre>		a number or a standard class name, or take the default (which
+		is displayed) by hitting RETURN.</pre>
+<p>C	Tells the C64 to display the contents of the currently selected object</p>
+<pre>		(which ought to be a container of some sort).  This display
+		remains until the screen is refreshed.</pre>
+<p>d	Displays the state information about a particular object.  The</p>
+<pre>		information is shown on the terminal screen.  You are prompted
+		for the noid.  This object becomes the active object.</pre>
+<p>D	Drops the current object into the container under the cursor.  The</p>
+<pre>		object under the cursor really should be a container of some
+		sort.</pre>
+<p>^D	Displays the current working path list on the terminal screen.  The</p>
+<pre>		current path is highlighted.</pre>
+<p>e	Allows you to edit the current object&#x27;s state information.  The</p>
+<pre>		information is displayed on the terminal screen with the first
+		field highlighted.  RETURN advances to the next field,
+		BACKSPACE takes you back to the previous field.  Simply by
+		Typing in a new value change the field.  Hitting the DEL key
+		or advancing past the last field exits edit mode.  If you have
+		made any changes the revised object will be sent to the C64
+		for display.</pre>
+<p>E	Allows you to edit the corners of the trapezoid that is the current</p>
+<pre>		object (it should be one).  In trapezoid edit mode, pressing
+		&#x27;L&#x27;, &#x27;l&#x27;, &#x27;R&#x27; or &#x27;r&#x27; places the joystick in control of the
+		upper left, lower left, upper right or lower right corners,
+		respectively, of the trapezoid.  Moving the joystick moves the
+		corner around.  Pressing &#x27;x&#x27; exits trapezoid edit mode.</pre>
+<p>f	Moves the current object into the foreground (i.e., sets the high-bit</p>
+<pre>		of the object&#x27;s Y-coordinate).</pre>
+<p>F	Cycles the current object&#x27;s flat type among GROUND, WALL, SKY and</p>
+<pre>		IMPASSABLE.  The object should, of course, be a flat or a
+		trapezoid.</pre>
+<p>g	Saves the current region in a file in Griddle format.  You will be</p>
+<pre>		prompted for the file name.</pre>
+<p>G	Tells the C64 to render objects with patterns that emphasize their</p>
+<pre>		flat types.  Display remains this way until refreshed.</pre>
+<p>h	Gives help info -- a one-screen summary of these commands. H	Nudges the current object&#x27;s container offset to the left a notch.</p>
+<pre>		Only affects the C64.</pre>
+<p>i	Loads Reno into the C64. I	Changes how the current object will be held by an Avatar.  Only</p>
+<pre>		affects the C64.</pre>
+<p>J	Nudges the current object&#x27;s container offset up a notch. Only affects</p>
+<pre>		the C64.</pre>
+<p>K	Nudges the current object&#x27;s container offset down a notch. Only</p>
+<pre>		affects the C64.</pre>
+<p>L	Nudges the current object&#x27;s container offset to the right a notch.</p>
+<pre>		Only affects the C64.</pre>
+<p>n	Tell the C64 to render the region in night mode.  Display remains this</p>
+<pre>		way until refreshed.</pre>
+<p>o	Displays on the terminal screen a list of the noids and classes of all</p>
+<pre>		the objects in the region.</pre>
+<p>O	Flips the orientation of the current object (i.e., toggles the low-bit</p>
+<pre>		of the orientation byte).</pre>
+<p>p	Increments the current object&#x27;s color or pattern. P	Decrements the current object&#x27;s color or pattern. ^P	Allows you to edit the current working path list.  The paths are</p>
+<pre>		displayed on the terminal screen with the current path
+		highlighted.  RETURN advances the current path to the next one
+		on the list.  BACKSPACE backs up to the previous one.  You can
+		change a path simply by typing in a new value.  Hitting the
+		DEL key exits the edit mode, and whatever path was selected at
+		the time becomes the working path.</pre>
+<p>q	Quits Fred. r	Reads a region from a file and displays it on the C64.  You will be</p>
+<pre>		prompted for the file name.  The file can be in either raw or
+		griddle format.</pre>
+<p>s	Sets the current object&#x27;s graphic state to 0. S	Increments the current object&#x27;s graphic state. t	Touches the object under the cursor, i.e., makes it the current</p>
+<pre>		object.  The object&#x27;s state information is displayed on the
+		terminal screen.</pre>
+<p>T	Twins the current object, i.e., creates a new object that is an exact</p>
+<pre>		duplicate of the current object.</pre>
+<p>u	Undeletes the last object that was deleted, if any. w	Causes the Avatar in the region, if there is one, to walk to the</p>
+<pre>		current object location.</pre>
+<p>x	Deletes the current object. z	Saves the current region in a file in raw format.  You will be</p>
+<pre>		prompted for the file name.</pre>
+<p>+	Increments the current object noid. -	Decrements the current object noid. !	Allows you to execute a Unix command.  You will prompted for the</p>
+<pre>		command string.</pre>
+<p>.	Increments the current object&#x27;s X-coordinate (actually increments it</p>
+<pre>		by 4, since object positions must be byte aligned anyhow).</pre>
+<p>,	Decrements the current object&#x27;s X-coordinate (actually decrements it</p>
+<pre>		by 4, since object positions must be byte aligned anyhow).</pre>
+<p>?	Increments the current object&#x27;s Y-coordinate. /	Decrements the current object&#x27;s Y-coordinate. &gt;	Increments the current object&#x27;s Y-coordinate by 10. &lt;	Decrements the current object&#x27;s Y-coordinate by 10. RETURN	Refreshes both the terminal screen and the C64 display. ^Z	Pauses Fred</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/regiontools.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

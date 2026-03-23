@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habitat Economics - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/econ.tbl" style="font-size:0.85em;">View source</a></div>
+<h1>Habitat Economics</h1>
+<p class="author">by Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">November 26, 1986</p>
+<p class="doc-number">Habitat Document # 35</p>
+<h2>Introduction</h2>
+<p>This document describes the <em>Habitat</em> economic model.  The <em>Habitat</em> economy is quite simple (at least, those facets of it that we will bother to try to manage are simple).  Economic policy for <em>Habitat</em> therefore consists of a few simple rules for such things as trust fund dispersements together with a global price list for objects in the world.</p>
+<h2>Money</h2>
+<p>As has been discussed often before, the standard monetary unit in <em>Habitat</em> is the <em>Token</em>.  The buying power of a Token is not directly comparable to any “real” monetary unit, since the relative values of various items in the <em>Habitat</em> world do not necessarily correspond to their relative values in the real world.  Also, of course, many items in <em>Habitat</em> are pure fantasy and have no real world counterparts.  However, as a purely subjective measure (e.g., in order to guide judgement when setting prices), it may be helpful to think of a Token as representing something between 25¢ and a dollar, depending on the context.</p>
+<h2>Whence Money Comes, Where Money Goes</h2>
+<p>Money enters the world in three ways: trust fund interest payments, paybacks from pawnshop machines, and random treasures placed in the world.  Money leaves the world in three ways also: expenditures in vendos and other coin-operated devices, fines and fees levied by the system for various reasons (such as the reincarnation penalty), and money simply lost by players which then gets swept up by “garbage collection” processes.  In order to define the <em>Habitat</em> economy, we need to define each of these sources and sinks in turn.</p>
+<h2>Making Money</h2>
+<p><em>Trust funds</em></p>
+<p>According to our fantasy, each Avatar is endowed with a trust fund.  This provides a basic, subsistence level income so that players can cover incidental expenses (TelePort fare, minimal equipment, and so on) without having to struggle for the cash if he or she is not interested in the game of money making.  The idea is that the trust fund pays “interest” into the Avatar&#x27;s bank account on a regular basis.  The principal is not available to the player — in fact, the player never even sees the principal.</p>
+<p>Trust fund payments are not really interest, in that they do not represent a percentage of anything and they do not compound.  The situation is actually much more analagous to the $200 you get for passing “GO” in Monopoly.  Each Avatar receives <b>trustFundPayment</b> Tokens per day, paid into his bank account.  We only count days that the Avatar actually logs in, so a player can&#x27;t stay away from <em>Habitat</em> for two weeks and then log in and get 14 days worth of trust fund payments.  The value of <b>trustFundPayment</b> is the same for all Avatars, though we may adjust it upward or downward from time to time in order to regulate the economy.  Initially, we will start with <b>trustFundPayment =</b> T100.</p>
+<p><em>Pawnshops</em></p>
+<p>The pawnshop machine provides a means whereby Avatars can recycle “dead” objects, converting them into ready cash.  Each object has a cash value that depends on its class and possibly on its style.  The pawnshop machine behavior code on the host must have access to a table of these values.  Due to the wide variety of objects available in the world, this table will by necessity be somewhat large, even though it needn&#x27;t contain entries for objects which cannot be carried and placed into the machine (e.g., trees and houses). Therefore, we do not wish to support an idiosyncratic pricing model for each individual pawnshop.  Instead, there will be one global set of values that will be placed in a global table to be shared in common by all instances of the pawnshop machine object.  In order to provide a little bit of variety (as well as to cause some pricing differentials to stimulate trade), each machine will have a limited number of local price exceptions for certain items that it recognizes.  For example, rocks could bring an unusually high return in one part of the world while escape devices bring an unusually low return in another.</p>
+<p>As a rule, the prices paid by a pawnshop machine reflect a substantial discount from the price that an Avatar would have to pay in order to purchase the same item from a vendo machine.  There will be rare exceptions to this, where a particular machine pays a premium for an item that can be purchased more cheaply elsewhere.  Since such situations are intended to stimulate trade, the place where an item can be obtained cheaply will be distant from the place where it can be exchanged for a higher cash value.  Note that distance in <em>Habitat</em> is a little different from its real world counterpart, due to the presence of TelePort booths (although, of course, the cost of the TelePort ride itself adds to the “economic distance” between two points).</p>
+<p>The complete price schedule for all types of objects is given in the appendix.</p>
+<p><em>Money found</em></p>
+<p>As the operators of this world, we will, from time to time, place treasures to be found by the players.  Some of these will be objects that can be redeemed for cash, and some will be cash directly.  We can offer here no particular guidelines for the value of these treasures, other than a general observation that profligate treasure burying will cause inflation.  Unlike the real world, where inflation is bad because of the economic dislocation that it causes, in <em>Habitat</em> inflation is bad because it makes the world a less exciting place by devaluing the objects of players&#x27; quests.</p>
+<h2>Spending Money</h2>
+<p><em>Buying things</em></p>
+<p>Avatars may obtain goods and services throughout the world using a variety of coin-operated devices.  The most common of these is the vendo machine, but there are also TelePort booths, fortune telling machines and coke machines.</p>
+<p>Each object that may be purchased in a vendo has a price associated with it in the machine.  This is in contrast to the pawnshop machine, where prices are global, and is possible because each vendo sells only a limited number of items.  This means that there can be much greater variation in the selling prices of various kinds of objects throughout the world.  However, we will try to stick close to a universal price list.  As with the pawnshop machines, variations will be strategically chosen to encourage trade.  The basic prices represent our subjective judgement about the relative values of various items. The complete price breakdown by class and style is given in the appendix.</p>
+<p>TelePort travel is charged on the basis of how far the Avatar is travelling. Distance is measured by counting the number of “area code” zones between the starting and ending TelePorts.  TelePort travel cost is reckoned in terms of a basic unit, <b>teleportFare</b>.  The formula for computing cost is</p>
+<pre>
+	<b>cost = teleportFare + (longDistancePremium × teleportFare × distance)</b>
+</pre>
+<p>where <b>distance</b> is the length of the hop in area code zones and <b>longDistancePremium</b> is a multiplier to scale the long distance charge by.  For trips within a single area code zone <b>distance</b> is 0, and so cost only the minimum charge necessary to activate a TelePort booth.  Each successive zone cost adds an additional <b>longDistancePremium × teleportFare</b> Tokens to the charge.  Initially we are going to start with <b>teleportFare =</b> T10 and <b>longDistancePremimum =</b> 2.  Thus a local &#x27;Port will cost T10, a trip to the area code zone next door will cost T30, the zone next to that costs T50, and so on.  With the present geographic layout, the maximum distance between two area code zones is 5, so the maximum possible TelePort charge would be T110.  Eventually we would like to add a special pseudo-area code analagous to the real world 800-number: a toll-free TelePort destination.</p>
+<p>Fortune telling machines and coke machines are minor sources of humor.  The price we set for them is rather arbitrary.  For the time being it will be T5, which is more than nothing but still cheap.</p>
+<p><em>Fines and fees</em></p>
+<p>The Oracle charges for some of the services that it provides for Avatars. These include reincarnation as well as some of the services available from various Bureaucrats-In-A-Box.</p>
+<p>Since the amount of money that an Avatar may have when it dies is completely unpredictable, the reincarnation fee is not a fixed charge, but a fraction of the Avatar&#x27;s net worth.  “Net worth”, in this context, is the sum of the Avatar&#x27;s bank account balance and any Tokens that may be stashed in his Turf. Note that an Avatar can shelter his money by storing it as cash outside his Turf, at the risk that somebody else might steal it.  To begin with, the reincarnation fee will be 20% of the Avatar&#x27;s net worth or T100, whichever is more.</p>
+<p>Services of Bureaucrats-In-A-Box are charged variously.  The currently defined Bureaucratic functions are as follows:</p>
+<ul class="bullet">
+<li><em>Transfers of title to turves</em> — T50.</li>
+<li><em>Public advertisements</em> — T500 to T10,000, depending on size and location.</li>
+<li><em>Business property rent</em> — T700 per week.  This charge is based on the maximum possible trust fund payment that can be received by an Avatar.  In other words, if an Avatar was to spend every Token he received renting a business property, he could do it, but we would have nothing left over.  In order to keep the Avatar solvent, the business has to make a profit. Currently we do not distinguish between the various possible business rental properties that we will be making available.  We may wish to reconsider this in the future.</li>
+<li><em>Public facility scheduling</em> — T0.  For the time being, we will make public facilities (theaters, auditoria, and so on) available for free.  The purpose is to get them to be used.  If we reach a point where demand greatly exceeds supply, we may have to consider charging for use of the space, at least until additional facilities can be created.</li>
+</ul>
+<p><em>Money lost</em></p>
+<p>From time to time, players will leave Tokens laying around the world, either deliberately or by accident.  While money is one thing that we will probably not want to have picked up by periodic “garbage collection” processes, we will want to keep an eye on it and sweep it up if the quantity of loose change starts to get out of hand.  For this reason, one of the daily batch processes that we will want to have will be a money supply counter, measuring how much money is in the world, both in cash and in Avatars&#x27; bank accounts.  It should be able to give separate tallies for cash carried on Avatars&#x27; persons, stored in Turves, and laying around free.  We will want to monitor the latter quantity carefully.</p>
+<hr>
+<pre><b>Appendix: Values of Objects</b></pre>
+<table>
+<tr><th>l l l</th></tr>
+<tr><td>l n n l .</td></tr>
+<tr><td>Class:Purchase price (T):Pawn value (T)</td></tr>
+<tr><td>_:_:_</td></tr>
+<tr><td>amulet:5 to 10,000+:1 to 2,000+:depends on magic type</td></tr>
+<tr><td>bag:50:25:</td></tr>
+<tr><td>ball:20:10:</td></tr>
+<tr><td>body sprayer:50:25:</td></tr>
+<tr><td>book:1 to 100+:1 to 50+:depends on nature of book</td></tr>
+<tr><td>boomerang:40:20:</td></tr>
+<tr><td>bottle:10:5:</td></tr>
+<tr><td>box:80:40:</td></tr>
+<tr><td>change-o-matic:695:400:</td></tr>
+<tr><td>club:129:100:</td></tr>
+<tr><td>compass:195:100:</td></tr>
+<tr><td>crystal ball:50,000:35,000:</td></tr>
+<tr><td>drugs:75:5:</td></tr>
+<tr><td>escape device:1120:800:</td></tr>
+<tr><td>fake gun:80:20:</td></tr>
+<tr><td>flashlight:22:11:</td></tr>
+<tr><td>frisbee:47:47:</td></tr>
+<tr><td>gemstone:5 to 10,000+:1 to 2,000+:depends on magic type</td></tr>
+<tr><td>grenade:2,800:400:</td></tr>
+<tr><td>gun:800:600:</td></tr>
+<tr><td>key:5:1:</td></tr>
+<tr><td>knick-knack:4 to 104:1 to 10:depends on kind of knick-knack</td></tr>
+<tr><td>knife:395:200:</td></tr>
+<tr><td>magic staff:500 to 10,000+:100 to 2,000+:depends on magic type</td></tr>
+<tr><td>magic wand:150 to 10,000+:30 to 2,000+:depends on magic type</td></tr>
+<tr><td>matchbook:2:1:</td></tr>
+<tr><td>movie camera:10:5:</td></tr>
+<tr><td>plant:27:1:</td></tr>
+<tr><td>ring:5 to 10,000+:1 to 2,000+:depends on magic type</td></tr>
+<tr><td>rock:100:1:</td></tr>
+<tr><td>security device:995:800:</td></tr>
+<tr><td>sensor:95 to 9,000:50 to 4,500:depends on what it senses</td></tr>
+<tr><td>shovel:150:75:</td></tr>
+<tr><td>stun gun:1,800:900:</td></tr>
+<tr><td>ticket:5+:1:depends on what it admits you to</td></tr>
+<tr><td>wind up toy:300:150:</td></tr>
+</table>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/econ.tbl" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Host Architecture - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/hostarch.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Host System Architecture</h1>
+<p class="author">by the design of the host-based portion of the MicroCosm system, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document #8</p>
+<h2>Introduction</h2>
+<p>This document attempts to describe the preliminary <b>MicroCosm</b> host system architecture.  The purpose of this document is to try to get all the design straight before getting bogged down in implementation.</p>
+<p>The names of system components referred to in this document match those used in the attached host system block diagram.  Please refer to this illustration to minimize confusion.</p>
+<h2>Overview</h2>
+<p>The host system consists of 6 primary components: the <em>Communications Channel Controller</em>, the <em>Message Switcher</em>, the <em>Transaction Monitor</em>, the <em>Asynchronous Notifier</em>, <em>Looi</em> (the <b>L</b>ow <b>O</b>verhead <b>O</b>bject <b>I</b>nterpreter) and the <em>Database</em> itself. Each of these components is discussed in detail below.  Note however, that the Communications Channel Controller and Message Switcher designs are affected by the host system architecture.  Depending on the host, their functions may be subsumed by various preexisting host components rather than being implemented as parts of the <b>MicroCosm</b> software.</p>
+<h2>Communications Channel Controller</h2>
+<p>The Communications Channel Controller is responsible for the physical communications link between the host and the players at home.  It encapsulates all knowledge about the packet switching network protocols, modem control, message formats, and so on.  Depending on the host system underlying it, it may be a single process that mediates between <b>N</b> players and the <em>Message Switcher</em> or it may be a collection of (identical) processes each of which talks to a single player.  In either case, its function is to handle the receipt and buffering of messages from the player to the host and the buffering and then transmission of messages back to the player.  Other than those portions of messages that relate to the transmission medium itself it does not deal in any way with the actual message contents.</p>
+<h2>Message Switcher</h2>
+<p>The Message Switcher is responsible for routing messages between the various players and the host and between one player and another.</p>
+<p>One of the Message Switcher&#x27;s duties is handling messages from the players to the host itself.  The barrage of messages coming from many sources is processed into a single serial input stream directed at the <em>Transaction Monitor</em>.  The Message Switcher tags these incoming messages with an indication of their player of origin before passing them along.  The Transaction Monitor in turn generates a single serial output stream of similarly tagged messages back to the players.  The Message Switcher must route these messages to the appropriate output handler(s) (e.g., the Communications Channel Controller process assigned to a particular player).</p>
+<p>Aside from handling the player identification tags, the Message Switcher ordinarily does not meddle with nor examine the contents of messages. However, it does have the capacity to recognize messages that are directed from one player to another.  Rather than burdening the Transaction Monitor with the chore of taking these messages apart only to have to put them back together again and send them back out, it simply passes them directly to their destinations without further processing by the host.  Such messages are, of course, checked for conformance with the player-to-player message protocols, but the contents of the messages themselves are not dealt with in any way.</p>
+<h2>Transaction Monitor</h2>
+<p>The Transaction Monitor unpacks messages from the players into <em>transactions</em>.  Each transaction is a request from a player&#x27;s home system for the host to perform some action or provide some information.  Each such request boils down to a call to <em>Looi</em>.</p>
+<p>The Transaction Monitor decodes incoming messages, generates the appropriate calls to Looi, assembles the result into a response message (if one is required) and then ships this response back out to the player via the Message Switcher.  It will undoubtedly have to perform some error checking on the incoming request stream, but this must be minimal because of the time-critical nature of transaction processing.</p>
+<p>The Transaction Monitor also receives requests from the <em>Asynchronous Notifier</em>.  These are similar to ordinary requests from players, except that they originate within the system and therefore do not have to be unpacked as messages nor checked for certain types of errors.  The responses to requests generated by the Asynchronous Notifier are generally directed to particular players rather than back to the points of origin.  The Transaction Monitor must keep this straight.</p>
+<h2>Asynchronous Notifier</h2>
+<p>The Asynchronous Notifier is the means by which the actions triggered by a request from a player can in turn propagate further actions that result in messages being sent out to other players.  The idea is that the code handling the behavior of some object can issue requests on the behalf of individual players.  These players then receive the responses to these requests even thought they never issued anything themselves.  This is how players are informed of asynchronous events; that is, events that effect them but which they did not initiate.</p>
+<p>The Asynchronous Notifier is called by routines invoked under Looi.  It simply queues up the requests and holds them until the Transaction Monitor is ready to process them.  The requests are fed to the Transaction Monitor in first-in, first-out order in between its handling of actual messages from players.</p>
+<h2>Looi</h2>
+<p>Looi is the <b>MicroCosm</b> <b>L</b>ow <b>O</b>verhead <b>O</b>bject <b>I</b>nterpreter.  It is described in gory detail in the companion document <b>Looi</b>.  In essence, Looi is a remote-procedure-call interface to an object oriented database.  Each incoming request contains the identifier of the object to which the request is directed, a number indicating the action or information being requested, and additional request dependent information handled as “arguments” that are internally significant to the code Looi invokes to actually handle the request.  Each call to Looi yields a result that the Transaction Monitor deals with appropriately.  Some times this result is interpreted as “all is well but don&#x27;t bother to respond”, in which case the Transaction Monitor does nothing but go on to the next request.</p>
+<h2>Database</h2>
+<p>The <b>MicroCosm</b> world model is object oriented.  This means that everything in the universe is represented as an object of one sort or another. The Database itself is the collection of information that describes these objects.  Each object consists of four components: the <em>object state</em>, the <em>host behavior code</em>, the <em>home behavior code</em>, and the <em>imagery</em>.</p>
+<p>The imagery and the home behavior code are significant only to the home systems.  The imagery is the set of pictures used to display the object on the player&#x27;s computer screen.  The home behavior code is the software that runs in the player&#x27;s home computer to simulate the object&#x27;s actions.  The host simply acts as a central repository for these, providing them for home systems&#x27; use on demand.</p>
+<p>The host behavior code is the software that runs in the host to execute the object&#x27;s actions.  It is coded in Noodl and invoked by Looi.  Please refer to the documents <b>Noodl</b> and <b>Looi</b> for details.</p>
+<p>An object&#x27;s imagery, home behavior code and host behavior code are collectively called its <em>object description</em>.  Each object in the world belongs to a <em>class</em> of objects that are functionally equivalent.  A group of objects of the same class can share a common object description, since it is the same for each object in the group.</p>
+<p>In contrast to the object description, an object&#x27;s state is unique to the individual object.  The object state is simply a series of bytes (how many depends on the class of object) that describes the particulars of an object as distinguished from other objects of the same type.  This includes such things as location and owner as well as things that are entirely dependent on the nature of the object.  The interpretation of the various bytes of the object state information is internal to the host behavior code.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/hostarch.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

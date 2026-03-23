@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimal Object Set - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/minobs.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Minimal Object Set</h1>
+<p class="author">by the basic set of objects from which the MicroCosm fantasy world is built</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document # 16</p>
+<h2>Introduction</h2>
+<p>This document describes the basic set of objects from which the <b>MicroCosm</b> fantasy world is constructed.  In addition to functional objects which the players manipulate, this set also includes scenic objects and objects which are solely internal to the simulation.  It is the constitution of this object set which defines the fantasy.</p>
+<h2>Standard Actions</h2>
+<p>In the object descriptions which follow, the following phrases are used to describe standard actions for object behaviors.  These standard actions are provided because the objects share a common underlying world model and there is much redundancy in the user interface.  Standard actions provide consistency.</p>
+<p><em>Broadcast</em> — typed text message is to be broadcast to everyone in the region.</p>
+<p><em>Cease</em> — cease any ongoing activities if possible.</p>
+<p><em>Depends</em> — the action to be taken depends on the contents of the avatar&#x27;s hand(s).  In other words, the action becomes a <code>Reversed Do</code> on the object in the avatar&#x27;s hand(s) instead of a <code>Do</code> on the object pointed at.</p>
+<p><em>Go if necessary</em> — if not already at the object&#x27;s location, go there.</p>
+<p><em>Go and drop</em> — go if necessary.  Deposit any item(s) in the avatar&#x27;s hand(s) at that the object&#x27;s location.</p>
+<p><em>Go and get</em> — go if necessary.  Pick the object up and put it in the avatar&#x27;s hand(s), if that is possible.</p>
+<p><em>Go and fill</em> — go if necessary.  If carrying a potential water container, fill the container from the object.</p>
+<p><em>Goto</em> — walk to the object&#x27;s location if it is possible to do so.</p>
+<p><em>No effect</em> — nothing happens as a result of doing this.</p>
+<p><em>Throw</em> — throw the object at the indicated spot.</p>
+<p><em>Wear</em> — if wearing, no effect.  Otherwise, go if necessary, put on.</p>
+<p><em>Wear or unpocket</em> — if wearing, remove item(s) from pockets. Otherwise, go if necessary, put on.</p>
+<p><em>Remove</em> — if wearing, take off.  Otherwise, go and drop.</p>
+<h2>Miscellaneous Comments</h2>
+<h2>Day and Night</h2>
+<p>In the world we have a concept of day and night.  Time passes.  The time of day is determined by the host, and probably follows a fast clock (e.g., six hour days instead of 24).  When it is night, it is dark throughout the world (though if the world is cylindrical we might want to implement actual time zones with moving dark and light areas).  Darkness is indicated by setting the color map so all the colors are dark and contrast is poor.  Various means of artificial illumination can light up a region as if it were daytime.  Dark and light is determined on a whole-region basis.</p>
+<h2>Containers</h2>
+<p>Many objects are <em>containers</em>.  That is, they can carry or hold some number of other objects.  Each container has a list of its <em>contents</em> as one of its properties.  The most important characteristic of a container, from a functional standpoint, is that when you move a container from one location to another you also automatically move all of its contents.</p>
+<p>All containers have a notion of whether they are <em>open</em> or <em>closed</em>. Some containers can be opened or closed on command, while others are just permanently open.  The distinction is that a closed container is a black box: all that you see is the container itself and you have no information about its contents.  The contents of an open container, on the other hand, are visible to any observer.</p>
+<p>Some objects are obviously containers, such as boxes or backpacks.  However, there are other objects which are containers of a more subtle type.  For example, avatars are containers of the permanently open variety.  Anything that an avatar is wearing or carrying is said to be contained by the avatar object.  This means that whenever the avatar walks around or teleports to another region, his clothing and possessions go with him.</p>
+<p>Performing a <code>Get</code> action on some kinds of containers while you are holding them activates a menu display mechanism that lets you select from and examine the contents.  This typically happens with containers whose screen images are too small to allow any plausible display of the contents without “zooming in” for a close-up look.  The screen is replaced with a stylized view of the container&#x27;s contents: a grid of icons each representing one item. These icons are simply the canonical images that would be used to display the objects were they not inside the container.  You can then further select items or return to the main display using a <code>Put</code> action.</p>
+<h2>Transportation</h2>
+<p>The <b>MicroCosm</b> transportation system is what allows an avatar to get from place to place in the wide, wide world.  There are basically four ways of getting around: walking, driving a vehicle, using the teleport booth network, or taking the bus.  Except for walking, these all hinge on objects of one sort or another to work.</p>
+<p>Teleport booths, from the player&#x27;s point of view, are actually the simplest way to get around.  You just drop a coin in the slot, dial a number and <em>*poof*</em>, there you are.  It&#x27;s just like making a phone call (though more expensive).  Use of the teleport system does presume that you know the teleport number of your destination.  We will need some sort of mechanism to distribute this information (a guidebook, perhaps).</p>
+<p>Vehicles are a special class of container objects.  When an avatar is seated in the driver&#x27;s seat of a vehicle, the motion control commands that would ordinarily direct walking now direct the movement of the vehicle (and all its contents).</p>
+<p>Busses are implemented as a kind of region whose connectivity with the rest of the world varies with time in an orderly way.  Thus, you enter the bus region from a bus stop region, spend some time aboard the bus, then get off someplace else.  To use the bus you have to pay bus fare, so the bus interior region contains a fare box object.  You have to drop money in the fare box or you will be left behind when the bus leaves.</p>
+<h2>Communications</h2>
+<p>There are several ways of communicating with other players and with the system operators.  These include broadcast and point-to-point talking, the mail system, and the telephone system.  There is an analogy to the transportation systems in that all but the most elementary communications system (talking) require one or more objects to make them work.  Several different kinds of objects are used to implement the communications facilities.  A variety of other kinds of objects add features and capabilities to the basic systems for the convenience of the player.</p>
+<p>The mail system uses the paper, pencil and mailbox objects.  Messages are written on pieces of paper using a pencil (and need not be mailed, actually, but can be left around as notes or stored away for future reference, just like real paper).  Each player has a mail address.  You address a message to a player and then drop it in a mailbox — either a public mail drop box or your personal household mailbox.  Mail arrives for you in your personal household mailbox, from which you extract pieces of paper whose contents you can read.</p>
+<p>The telephone system is much more sophisticated.  The basic object is the telephone.  There are two types of phones: home phones and pay phones.  Each phone has a phone number, which you use to connect to it from another phone. Phones in <b>MicroCosm</b> work pretty much like they do in the real world. You pick up a phone, dial somebody&#x27;s phone number, the phone rings at the other end and if they are home they answer and then you talk to each other. Everyone has a home phone on their turf which they can use free of charge. Pay phones are scattered throughout the world and may be used by anyone with a token.  Embellishments include portable phones, which work like home phones except that you can carry them around with you; answering machines, which answer the phone when you are not home, deliver a message from you and collect a response; and beepers, which let you know when somebody is trying to call you.</p>
+<h2>Addressing</h2>
+<p>From the above discussion you should realize that, as in the real world, there are a number of parallel, partially redundant addressing schemes for referring to people and places in the world:</p>
+<ul class="bullet">
+<li>Physical coordinates (region number + <code>(x,y)</code> within region)</li>
+<li>Residence address (region of your turf)</li>
+<li>Mail address</li>
+<li>Phone number</li>
+<li>Teleport number</li>
+<li>Name</li>
+</ul>
+<p>Oddly, the only one of these whose function is unclear is the player&#x27;s name.</p>
+<h2>The Objects</h2>
+<h2>Pseudo-Objects</h2>
+<p>These are present because the player interface requires them but they are not really objects.</p>
+<p><b>ground</b></p>
+<p>The basic background below the horizon.</p>
+<p>Can be walked on.  Can be pointed at, returning a location.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Absolute blank, single color background from bottom of graphics window up to the horizon line.  Drawn by background rendering initialization routines.</p>
+<p><code>color</code>, <code>horizon</code></p>
+<p><b>sky</b></p>
+<p>The basic background above the horizon.</p>
+<p>Can be pointed at, returning a location.</p>
+<p>Depends.</p>
+<p>No effect.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>No effect.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Blue from top of graphics window to the scenic horizon.  Scenic background color from scenic horizon down to the true horizon.  Scenic background horizon line is a jaggy line procedurally determined from the terrain type.  Drawn by the background rendering initialization routines.</p>
+<p><code>color</code></p>
+<h2>Scenic Objects</h2>
+<p>These are always part of the background.</p>
+<h3>Inert Scenic Objects</h3>
+<p>These just sit there, though they may modify the effect or behavior of other objects.</p>
+<p><b>bridge</b></p>
+<p>Your basic small foot or highway bridge.</p>
+<p>Provides pathway across water.</p>
+<p>Depends.</p>
+<p>Go to part of bridge indicated.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Two static images: side view and end view.</p>
+<p><code>orientation</code></p>
+<p><b>bush</b></p>
+<p>Your basic bushy plant.</p>
+<p>Scenic element.  Obstruction.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Single static image.  Variations possible.</p>
+<p><code>bush-type</code></p>
+<p><b>fence</b></p>
+<p>A section of an impassable, man-made barrier.</p>
+<p>Linear obstruction.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Two static images, side view and end view, of fence section.  Variations possible (picket fence, wooden fence, chain-link fence, barbed wire fence, brick wall, stone wall, etc.).</p>
+<p><code>path</code>, <code>fence-type</code></p>
+<p><b>plant</b></p>
+<p>Your basic generic plant.</p>
+<p>Scenic element.  Obstruction.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Uproot plant and get it into two hands, if possible.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Single static image.  Variations possible.</p>
+<p><code>size</code>, <code>plant-type</code></p>
+<p><b>pond</b></p>
+<p>A small (within the region) body of water.</p>
+<p>Water source.  Water obstruction.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and fill.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Pond image on ground, rendered during background processing.</p>
+<p><code>coverage</code></p>
+<p><b>river</b></p>
+<p>Body of water flowing through a region.</p>
+<p>Water source.  Linear water obstruction.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and fill.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>River image on ground, rendered during background processing.</p>
+<p><code>path</code></p>
+<p><b>sidewalk</b></p>
+<p>Your basic suburban sidewalk.</p>
+<p>Scenic element.  Can be walked on (keeps feet off the lawn!).</p>
+<p>Depends.</p>
+<p>Go to nearest part of sidewalk if not already on it.  Once on, follow along it to point designated.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Sidewalk image on ground, rendered during background processing.</p>
+<p><code>path</code></p>
+<p><b>street</b></p>
+<p>Your basic roadway.</p>
+<p>Can be walked on.  Carries ground vehicles.</p>
+<p>Depends</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Road image on ground, rendered during background processing.</p>
+<p><code>path</code></p>
+<p><b>tree</b></p>
+<p>Your basic tree.</p>
+<p>Scenic element.  Obstruction.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Single static image.  Variations possible.</p>
+<p><code>tree-type</code></p>
+<h3>Functional Scenic Objects</h3>
+<p>These can actually do something.</p>
+<p><b>atm</b></p>
+<p><b>A</b>utomatic <b>T</b>oken <b>M</b>achine.</p>
+<p>Dispenses tokens.</p>
+<p>Causes machine to tell you how many tokens are in your bank account.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Takes 50 tokens or your entire balance, whichever is less, from your account and puts them in your avatar&#x27;s hand.</p>
+<p>Go if necessary.  If item in hand is tokens, these are deposited in your account and disappear from hand, otherwise item is dropped in front of machine.</p>
+<p>Broadcast</p>
+<p>None.</p>
+<p>Single static image of machine.  Sound effect of money being withdrawn.  Sound effect of money being deposited.</p>
+<p>We may wish to add some sort of dialogue that lets you select the amount you wish to withdraw.</p>
+<p><b>fare box</b></p>
+<p>Mass transit fare collection box.</p>
+<p>Controls access to the bus system.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go if necessary.  If item in hand is a token, drop in fare box, otherwise drop at foot of box.</p>
+<p>Broadcast.</p>
+<p>The fare box is found in regions which represent the interior of busses.  If you drop a token in the fare box you will be carried with the bus when it moves, otherwise you will be left behind.</p>
+<p>Single static image of fare box.  Sound of coin dropping in box.</p>
+<p><b>fountain</b></p>
+<p>Generic looking tacky town square fountain.</p>
+<p>Scenic element.  Water source.  Oracle.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and fill.</p>
+<p>Go and drop.</p>
+<p>Typed text message is sent to host as a question for the oracle.  Also broadcast.</p>
+<p>The oracle answers questions, makes predictions, and generally does all of the things that oracles are supposed to do.  However, it is, by tradition, subtle and not completely reliable.  Sometimes it answers your questions immediately. Sometimes it even carries on a conversation with you.  Most of the time though, it takes quite a while to get an answer:  you have to come back several days later.  Occasionally it says things spontaneously.  Such things are usually important.  Anyone in the region with the oracle can hear what it says.</p>
+<p>Single static image of fountain.  Possible animation of water spurting up.</p>
+<p>Of course, the minds behind the oracle are our own.  Somebody has to respond, but the nature of the oracle business is such that a response need not be timely, nor need all questions be answered.</p>
+<p><b>gate</b></p>
+<p>A gate in a fence or wall.</p>
+<p>Provides a way to put a passageway through a fence.</p>
+<p>If adjacent, open if closed (only openable if gate is unlocked or if avatar has the key), close if open.  Otherwise, depends.</p>
+<p>If adjacent, go through (opening and closing as needed), otherwise goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Two state image: open gate and closed gate.  Variations possible due to fence/wall type.</p>
+<p><code>open-or-closed</code>, <code>gate-type</code>, <code>locked-or-unlocked</code>, <code>key</code></p>
+<p><b>mailbox</b></p>
+<p>A conventional household roadside mailbox.</p>
+<p>Interface to mail system.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go if necessary.  If there is mail for you, it is taken out of the mailbox and placed in your avatar&#x27;s hand.  Note that only the mailbox&#x27;s owner can take mail out of it.</p>
+<p>Go if necessary.  If your avatar is carrying a letter (i.e., a piece of paper with and address and a message on it) it is taken from your avatar&#x27;s hand and mailed away.  If you are carrying anything else, it is dropped in front of the mailbox.</p>
+<p>Broadcast.</p>
+<p>Mailbox has a little red flag on it that is up if mail is waiting and down otherwise.</p>
+<p>Two state image of mailbox (flag up and flag down).</p>
+<p><code>mail-arrived</code></p>
+<p>A variant object would be a standard post-office style letter drop-box (like the one outside Z Building along Bellam), which would, of course, be a send-only device.</p>
+<p><b>phone booth</b></p>
+<p>The traditional walk-in phone booth with real-live working pay phone (which are getting rarer and rarer these days).</p>
+<p>Interface to the telephone system for avatars away from home.</p>
+<p>If in booth, hang up phone if not already hung up.  Deactivates phone.  Answer if ringing.  Otherwise, depends.</p>
+<p>If not adjacent to the phone booth, go to it.  If adjacent, enter it.  If inside, exit it.</p>
+<p>Cease.</p>
+<p>Go if necessary.  Answer the phone if it is ringing, otherwise do nothing.</p>
+<p>Go if necessary.  If avatar has a token in hand, activate the phone, otherwise drop whatever is in hand next to the phone booth.</p>
+<p>If the phone is activated (by dropping a token in it), interpret text as a phone call: first text message is phone number, further messages are conversation with the person at the other end.  When you enter the number, the phone dials.  If there is an answer, you can talk.  If not, you get your token back (into avatar&#x27;s hand) and the phone is deactivated.  If the phone is not activated, broadcast.</p>
+<p>The pay phone in the booth may be called from other phones.  When this happens it rings.  If you answer it you are connected to the other caller.</p>
+<p>Single static image of phone booth.  Sound of phone in booth ringing.  Sound of phone ringing at other end of phone line.  Busy signal sound.  Dial tone. Dialing sounds (touch tones).  Click when somebody answers.</p>
+<p><code>phone-number</code></p>
+<p><b>rock</b></p>
+<p>Your basic rock.</p>
+<p>Scenic element.  If small can be picked up, thrown.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and pick up. (If not too heavy).</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Static image of rock.  Possible variations depending on the size of the rock. Sound of rock hitting something.</p>
+<p><code>weight</code></p>
+<p><b>streetlamp</b></p>
+<p>Conventional streetlamp.</p>
+<p>Scenic element.  Provides light at night.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>If it is night time, the region in which the streetlamp is found will be illuminated as if it were daytime.</p>
+<p>Single static image of streetlamp.  Possible stylistic variations (modern, old-fashioned, etc.).</p>
+<h2>Structural Objects</h2>
+<p>These are used to create buildings and other structures.</p>
+<h3>Component Structural Objects</h3>
+<p>These are the building blocks.</p>
+<p><b>door</b></p>
+<p>The conventional door.</p>
+<p>Graphic element in buildings.  Passageway through wall.</p>
+<p>If adjacent, open if closed (only openable if door is unlocked or if avatar has key), close if open.  Otherwise depends.</p>
+<p>If adjacent, go through (opening and closing as needed), otherwise goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Two state image: open door and closed door.  Variations possible due to style.</p>
+<p><code>open-or-closed</code>, <code>door-type</code>, <code>locked-or-unlocked</code>, <code>key</code></p>
+<p><b>roof</b></p>
+<p>The roof of a building.</p>
+<p>Graphic element in buildings.</p>
+<p>Depends.</p>
+<p>No effect.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>No effect.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Roof image, rendered by background processor.</p>
+<p><code>dimensions</code>, <code>roof-type</code>, <code>color</code></p>
+<p><b>wall</b></p>
+<p>An interior or exterior wall section.</p>
+<p>Graphic element in buildings.  Obstruction.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Wall image, rendered by background processor.</p>
+<p><code>color</code>, <code>dimensions</code></p>
+<p><b>window</b></p>
+<p>A conventional house window.</p>
+<p>Graphic element in buildings.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Single static image.  Variations possible due to window style.</p>
+<p><code>window-type</code></p>
+<h3>Composite Structural Objects</h3>
+<p>These are what hold the components together.</p>
+<p><b>building</b></p>
+<p>Any sort of building.</p>
+<p>A “glue” object to organize building parts into a single entity.</p>
+<p>Not a selectable object on the screen.</p>
+<p>None.</p>
+<p>The sum of its parts.</p>
+<p><code>roof</code>, <code>walls</code>, <code>doors</code>, <code>windows</code></p>
+<p>This is a higher-level data structure that organizes all of the building components into a single unit for reference purposes.  It provides a base location for all the pieces and an organizing framework.</p>
+<h2>Furniture Objects</h2>
+<p>These are things found usually, but not always, <em>inside</em> buildings.</p>
+<p><b>bed</b></p>
+<p>An ordinary bed.</p>
+<p>Can be laid upon (for lower energy expenditure?)</p>
+<p>If adjacent, lay down.  If laying down, get up.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Three static images: side view, foot view and head view.  Stylistic variations possible.</p>
+<p><code>orientation</code>, <code>bed-type</code></p>
+<p><b>chair</b></p>
+<p>An ordinary chair.</p>
+<p>Can be sat in (for lower energy expenditure?)</p>
+<p>If adjacent, sit (if not occupied already).  If sitting, stand.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Three static images: side view, front view, back view.  Stylistic variations possible.</p>
+<p><code>orientation</code>, <code>chair-type</code></p>
+<p><b>chest</b></p>
+<p>A chest of drawers.</p>
+<p>Can hold stuff.</p>
+<p>If adjacent and open, close.  If adjacent and closed, open.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go if necessary.  If open, pick up contents (menu).  If closed, no effect.</p>
+<p>Go if necessary. If open, put contents of hands in drawers (if fits).  If closed, drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Two state image: open and closed chest.</p>
+<p><code>open-or-closed</code>, <code>contents</code></p>
+<p><b>couch</b></p>
+<p>Your basic living room couch.</p>
+<p>Like chair, but can be sat in by multiple avatars.</p>
+<p>If adjacent and standing sit (if not full).  If sitting, stand.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Three static images: side view, front view, back view.  Possible stylistic variations.</p>
+<p><code>orientation</code>, <code>couch-type</code>, <code>inhabitants</code></p>
+<p><b>countertop</b></p>
+<p>Store counter.</p>
+<p>Can support things.  Mediates transactions.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Objects placed on the counter behave differently.  If you place an object on the counter, you can pick it up again.  However, if somebody else places an object on the counter, you can only pick it up if you already have an item of your own on the counter.  After you have picked up the other person&#x27;s item, the ownership of the two items reverses.</p>
+<p>Single static image of counter.</p>
+<p><code>contents</code></p>
+<p><b>display case</b></p>
+<p>Store display case.</p>
+<p>Can hold things visibly but safely, even if unattended.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>If you put an item in (or on) a display case, only you can pick it up again. Nobody else can.</p>
+<p>Single static image of display case.</p>
+<p><code>contents</code></p>
+<p><b>floor lamp</b></p>
+<p>A household floor lamp.</p>
+<p>Provides light at night.</p>
+<p>If adjacent and lamp is off, turn it on.  If adjacent and lamp is on, turn it off.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>If it is night time and the lamp is turned on, the region in which the lamp is located will be illuminated as if it were daytime.</p>
+<p>Single static image of floor lamp.</p>
+<p><code>on-or-off</code></p>
+<p><b>garbage can</b></p>
+<p>Conventional garbage can or wastebasket.</p>
+<p>Makes things disappear.</p>
+<p>If adjacent, make contents of garbage can disappear (permanently).  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go if necessary.  Pick up contents of garbage can if there are any (menu).</p>
+<p>Go if necessary.  Put contents of hands into garbage can (if will fit).</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Single static image of garbage can.  Possible stylistic variations (garbage can, wastebasket).</p>
+<p><code>contents</code>, <code>garbage-can-type</code></p>
+<p><b>hot tub</b></p>
+<p>A touch of Marin.</p>
+<p>A place to hang out.</p>
+<p>If adjacent and not in tub, climb in (if it&#x27;s not full).  If in, climb out. Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Single static image of hot tub.</p>
+<p><code>inhabitants</code></p>
+<p><b>sign/billboard/painting</b></p>
+<p>A picture to display.</p>
+<p>Displays artwork or text on wall or in space.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go if necessary.  Grab the item, if it is small enough.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>A single static image of a rectangular frame.  Size is parameterized.  Filled in with contents which is an image that is part of the object state.</p>
+<p><code>size</code>, <code>picture</code></p>
+<p>Due to the large overhead associated with such objects, we will guarantee that no picture will ever change.  Rather, if a change is necessary a new picture will be substituted.  This allows us to download the image once and save it, and then use it over time without worrying if it has changed when we were not looking.</p>
+<p><b>table</b></p>
+<p>A common table.</p>
+<p>Can support things (hold them off the floor).</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>A single static image of a table.  Possible stylistic variations.</p>
+<p><code>contents</code>, <code>table-type</code></p>
+<h2>Implement Objects</h2>
+<p>These are small, often handheld, things that can be manipulated to do something.</p>
+<p><b>answering machine</b></p>
+<p>A telephone answering machine.</p>
+<p>Handle your phone calls when you&#x27;re not at home.</p>
+<p>If adjacent, plays back the next un-played-back message.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Typed text message becomes new answer message on machine.</p>
+<p>The answering machine functions when it is placed at the same location as a private phone (i.e., not a pay phone).  Whenever someone calls that phone, if it is not answered after the fourth ring the answering machine goes to work.  The caller is sent the message that you have provided on the machine, and then has the opportunity to enter a response.  The answering machine has a light on it that goes on whenever there are messages waiting.</p>
+<p>Two state image: machine with light off and machine with light on.</p>
+<p><code>waiting-messages</code>, <code>answer-message</code></p>
+<p><b>beeper</b></p>
+<p>One of those annoying little devices that disrupts movie theaters.</p>
+<p>Alerts you that messages are awaiting.</p>
+<p>If you are holding it and it is beeping, it shuts up; if it is not beeping, no effect.  Otherwise depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>No effect.</p>
+<p>If a phone call arrives at your home phone when you are not there, and you are carrying the beeper, it beeps until you either shut it up, go home and answer the phone, or the caller hangs up.</p>
+<p>Single static image of beeper.  Sound of beeper beeping.</p>
+<p><code>beeping</code></p>
+<p><b>book/newspaper/map</b></p>
+<p>A readable document.</p>
+<p>Displays text or artwork on paper.</p>
+<p>If holding document, read it: fill graphics window with contents of document. If already reading it, stop.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>If holding, start reading.  Otherwise, go and get.</p>
+<p>If reading, stop reading.  Otherwise, go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Single static image of document.  Stylistic variations due to document type (book, magazine, newspaper, flyer, etc.).  Text or picture display of contents of document.</p>
+<p><code>reading</code>, <code>text</code>, <code>picture</code></p>
+<p>Due to the large overhead associated with such objects, we will guarantee that no document will ever change.  Rather, if a change is necessary a new document will be substituted.  This allows us to download the text or image once and save it, and then use it over time without worrying if it has changed when we were not looking.</p>
+<p><b>bottle</b></p>
+<p>A glass bottle.</p>
+<p>Holds water, other liquids.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Go if necessary.  Pour the contents of the bottle on the indicated spot.</p>
+<p>None.</p>
+<p>Two state image: bottle empty and bottle full.</p>
+<p><code>contents</code>, <code>capacity</code></p>
+<p><b>credit card</b></p>
+<p>Your basic plastic money.</p>
+<p>Can be used at participating businesses to pay for purchases.  Don&#x27;t leave home without it.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Purchase the indicated object with your card.  If the indicated object is for sale and you have enought money in your bank account, then the indicated object becomes yours and the asking price for the object is deducted from your balance.</p>
+<p>None.</p>
+<p>Single static image of card.</p>
+<p><b>compass</b></p>
+<p>Your basic pointer to the West Pole.</p>
+<p>Tells absolute direction.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>The image chosen to display the compass in any given region reflects the orientation of that region&#x27;s viewpoint with respect to true west.  The compass appears as an arrow pointing towards whichever edge of the region is west.</p>
+<p>Four state image of compass with arrow: pointing left, pointing right, pointing towards viewpoint, pointing away from viewpoint.</p>
+<p><code>orientation</code></p>
+<p>This may not be needed.</p>
+<p><b>die</b></p>
+<p>A six-sided die.</p>
+<p>For gambling, games.</p>
+<p>If holding the die, roll it.  It is thrown to the ground and displayed in a new state.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>6-state image showing the various possible die rolls.</p>
+<p><code>state</code></p>
+<p>This probably won&#x27;t work.</p>
+<p><b>escape device</b></p>
+<p>Your basic panic button.</p>
+<p>Gets you out of a jam, fast.</p>
+<p>If holding the device, teleport your and your possessions back to your home turf.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of device.  Sound effect when device is activated.</p>
+<p>Very rare and expensive.</p>
+<p><b>flashlight</b></p>
+<p>Your basic hand torch.</p>
+<p>Portable light source at night.</p>
+<p>If holding, turn on if off, off if on.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>If it is night time and the flashlight is turned on, the region will be illuminated as if it were daytime.</p>
+<p>Single static image of flashlight.</p>
+<p><code>on-or-off</code></p>
+<p>We may wish to consider requiring batteries.</p>
+<p><b>gemstone</b></p>
+<p>Like a rock, only worth more.</p>
+<p>Valuable.  May contain magic.</p>
+<p>If magic, activate magical function.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of gemstone.  Stylistic variations possible due to stone type.</p>
+<p><code>magic</code>, <code>gemstone-type</code></p>
+<p>Magical function may vary.  Set of magical functions needs thought.</p>
+<p><b>handcuffs</b></p>
+<p>Police-style wrist-or-ankle-cuffs.</p>
+<p>Restrain another avatar&#x27;s hands or feet.</p>
+<p>If adjacent, unlock cuffs (if you have the key).  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>If restrained by them, no effect.  Otherwise, go and get.</p>
+<p>If restrained by them, no effect.  Otherwise, go and drop.</p>
+<p>Broadcast.</p>
+<p>If restrained by them, no effect.  If adjacent to object and object is an avatar, bind the specified site (wrists or angles) with the cuffs.  Otherwise, throw.</p>
+<p>When wrists are restrained by cuffs, certain <b>do</b> actions are not possible.  When ankles are restrained, walking is not possible.</p>
+<p>Single static image of cuffs.  Sound of cuffs clicking shut, clanking open.</p>
+<p><code>binding</code>, <code>key</code></p>
+<p>The effect of wrist restraint needs further thought.</p>
+<p><b>key</b></p>
+<p>An unpickable lock key.</p>
+<p>Opens locked doors, handcuffs.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>If object is lock for which this key fits, unlock or lock the lock.  If object is lock for which key does not fit, no effect.  Otherwise, throw.</p>
+<p>None.</p>
+<p>Single static image of key.  Sound of key turning in lock.</p>
+<p><code>lock</code></p>
+<p><b>knick knack</b></p>
+<p>Your basic gewgaw.</p>
+<p>Scenic element.  Possibly magical.</p>
+<p>If magic, activate magical function.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of knick-knack.  Stylistic variations possible.</p>
+<p><code>magic</code>, <code>knick-knack-type</code></p>
+<p>Set of gewgaws needs thought.</p>
+<p><b>paper</b></p>
+<p>A piece of paper.</p>
+<p>Can be written upon and then retrieved.</p>
+<p>If holding, read.  If reading, hold.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>If holding paper and also holding pencil, text message typed is written onto paper for future reference.  Otherwise, no effect.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of piece of paper.  Large format display of text on page.</p>
+<p><code>text</code></p>
+<p>Any piece of paper whose text begins “to <em>name</em>” can be sent as a mail message.</p>
+<p><b>pencil</b></p>
+<p>Your basic pencil.</p>
+<p>Writes on paper.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>If holding both pencil and piece of paper, text message entered is written onto the paper.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of pencil.</p>
+<p>It&#x27;s a magic pencil: it never needs sharpening.</p>
+<p><b>property changer</b></p>
+<p>Miscellaneous gadget.</p>
+<p>Changes some property of another object or avatar.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Activate property changing function against target object.</p>
+<p>None.</p>
+<p>Single static image of gadget.  Stylistic variations possible.  Sound of gadget working.</p>
+<p><code>effect</code>, <code>property-changer-type</code></p>
+<p>The set of possible property changes needs lots of thought.</p>
+<p><b>security device</b></p>
+<p>Another miscellaneous gadget.</p>
+<p>Provides a way to make a region safe from intrusion.</p>
+<p>If device is in hand, turn it off if it&#x27;s on, or on if it&#x27;s off.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>When device is on, an indicator light is lit.  When the device is activated no one else can enter the region it is in.</p>
+<p>Two-state image of device: on and off.  Also, sound when it is turned on or off.</p>
+<p><code>on-or-off</code></p>
+<p>Only works in selected regions (like hotel rooms).</p>
+<p><b>sensor</b></p>
+<p>Another miscellaneous gadget.</p>
+<p>Tells some property of a region, object or avatar.</p>
+<p>If sensor is in hand, turn it off if it&#x27;s on, or on if it&#x27;s off.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Direct attention of sensor towards target object.</p>
+<p>While sensor is on, it periodically changes its sound or appearance according to what it is sensing.</p>
+<p>Multi-state image of sensor: sensor off, sensor on but not sensing anything, sensor sensing something, etc.  Also, sound of detector in action.</p>
+<p><code>sensor-type</code>, <code>detects</code></p>
+<p>The set of things that sensors sense needs further thought.</p>
+<p><b>telephone</b></p>
+<p>The household telephone.</p>
+<p>Remote communications with other players on-line.</p>
+<p>If adjacent, hang up if not already hung up, answer if ringing.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go if necessary.  Answer the phone if it is ringing, otherwise get.</p>
+<p>Hang up if holding and not hung up.  Otherwise, go and drop.</p>
+<p>If adjacent, interpret text as a phone call: first text message is phone number, further messages are conversation with the person at the other end. When you enter the number, the phone dials.  If there is an answer, you can talk.  If not adjacent, broadcast.</p>
+<p>Throw.</p>
+<p>The phone may be called from other phones.  When this happens it rings.  If you answer it you are connected to the other caller.</p>
+<p>Single static image of phone.  Sound of phone ringing.  Sound of phone ringing at other end of phone line.  Busy signal sound.</p>
+<p><code>phone-number</code></p>
+<p><b>towel</b></p>
+<p>Your basic towel.</p>
+<p>Necessary for every traveler.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of towel.</p>
+<p>Everyone knows that this is the single most useful object you can have.</p>
+<p><b>walkie-talkie</b></p>
+<p>A radio telephone.</p>
+<p>Like a telephone, but portable.</p>
+<p>If adjacent, hang up if not already hung up, answer if ringing.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go if necessary.  Answer if it is ringing, otherwise get.</p>
+<p>Hang up if holding and not hung up.  Otherwise, go and drop.</p>
+<p>If holding, interpret text as a phone call: first text message is phone number, further messages are conversation with the person at the other end. When you enter the number, it is dialed.  If there is an answer, you can talk.  If not holding, broadcast.</p>
+<p>Throw.</p>
+<p>The walkie-talkie may be called from other phones.  When this happens it rings.  If you answer it you are connected to the other caller.</p>
+<p>Single static image of walkie-talkie.  Sound of phone ringing.  Sound of phone ringing at other end of phone line.  Busy signal sound.</p>
+<p><code>phone-number</code></p>
+<h2>Substance Objects</h2>
+<p>These are things which are reckoned in terms of their quantity.</p>
+<p><b>drugs</b></p>
+<p>Little pills.</p>
+<p>Temporarily changes an avatar&#x27;s properties.</p>
+<p>If holding, take one of the pills.  Drug immediately effects relevant property.  Otherwise depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>When quantity reaches zero, it&#x27;s all gone and disappears.</p>
+<p>Single static image of pill.</p>
+<p><code>count</code>, <code>effect</code></p>
+<p>The set of possible effects needs thought.</p>
+<p><b>tokens</b></p>
+<p>Filthy lucre.</p>
+<p>Money in the MicroCosm.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.  Possible menu interaction to determine quantity given.</p>
+<p>None.</p>
+<p>Single static image of a coin.  On one side it says <em>Good For One Fare</em>. On the other side it says <em>Fiat Lucre</em>.  Sound of coins jingling.</p>
+<p><code>quantity</code></p>
+<p>Handling of varying of quantities of loose change needs further thought.</p>
+<p><b>water</b></p>
+<p>You know what water is.</p>
+<p>A useful fluid.</p>
+<p>Must be in a container.  Manipulated indirectly.</p>
+<p>None.</p>
+<p>None.</p>
+<p><code>quantity</code></p>
+<p>What good is it?</p>
+<hr>
+<h2>Clothing Objects</h2>
+<p>Clothing makes the avatar, as they say.</p>
+<p><b>diving suit(?)</b></p>
+<p>Wetsuit and scuba gear.</p>
+<p>Lets an avatar travel through water.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>If an avatar is wearing this, he can travel as if walking through ponds and rivers.</p>
+<p>Single static image of suit in a heap.  Additional avatar animation frames showing avatar in suit.</p>
+<p>Is this really a good idea?</p>
+<p><b>hat</b></p>
+<p>Your basic hat.</p>
+<p>Decorative.  Helps distinguish one avatar from another.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of hat.  Possible stylistic variations.  Additional avatar animation frames of hat on head.</p>
+<p><code>hat-type</code></p>
+<p><b>jacket</b></p>
+<p>Your basic jacket.</p>
+<p>Decorative.  Helps distinguish one avatar from another.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear or unpocket.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of jacket in heap.  Additional avatar animation frames of torso wearing jacket.</p>
+<p><code>contents</code>, <code>capacity</code></p>
+<p><b>pants</b></p>
+<p>A pair of pants.</p>
+<p>Decorative.  Helps distinguish one avatar from another.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear or unpocket.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of pants in heap.  Additional avatar animation frames of legs wearing pants.  Possible stylistic variations.</p>
+<p><code>pants-type</code>, <code>contents</code>, <code>capacity</code></p>
+<p><b>shirt</b></p>
+<p>Your basic shirt.</p>
+<p>Decorative.  Helps distinguish one avatar from another.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of shirt in heap.  Additional avatar animation frames of torso wearing shirt.  Possible stylistic variations.</p>
+<p><code>shirt-type</code></p>
+<p><b>shoes</b></p>
+<p>A pair of shoes.</p>
+<p>Decorative.  Helps distinguish one avatar from another.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of shoes.  Additional avatar animation frames of feet wearing shoes.  Possible stylistic variations.</p>
+<p><code>shoe-type</code></p>
+<p><b>skirt</b></p>
+<p>Your basic skirt.</p>
+<p>Decorative.  Helps distinguish one avatar from another.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear or unpocket.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of skirt in heap.  Additional avatar animation frames of legs wearing skirt.  Possible stylistic variations.</p>
+<p><code>skirt-type</code>, <code>contents</code>, <code>capacity</code></p>
+<p><b>swim suit</b></p>
+<p>Swim trunks.</p>
+<p>Decorative.  Helps distinguish one avatar from another.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of swim suit in heap.  Additional avatar animation frames of legs wearing swim suit.</p>
+<h2>Container Objects</h2>
+<p>These are objects which can hold other objects.</p>
+<p><b>backpack</b></p>
+<p>Your basic backpack.</p>
+<p>Can carry multiple items without use of hands to hold them all.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Wear or unpocket.</p>
+<p>Remove.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static frame of lone backpack.  Possible additional animation frames of pack on torso of avatar.</p>
+<p><code>contents</code>, <code>capacity</code></p>
+<p><b>bag</b></p>
+<p>The sack.</p>
+<p>Can carry multiple items using only one hand.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>If holding, get stuff out of it.  Otherwise, go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Two state image of bag: full and empty.</p>
+<p><code>contents</code>, <code>capacity</code></p>
+<p><b>box</b></p>
+<p>Your basic box.</p>
+<p>Can carry more than two items using only two hands.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>If holding, get stuff out of it.  Otherwise, go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Two state image of box: full and empty.  Possible stylistic variations (cardboard box, wooden crate, treasure chest).</p>
+<p><code>contents</code>, <code>capacity</code></p>
+<p>We may want to consider making boxes open/close -able.</p>
+<p><b>cage</b></p>
+<p>A cage with bars and everything.</p>
+<p>Can contain an avatar (and hold him against his will).</p>
+<p>If adjacent or inside, unlock cage (if you have the key).  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>None.</p>
+<p>Two state image of cage: open (unlocked) and closed (locked).</p>
+<p><code>locked</code>, <code>contents</code></p>
+<h2>Weapon Objects</h2>
+<p>These are things which can adversely effect other avatars and objects.</p>
+<p><b>club</b></p>
+<p>The most basic weapon.</p>
+<p>Pain and injury at close range.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>If the target is adjacent, hit it with the club.  Otherwise, no effect.</p>
+<p>None.</p>
+<p>Single static image of club.</p>
+<p>We need to consider what the damage effects will be.</p>
+<p><b>grenade</b></p>
+<p>A little bomb that goes boom.</p>
+<p>Death and mayhem tossed into another region.</p>
+<p>If holding, pulls pin on grenade.  Several seconds later it will explode. Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.  Grenade can be tossed into an adjoining region.</p>
+<p>If the pin is pulled, the timer is set.  The timer counts down each second. When it reaches zero the grenade explodes, doing damage to avatars and objects in the region it exploded in.</p>
+<p>Two state image of grenade: static state and pin pulled.  Animation of explosion.  Sound of pin being pulled.  Sound of explosion.</p>
+<p><code>timer</code>, <code>pin-pulled</code></p>
+<p>We need to consider what the damage effects will be.  We need to think about how you indicate that you wish to toss it into another region.</p>
+<p><b>gun</b></p>
+<p>A pistol.</p>
+<p>Death and destruction from a distance.</p>
+<p>If holding, toggles safety switch.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Shoot at designated object.  In order to shoot, the safety must be off.</p>
+<p>None.</p>
+<p>Two state image: static gun and gun shooting.  Sound of shot.</p>
+<p><code>safety-setting</code></p>
+<p>We need to consider what the damage effects will be.  We should decide if requiring ammunition would be a good idea.</p>
+<p><b>knife</b></p>
+<p>Sharp pointy thing.</p>
+<p>Death and injury at close range.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>If the target is adjacent, stab it with the knife.  Otherwise, no effect.</p>
+<p>None.</p>
+<p>Single static image of knife.</p>
+<p>We need to consider what the damage effects will be.</p>
+<h2>Vehicle Objects</h2>
+<p>These take things from place to place.</p>
+<p><b>boat</b></p>
+<p>A nice little runabout.</p>
+<p>Carries avatars and their possessions across water.</p>
+<p>Depends.</p>
+<p>If adjacent, get in.  Otherwise, goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>The boat can travel across water.  An avatar operates it by sitting at the controls and then executing movement commands as if he were walking.</p>
+<p>Three static images of boat: side view, front view, back view.  Sound of boat driving.</p>
+<p><code>contents</code>, <code>capacity</code>, <code>speed</code></p>
+<p><b>bus</b></p>
+<p>Mass transit.</p>
+<p>Carries many avatars and their possessions along roads.</p>
+<p>A bus is just a special kind of region.  It is not a selectable object on the screen.</p>
+<p>A bus is a special region whose connection to other regions changes with time. Busses follow predetermined paths.  You board a bus by entering its region when it is at an adjacent bus stop.  You get off by leaving its region when it is stopped.  It costs money to ride the bus.  Bus fare is collected by a fare box object — each bus region contains one.</p>
+<p>Background image of bus from the outside.  Background image of the bus from the inside.  These are rendered by the background processor.</p>
+<p><code>route</code></p>
+<p>A mechanism for collecting the fare is still needed.</p>
+<p><b>car</b></p>
+<p>The great American automobile.</p>
+<p>Carries avatars and their possessions along roads.</p>
+<p>If adjacent to the car or inside it, opens the car door if it is closed or closes it if it is open.  Otherwise, depends.</p>
+<p>If adjacent and door is open, get in.  If inside and door is open, get out. Otherwise, goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>The car can travel along roads (only).  An avatar operates it by sitting in the driver&#x27;s seat and then executing movement commands as if he were walking.</p>
+<p>Three static images of car: side view, front view, back view.  Sound of car driving.</p>
+<p><code>contents</code>, <code>capacity</code>, <code>speed</code></p>
+<p><b>teleport booth</b></p>
+<p>Like a phone booth, but it carries all of you instead of just your voice.</p>
+<p>Zaps avatars and their possessions elsewhere instantaneously.</p>
+<p>Depends.</p>
+<p>If not adjacent to the booth, go to it.  If adjacent, enter it.  If inside, exit it.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go if necessary.  If avatar has a token in hand, activate the teleporter, otherwise drop whatever is in hand next to the phone booth.</p>
+<p>If the teleporter is activated (by dropping a token in it), interpret text as a teleport booth number, and teleport the avatar and everything he is carrying to the teleport booth dialed.  If the other teleport booth already has an avatar in it, you get a busy signal and then you get your token back (into avatar&#x27;s hand) and the booth is deactivated.  If the booth is not activated, broadcast.</p>
+<p>The booth may be called from other booths.  When this happens an avatar materializes from someplace else, unless the booth is occupied already.</p>
+<p>Single static image of teleport booth.  Sound of busy signal.  Sound of yourself zapping from one place to another.  Sound of somebody else zapping in from elsewhere.</p>
+<p><code>booth-number</code></p>
+<p><b>truck</b></p>
+<p>A big truck.</p>
+<p>Carries lots of objects along roads.</p>
+<p>Depends.</p>
+<p>If adjacent, get in.  If inside, get out.  Otherwise, goto.</p>
+<p>Cease.</p>
+<p>No effect.</p>
+<p>Go into truck and drop.</p>
+<p>Broadcast.</p>
+<p>The truck can travel along roads (only).  An avatar operates it by sitting in the driver&#x27;s seat and then executing movement commands as if he were walking.</p>
+<p>Three static images of truck: side view, front view, back view.  Sound of truck driving.</p>
+<p><code>contents</code>, <code>capacity</code>, <code>speed</code></p>
+<hr>
+<h2>Magical Objects</h2>
+<p>These can do any number of things...</p>
+<p><b>amulet</b></p>
+<p>A hang-around-the neck type amulet.</p>
+<p>Generic magic talisman.</p>
+<p>If holding or wearing, activate magical function, if there is one.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of amulet.  Stylistic variations possible.</p>
+<p><code>effect</code>, <code>amulet-type</code></p>
+<p>Magical functions need to be more carefully considered.</p>
+<p><b>instant object pill</b></p>
+<p>A little pill, until you use it.</p>
+<p>Add water, it turns into some object.</p>
+<p>Depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>If you pour water on it, it turns into something else.</p>
+<p>Single static image of pill.  Sound of metamorphosis.</p>
+<p><code>instant-what</code></p>
+<p><b>magic lamp</b></p>
+<p>Just like Aladdin had...</p>
+<p>Rub it and a genie appears to grant a wish.</p>
+<p>A genie appears to grant you a wish.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of lamp.  Sound of genie appearing.</p>
+<p>Need to define a genie object!  Genie himself works like the oracle.</p>
+<p><b>magic staff</b></p>
+<p>A stick about as tall as an avatar.</p>
+<p>Generic magic talisman.</p>
+<p>If holding, activate magical function, if there is one.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>If target is adjacent, hit with staff, unless magical function is projectile in nature, in which case activate the magical function.</p>
+<p>None.</p>
+<p>Single static image of staff.  Sound of staff operating.</p>
+<p><code>effect</code>, <code>staff-type</code></p>
+<p>Magical functions need to be figured out.</p>
+<p><b>magic wand</b></p>
+<p>Just like your fairy godmother has.</p>
+<p>Generic magic talisman.</p>
+<p>If holding, activate magical function, if there is one.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>Go and get.</p>
+<p>Go and drop.</p>
+<p>Broadcast.</p>
+<p>If target is adjacent, hit with wand, unless magical function is projectile in nature, in which case activate the magical function.</p>
+<p>None.</p>
+<p>Single static image of wand.  Sound of wand operating.</p>
+<p><code>effect</code>, <code>wand-type</code></p>
+<p>Need to think out magical functions.</p>
+<p><b>ring</b></p>
+<p>Your basic magic ring.</p>
+<p>Generic magic talisman.</p>
+<p>If wearing, activate magical function, if there is one.  Otherwise, depends.</p>
+<p>Goto.</p>
+<p>Cease.</p>
+<p>If not wearing, put it on.  Otherwise, go and get.</p>
+<p>If wearing, take it off.  Otherwise, go and drop.</p>
+<p>Broadcast.</p>
+<p>Throw.</p>
+<p>None.</p>
+<p>Single static image of ring.  Sound of ring operating (maybe).</p>
+<p><code>effect</code>, <code>ring-type</code></p>
+<p>Magical functions need more definition.</p>
+<h2>Avatar Objects</h2>
+<p>These are the people themselves.</p>
+<p><b>avatar</b></p>
+<p>You or somebody else.</p>
+<p>The animated figure.</p>
+<p>If adjacent, strike the avatar with your fists.  If self, ??. Otherwise, depends.</p>
+<p>If self, change posture: standing, sitting, or lying.  Otherwise, goto.</p>
+<p>Cease.</p>
+<p>If not self, go if necessary and receive an object from the other avatar.  If self, ??.</p>
+<p>If not self, go if necessary and give whatever is in your avatar&#x27;s hands to the other avatar.  If self ??.</p>
+<p>If not self, text message is sent to other avatar as a person-to-person message.  If self ??.</p>
+<p>None.</p>
+<p>Complex set of animation images expressing a wide range of motions and actions.</p>
+<p><code>position</code>, <code>orientation</code>, <code>weight</code>, <code>health</code></p>
+<p>There are undoubtedly lots of properties not touched on here.  What to various actions taken with respect to one&#x27;s self mean?  We need to define the animation very rigorously.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/minobs.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

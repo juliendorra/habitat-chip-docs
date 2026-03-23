@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report November - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/reportNovember.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Report December 5, 1985</h1>
+<p class="author">by “Because we thought you&#x27;d want to know”</p>
+<p class="institution">Chip Morningstar, Lucasfilm Ltd. Games Division</p>
+<h2>Introduction</h2>
+<p>This is the first in a series of monthly reports detailing the progress on the <b>MicroCosm</b> project at Lucasfilm.  This report describes events and achievements during the month of November, 1985.</p>
+<h2>People In The News</h2>
+<p>Aric Wilmunder joined the project full-time on Monday, November 4.  Randy Farmer joined the project full-time on Monday, November 18.  Both immediately started working on 6502 software for the project.</p>
+<p>In addition to Aric, Randy and myself, we have enlisted the aid of two other Lucasfilm Games Division members, Charlie Kellner and Kevin Furry, who are involved with other projects inside the Games Division.  By getting them to write some of their software in a fashion that is more general than would be required for their projects alone, we obtain some of the components for MicroCosm without having to write them ourselves.  Right now, Charlie is working on animation and graphics software.  Kevin is developing a flexible, high-performance Commodore 64 disk I/O package.  Both of these sets of software will be very useful to us.  Part of our strategy for meeting the ambitious development schedule we have planned is to build on top of the efforts of other projects in the Division when appropriate.</p>
+<p>Gary Winnick is the Games Division&#x27;s primary artist and animator in residence. Gary will be working on the animation and imagery for the avatars and for many of the other objects that will be found in the world.</p>
+<h2>Work In Progress/Tasks Accomplished</h2>
+<p>I have finished the full set of system design documents save one, the description of the basic object set (the design of which is not yet complete). I have also set up a semi-automated system to manage the various documentation revisions as they occur and to keep track of who has what versions of what documents.</p>
+<p>Design of the fantasy world itself is proceeding apace.  On Thursday, November 21, we had a meeting of most of the Division design staff to discuss the MicroCosm fantasy and the proper constitution of the basic object set. Numerous good ideas, clever suggestions and potential pitfalls were identified.  These will be incorporated into the eventual design.  We have a preliminary list of objects for the basic object set now, but this list needs to be refined to bring it into line with our design goals and within reach of implementation.</p>
+<p>The Lucasfilm Animation Cel Editor (ACE) is an interactive tool we previously developed for creating images and animation for our cel animation driver (it was used to create the creature animation used in <em>The Eidolon</em>). However, ACE is fairly primitive and difficult to use as such things go. Since we will be creating a large volume of animation and imagery in this project, we have decided that it will be expedient to substantially update and improve the editor.  Aric is therefor working on what we are tentatively naming GRACE (Gary&#x27;s Revised Animation Cel Editor — Gary being the primary user for whom the tool is being tailored).  GRACE will allow us to produce a large amount of imagery in as short a time as possible.  As of the end of November, this work is approximately 2/3 completed.</p>
+<p>Concurrently with the work on the cel editor, we are proceeding with work on the animation driver itself.  As of the end of November, Charlie has completed the high speed cel painter routines, which are the heart of the animation driver.  This is a completely new system, different from the one used in <em>The Eidolon</em>.  In addition to being faster it allows cels to be enlarged or shrunk by a scale factor as they are painted on the screen.  This will allow figures to change size as their distance from the viewpoint changes.  It will also enable avatar customization in the form of alterations to the size and relative proportions of the various body parts.</p>
+<p>Randy has begun work on various components of the user interface, including routines to handle the text-balloon display, the keyboard, text buffering and editing, the joystick and the sprites (sprites will be used for the cursor and for the pointer that connects a text-balloon to a speaking avatar).  This work is proceeding well, with the text-balloon display functions already operational.</p>
+<h2>Tasks For December</h2>
+<p>During December we plan to finish GRACE, the animation driver, and at least the lowest level routines of the user interface.  In addition we intend to get started on the communications routines linking the Commodore 64 with the host system.  Further design and documentation work on the basic object set and the fantasy world itself will also be high priority.</p>
+<p>We are on target for our December 15 milestones.  We expect to deliver as planned.</p>
+<h2>Quantum Comments</h2>
+<p>We are still awaiting the Commodore 64 communications routines from Quantum. These will be required before we can proceed with work on the MicroCosm communications software.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/reportNovember.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

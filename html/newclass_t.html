@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adding New Object Classes - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/newclass.t" style="font-size:0.85em;">View source</a></div>
+<h1>How to add new classes</h1>
+<h3>How to add new classes</h3>
+<pre>    This document describes everything you need to do to add a new class.  We</pre>
+<p>assume that you have the object designed and know how to program the C64 and host behaviors to make it do what it&#x27;s supposed to do.  This is simply a guide to the various things that need to be updated to incorporate a new class.</p>
+<p>General:</p>
+<pre>    1) Pick a name for the new class.  This should be short and pithy but</pre>
+<p>descriptive.  For purposes of the examples below, we will use the name &quot;foo&quot;</p>
+<pre>    2) Pick a class number for the new class.  Of course, this should not</pre>
+<p>belong to any existing class of object.  We try to assign class numbers sequentially, but due to the deletion of certain classes as the project has evolved, there are some &quot;holes&quot; in the number space.  We are now filling these holes up.  We follow a general rule that classes 0-127 are for portable objects or ones which are irremovable features of the universe, while classes 128-255 are non-portable objects that are potentially unique to the initial Habitat world.  Unfortunately, this rule has not been applied with absolute rigor; nevertheless, try to follow it anyway.  For purposes of the examples below, we will use the number 47.  DO NOT USE THIS NUMBER YOURSELF.</p>
+<p>C64:</p>
+<pre>    3) Create artwork for the new object.  This is usually a matter of bugging</pre>
+<p>Gary until he does it.  The imagery should go in files in the directory &quot;/u0/habitat/Beta/Images&quot;.  These files should have names like &quot;foo0.bin&quot;, &quot;foo1.bin&quot;, etc.</p>
+<pre>    4) Program any new behaviors that the new class may require (classes can</pre>
+<p>usually be created using existing action code for most behaviors).  The new behavior code should be placed directory &quot;/u0/habitat/Beta/Actions&quot;.  Each new action that an object supports will probably require two routines, one for the synchronous case and one for the asynchronous case.  The synchronous cases should go in files with names of the form &quot;class_verb.m&quot; (&quot;class_verb.bin&quot; for the binary).  For example, &quot;foo_do.m&quot; or &quot;foo_get.m&quot; would be the DO and GET behaviors for class foo.  The asynchronous cases should go in files with names of the form &quot;class_ACTION.m&quot;.  For example, &quot;foo_ADUMBRATE&quot; would be the asynchronous ADUMBRATE behavior for class foo.</p>
+<pre>    4a) Update the Makefile in &quot;/u0/habitat/Beta/Actions&quot; to incorporate the</pre>
+<p>new behaviors.</p>
+<pre>    5) Create any new sound effects that the new class may require (usually we</pre>
+<p>can use sound effects that we already have, but sometimes new ones are needed).  This is usually a matter of negotiating with Chris.  The sounds go in &quot;/u0/habitat/Beta/Sounds&quot;.  There can be several files for any given sound effect.  All sounds have a sound file.  The source is in a file named &quot;sound.sob&quot; and the binary is in &quot;sound.bin&quot;.  For example, &quot;loud_crunch.sob&quot; and &quot;loud_crunch.bin&quot;.  Some complex sounds also have pulse width data associated with them, with source in &quot;sound.spb&quot; and binary in &quot;sound.pwbin&quot;. For example, &quot;loud_crunch.spb&quot; and &quot;loud_crunch.pwbin&quot;.</p>
+<pre>    5a) Update the Makefile in &quot;/u0/habitat/Beta/Sounds&quot; to incorporate the</pre>
+<p>new sounds.</p>
+<p>Muddle:</p>
+<pre>    6) Add a new class entry in the main Muddle file.  This is currently the</pre>
+<p>file &quot;/net/moth/u0/habitat/Beta/beta.mud&quot;, though this will change to something new once the beta version is released.  The entry should look something like this:</p>
+<pre>	class class_foo 47 {
+		action	foo_do			/* do */
+		action	generic_throw		/* reversed do */
+		action	generic_goTo		/* go */
+		action	generic_cease		/* stop */
+		action	generic_goToAndGet	/* get */
+		action	generic_goToAndDropAt	/* put */
+		action	generic_broadcast	/* talk */
+		action	generic_destroy		/* destroy */
+		action  foo_ADUMBRATE		/* 8 */
+		image	foo_image_0
+		image	foo_image_1
+		sound	foo_operating
+		byte	16			/* Object instance length */
+		byte	 8			/* Initialization count */
+		byte	 0			/* Capacity */
+	}</pre>
+<p>These entries are in alphabetical order by class name.</p>
+<pre>    The capacity byte value should be the number of objects that objects of</pre>
+<p>this class can contain.  If the new class is not a container, this number should be 0.</p>
+<pre>    The initialization count value should be the number of bytes of state data</pre>
+<p>that the host will send to the C64.  This number should be 6 plus the number of class-specific state variables that objects of this class possess.  In the above example, foo objects have 2 special state variables, so this value is 8.</p>
+<pre>    The object instance length value should be the number of bytes that need</pre>
+<p>to be allocated for instances of this class.  This number should be 8 plus the initialization count value plus the capacity value.  For objects that have no special state variables and are not containers (a common case), this value will be 14.  In our example, since we have 2 special state variables, our value is instead 16.</p>
+<pre>    7) Add new entries in the image, action and sound definition portions of</pre>
+<p>the Muddle file to define the new image, action and sound names used in the class entry.  For example, the above class entry would require the image entries:</p>
+<pre>	foo_image_0:		&quot;Images/foo0.bin&quot;
+	foo_image_1:		&quot;Images/foo1.bin&quot;</pre>
+<p>the action entries:</p>
+<pre>	foo_do:			&quot;Actions/foo_do.bin&quot;
+	foo_ADUMBRATE:		&quot;Actions/foo_ADUMBRATE.bin&quot;</pre>
+<p>and the sound entry:</p>
+<pre>	foo_operating:		&quot;Sounds/loud_crunch.bin&quot;</pre>
+<p>Tools:</p>
+<pre>    8) Write a Ghu define statement for the class.  Assuming that objects of</pre>
+<p>class foo have two state variables, &#x27;zapcount&#x27; and &#x27;adumbracity&#x27;, it would look like this:</p>
+<pre>	define 47 &#x27;foo&#x27;
+	  zapcount:    bin15
+	  adumbracity: bin15
+	enddefine</pre>
+<p>This should be placed in the definition file, &quot;/u0/habitat/defines.ghu&quot;, and typed at Ghu on the host.</p>
+<p>Host code:</p>
+<pre>    9) Add an entry to the class numbers definition file.  This file is in</pre>
+<p>the work directory, &quot;#d010&gt;lucas&gt;microcosm&quot; which can be reached via the command &quot;work&quot;.  The file is named &quot;defs_class.incl.pl1&quot;.  You need to add a line of the form:</p>
+<pre>	%replace CLASS_FOO by 47;</pre>
+<p>at the appropriate point in the alphabetical list of class names.</p>
+<pre>    10) Add an entry to the struct names definition file.  This file is also</pre>
+<p>in the work directory and is named &quot;defs_struct.incl.pl1&quot;.  You need to add a line of the form:</p>
+<pre>	%replace struct_foo by &#x27;Structs&gt;struct_foo.incl.pl1&#x27;;</pre>
+<p>to the alphabetical list of entries.</p>
+<pre>    11) Create a struct definition for the class in the &quot;Structs&quot; subdirectory</pre>
+<p>of the work directory.  This definition should thus be in &quot;Structs&gt;struct_foo.incl.pl1&quot;.  These struct definitions have a standard form, but we will not go into the details of that form here.  Usually one simply copies a similar class&#x27; struct definition and modifies it as needed.</p>
+<pre>    12) Create the class definition itself in the &quot;Classes&quot; subdirectory of</pre>
+<p>the work directory.  This definition should thus be in &quot;Classes&gt;class_foo.pl1&quot;.  These class definitions have a standard form, but we won&#x27;t go into the details of that form here.  However, the class definition file should define the procedure &quot;initialize_class_foo&quot; as well as any special behavior routines that the class needs.  This file can be compiled from the work directory with the Stratus command &quot;pl1 Classes&gt;class_foo&quot; or (alternatively) &quot;plc foo&quot;.  The resulting object file should be moved into the &quot;Linkable&quot; subdirectory of the work directory.</p>
+<pre>    13) Change the entry for the class number in the list of entries declared</pre>
+<p>for the array of messages in &quot;Actions&gt;actions_help.pl1&quot;.  For non-existant class number (which this was before you created it) the entry in the help array will be &#x27;-&#x27;.  If the class uses &quot;generic_HELP&quot; for its help text, the help text should be placed in this entry instead of the &quot;-&quot;.  If the class has its own help routine, the entry should be changed to &#x27;i&#x27;.</p>
+<p>Regionproc:</p>
+<pre>    14) In the bind directory, &quot;#d010&gt;quantum&gt;stratus&gt;source&gt;microcosm&quot; or</pre>
+<p>(alternatively) &quot;bindir&quot;, reachable via the Stratus command &quot;cdbind&quot;, add a line to the file &quot;class.externals.incl.pl1&quot; of the form:</p>
+<pre>	declare initialize_class_foo entry;</pre>
+<p>in the alphabetical list of such entries.</p>
+<pre>    15) Also in the bind directory, add a line to the regionproc itself, in</pre>
+<p>the file &quot;regionproc.pl1&quot;.  This line should have the form:</p>
+<pre>	call initialize_class_foo;</pre>
+<p>and should be placed in the list of other calls to initialize the other classes.</p>
+<pre>    16) In the bind directory once again, add an entry to the bind control</pre>
+<p>file, &quot;regionproc.bind&quot;, of the form:</p>
+<pre>	class_foo,</pre>
+<p>in the alphabetical list of class object modules.</p>
+<pre>    17) Recompile the regionproc from the bind directory with the Stratus</pre>
+<p>command &quot;pl1 regionproc -table&quot;.  You should then use one of three commands to rebind: &quot;rebind&quot; rebinds the regionproc with the new class included; &quot;redo&quot; rebinds and then moves the resulting executable program into the run directory; &quot;fixup&quot; rebinds, moves the executable program into the run directory, and reboots Habitat.  The latter is a little radical and should only be done when you know that you are not going to break somebody else&#x27;s running system by bouncing Habitat.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/newclass.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

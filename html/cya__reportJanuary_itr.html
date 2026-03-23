@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report January - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/reportJanuary.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Report February 7, 1986</h1>
+<p class="author">by “Because we thought you&#x27;d want to know”</p>
+<p class="institution">Chip Morningstar, Lucasfilm Ltd. Games Division</p>
+<h2>Introduction</h2>
+<p>This is the third in a series of monthly reports detailing the progress on the <b>MicroCosm</b> project at Lucasfilm.  This report describes events and achievements during the month of January, 1985.</p>
+<h2>Work In Progress/Tasks Accomplished</h2>
+<p>The Project Schedule calls for us to meet two deliverables for mid-January. These are 1) to provide a definition document describing the basic set of objects that will populate the MicroCosm Universe, and 2) to establish communications across the packet switching network between our Commodore 64-based prototype system and the QuantumLink host in Virginia.  These deliverables have been met, though communications were established two days late due to delays caused by minor, unrelated technical difficulties with Quantum&#x27;s Stratus system.</p>
+<p>Aric Wilmunder has finished the cel animation driver.  This is the piece of software which paints the various pieces of imagery on the screen for each frame to achieve the cartoon-like animation we are using.  He has also produced a number of other graphics primitives that will be used together with the cel animator to produce the complete graphics system.  These primitives include routines for generalized trapezoidal polygons, circles and ellipses, and text.  We anticipate that these will allow us to represent many of the objects&#x27; imagery with much greater flexibility and lower storage overhead than would be possible if we stored everything as bitmaps.</p>
+<p>Gary Winnick, our artist in residence, has started designing the imagery for the many different kinds of objects.  These are looking very nice indeed.</p>
+<p>Randy Farmer has finished the communications software.  Our prototype system now handles the complete <b>MicroCosm</b> object-message protocol at both 300 and 1200 baud.  It now awaits a host system with which to talk.  Having finished the communications processor, Randy has now begun work on the sound effects routines.  We are constructing a general purpose sound-effects driver together with a simple interactive sound-effects editor that we will use to actually create the sounds.  The sound-effects editor has tentatively been named “CHEESE”, which stands for “CHEESE Helps Everyone Edit Sound Effects”.</p>
+<p>Ron Gilbert, another member of the Lucasfilm Games Division, has started working on the project half-time.  He is developing the object-oriented database system that will handle memory and disk space management and the various critical data structures that hold the whole system together.  As of the end of the month, the specific data structures have been designed and documented.  He will now set about actually implementing the database.</p>
+<p>I have begun very detailed specification of the internal behavior of the entire object set.  This will be the first step in implementation of the objects themselves in both the host and Commodore 64 portions of the <b>MicroCosm</b> system.  As of the end of the month this work was about 25% complete.</p>
+<h2>Tasks For February</h2>
+<p>During February we plan to finish the first-draft graphics sub-system, complete the first batch of artwork for the object set, finish the sound-effects infrastructure and begin work on creation of the sound-effects themselves.  In addition we intend to finish formal definition of the behavior of all objects and begin actual implementation of the objects.  This includes finishing the database system inside of which the objects will reside.</p>
+<p>We are on target for our February 15 milestones.  We expect to deliver as planned.</p>
+<h2>Quantum Comments</h2>
+<p>The mid-January Deliverables Requirements call for Quantum to provide us with access to their development system for purposes of object-set installation. This has not happened.  However, we are not yet ready to make use of the Quantum system, so this has had no effect on the schedule.  We are presuming that such access can be made available on short notice as soon as we actually require it.</p>
+<p>We were hoping to see a preliminary host database processor working at the Quantum end of the network by mid-February, as called for in the development schedule.  However, we understand that this work was only started in the last few days of January, and that the person doing this work, Janet Hunter, will be on vacation for the first week of February.  We expect that we will not have a working host database handler by February 15.  The schedule should not be adversely affected by this if the delay is no more than two weeks (i.e., if the database processor is working before the end of February).  However, we would like to stay as much on schedule as possible during these early months. Please recognize that if the delay is longer, one of the March 15 deliverables, which calls for the Commodore 64 system to demonstrate object interaction in concert with the host, will also be delayed.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/cya/reportJanuary.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

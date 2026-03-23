@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOOI Spec - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/looi.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Looi™</h1>
+<p class="author">by a low-overhead object interpreter for MicroCosm, Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="doc-number">MicroCosm Document #2</p>
+<h2>INTRODUCTION</h2>
+<p>This document describes the design of <b>Looi</b>, the <b>L</b>ow <b>O</b>verhead <b>O</b>bject <b>I</b>nterpreter, which forms the heart of the <b>MicroCosm</b> host database system.  The purpose of this document is to try to get it all straight before we get bogged down in implementation.</p>
+<p>A note on notation: things in <em>italics</em> are new terms being introduced for the first time.  The italics mean, “Pay attention, this is a new term.  Don&#x27;t panic if you don&#x27;t quite understand it.  We are either just now explaining it or will explain it real soon.”  Things in <b>boldface</b> are proper names or symbolic identifiers for entities in the system.</p>
+<h2>OBJECTS</h2>
+<p>The host database is constructed out of <em>objects</em>.  Objects are simply things with <em>properties</em>.  Objects&#x27; behavior, use, and implementation are described below.</p>
+<h2>PROPERTIES</h2>
+<p>All objects have <em>properties</em>.  An object&#x27;s properties are simply a set of values that have meaning in the context of what sort of thing the object is supposed to be.  These values may be integers, booleans, pointers to other objects, or more complicated structures, such as bitmaps or lists of things.</p>
+<h2>NOIDS</h2>
+<p>Each object is referenced by a <em>noid</em>, which stands for <b>N</b>umeric <b>O</b>bject <b>ID</b>entifier.  Every object in existence has a unique noid. Noids are integers, but what precision integer remains undetermined.  The constraint is that we may never be able to re-use a noid because we have no way to ever garbage collect them once they make their way into the outside world (well, perhaps we&#x27;ll have a disintegrator object that causes other objects to cease existence, thus freeing their noids for re-use).  It may be that the best way to do this is to simply use a big number (64 bits maybe), though that&#x27;s hard on bandwidth.  Perhaps variable-length humbers are the way to go.  It doesn&#x27;t really matter, as long as they are 1) compact in representation, and 2) can point at a lot of objects.</p>
+<h2>PROPERTY VECTORS</h2>
+<p>The database uses an object&#x27;s noid to look up its <em>property vector</em>.  This is an array of variable length (the length depends on what sort of object it is) that contains the information about the current state of the object&#x27;s properties.  Each element in this array is either the immediate value of a property (if the property is a simple integer or boolean value) or a pointer to a more complicated structure containing the relevant data in all its parts. What these elements are, what they mean, and how they are interpreted is all up to the software that actually uses the object.</p>
+<h2>ESSENTIAL PROPERTIES</h2>
+<p>The length of an object&#x27;s property vector varies, depending upon the type of object it is.  However, at a minimum all objects have the <em>essential properties</em> which are so called because they are essential to the basic operation of the object system.  The first few entries in the property vector are the essential properties.  The property vector always contains at least these.  There are currently four essential properties, though this may change as the design evolves.  These four are <em>class</em>, <em>location</em>, <em>owner</em>, and <em>image</em>.</p>
+<h2>CLASS</h2>
+<p>An object&#x27;s <em>class</em> says what kind of object it is.  The <b>class</b> property contains a pointer to a <em>class descriptor</em>, which is a data structure describing objects of a given type.  In particular, this structure tells the number of properties that objects of the given type possess (i.e., how long the property vector is) and gives the object&#x27;s <em>capabilities</em>. The <b>class</b> property is so important that we may deem it necessary to encode an object&#x27;s class in the object&#x27;s noid, and thereby avoid one level of pointer chasing in <b>Looi</b>&#x27;s inner loop.</p>
+<h2>LOCATION</h2>
+<p>An object&#x27;s <em>location</em> says where in the world it is.  The <b>location</b> property contains a set of coordinates in the <b>MicroCosm</b> coordinate system.  See the document <b>MicroCosm Coordinate Systems and Topology</b>.</p>
+<h2>OWNER</h2>
+<p>An object&#x27;s <em>owner</em> is the player entitled to manipulate it.  The <b>owner</b> property contains a player account number.</p>
+<h2>IMAGE</h2>
+<p>An object&#x27;s <em>image</em> is the way it appears when displayed graphically on a player&#x27;s home computer.  The <b>image</b> property contains a pointer to an <em>image descriptor</em>, which is a data structure describing an image, set of images, or animation sequence, in a reasonably display-device-independent fashion.  See the document <b>MicroCosm Graphics</b>.</p>
+<h2>CAPABILITIES</h2>
+<p>An object may have <em>capabilities</em> which the player can exercise. Capabilities are things that the player can do with the object, such as move it, change its appearance, find out how much it weighs, etc.  Capabilities are the means by which the home computers interrogate and manipulate the contents of the host database.</p>
+<h2>CAPABILITY PROCEDURES</h2>
+<p>The active part of a capability — the code which computes things and actually alters the contents of the database — is implemented by a <em>capability procedure</em>.  This is a compiled procedure that runs on the host system.  It takes a number of parameters which depend on the action that it is implementing.  In any case it takes two parameters: the object whose capability is being exercised and the <em>capability number</em>.  Any additional parameters are supplied by the entity requesting exercise of the capability.</p>
+<h2>CAPABILITY REFERENCE</h2>
+<p>A capability is referenced by specifying an object&#x27;s noid together with a <em>capability number</em>.  The noid is used to look up the object&#x27;s property vector, from which is obtained the object&#x27;s class descriptor.  In the class descriptor is a pointer to a <em>capability vector</em>.  The capability number is then used as an index into this vector to retrieve a pointer to the capability procedure.  Depending on the architecture of the host processor, we may want to make the capability vector pointer the very first entry in the class descriptor, so that it will have a zero offset from the class descriptor address and thereby enable us to avoid adding the structure offset in the inner loop (in some processors we get this offset addition for free in the instruction operand fetch, so it won&#x27;t matter, but in some it does not).  The capability procedure is then invoked like any other procedure would be.  Such a procedure lookup-and-invocation action is called a <em>capability reference</em>.  The act of requesting a capability reference is called <em>exercising a capability</em>.</p>
+<h2>CAPABILITY PROCEDURE DEFINITION</h2>
+<p>Capability procedures are compiled in the native programming language of the host system.  For purposes of discussion, I am assuming that this is <b>C</b>, but any other reasonably structured language (<b>Pascal</b>, <b>PL/1</b>, <b>Ada</b>, <b>Lisp</b>, etc.) will serve equally well.  We will design a very simple specification language that we can implement (using <b>yacc</b> or a similar utility) as an equally simple <b>C</b> preprocessor that will let us lay out the object property vectors, class definitions and capability procedures in a tidy, compact form.  Of course, we have come up with a terribly clever name for this language: <b>Noodl</b>, <b>N</b>egligable <b>O</b>verhead <b>O</b>bject <b>D</b>efinition <b>L</b>anguage.  See the document also entitled <b>Noodl</b> for a complete description.</p>
+<h2>TRANSACTION STRUCTURE</h2>
+<p>The <b>MicroCosm</b> database access control structure is built around the concept of <em>transactions</em>.  A transaction is an “atomic” exchange between <b>Looi</b> and the <b>Transaction Monitor</b> (see the <b>MicroCosm</b> system architecture block diagram).  A transaction is basically a single capability reference.  The <b>Transaction Monitor</b> is continually receiving requests from all the various remotes that are hooked into the host system at any given time.  Its responsibility is to break these requests into individual transactions, serially feed these to <b>Looi</b>, and then route <b>Looi</b>&#x27;s responses back to the requesters.  The mechanism by which is does this is beyond the scope of this document.  See the companion document entitled <b>MicroCosm Host System Architecture</b> for details.  The fact that transactions are fed to <b>Looi</b> serially is very important.  The system never processes more than one operation on the database at a time.  This is the means by which we avoid complicated locking, unlocking, and process synchronization procedures.</p>
+<h2>MAIN CONTROL LOOP</h2>
+<p>The main control loop of <b>Looi</b> is therefore simply a procedure which accepts a stream of incoming requests that are packaged as capability references.  For each request, it looks up the appropriate capability procedure, calls it with the appropriate parameters, and returns whatever the capability procedure returned.  It also must handle certain error checking (e.g., capability number out of bounds, etc.) and error response functions.</p>
+<h2>RIPPLE TRANSACTIONS</h2>
+<p>One of the things that a capability procedure can do is request further host system activity in the form of additional transactions with the database. Such transactions are called <em>ripple transactions</em> from the obvious image of transactions spreading out from one another like ripples in a pond.  The most common use of ripple transactions is to cause players other than the one exercising a particular capability to be told about the result of the operation.  This is done by initiating “inquiry” transactions on behalf of the players to be informed.</p>
+<h2>THE ASYNCHRONOUS NOTIFIER</h2>
+<p>Ripple transactions are fed to the <b>Transaction Monitor</b> by the <b>Asynchronous Notifier</b> (again, refer to the <b>MicroCosm</b> system architecture block diagram).  It collects transactions being requested by capability procedures along with the identities of the players who should be notified of the results.  In essence, it acts like another player talking to the <b>Transaction Monitor</b>, except that the responses go to a destination different from the source of the input.  The detailed structure of the <b>Asynchronous Notifier</b> is described in the <b>MicroCosm Host System Architecture</b> document.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/looi.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

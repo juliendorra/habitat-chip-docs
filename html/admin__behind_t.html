@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Behind Schedule - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/admin/behind.t" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm deviations from expectation 5/14/86</h1>
+<p>MicroCosm deviations from expectation 5/14/86</p>
+<pre>	We had planned to be able to release a beta-testable version of the</pre>
+<p>system tomorrow.  Obviously we aren&#x27;t going to be able to do this.  We are behind schedule in two major areas:</p>
+<p>1) Testing/debugging the object behaviors -- The major impediment in this is the unexpected cumbersomeness and slowness of the testing cycle, due to the long distance between us and Quantum and the commmunications difficulties and coordination problems that result.  Certain components at the Quantum end are presently either unimplemented or only partially implemented, which makes testing our end of those components virtually impossible.  However, we presently have our hands full just testing the stuff that is already there. I am at a loss to explain why the testing process is quite so cumbersome and time consuming.  Part of it is due to having an unreliable system at the other end, part is due to communications difficulties, and part is imponderables.</p>
+<p>2) Setting up the beta-test world itself -- Four things must happen in order to do this: we have to set up the tools to allow us to define the world, Quantum has to set up the tools to take those definitions and turn them into actual database entries in their system, we must conceptualize the world and take our resulting design and generate the description files to create it, and finally, Quantum must take these files, process them, and install the resulting world elements in their system.  The first of these tasks (creation of world definition tools for us to use) is essentially complete, save some minor revisions in the output format that were requested by Janet Hunter yesterday.  The status of the second task (definition processor at the Quantum end) is unclear.  My conversations with Janet yield the impression that it has just been started in the past few days.  The third task (conceptualization of the world) is in the design and creative stage, but we have not yet had time to create the formal definitions.  The fourth task awaits the execution of the other tasks.</p>
+<p>We are attempting to get the following elements operational for release to Quantum on Monday (5/19):</p>
+<pre>	The avatar
+	Inert and scenic objects (trees, the ground, etc.)
+	Doors
+	Carryable objects (get/put/throw)
+	Containers
+	Weapons
+	Teleport devices (pending teleport-number lookup working in host)
+	Magical objects (with few if any magical functions in the host though)
+	Money
+	Clothing
+	various miscellaneous items
+	Beta-version manual.
+	Generate test universe regions using Riddle (pending operation of
+		Quantum database generator).</pre>
+<p>Meeting this deadline will be touch-and-go given the present testing bottlenecks.</p>
+<p>The following components of the Quantum system are currently in a state that is unknown due to the testing delays.  These components are required for the beta-release:</p>
+<pre>	Interim teleport number lookup facility.
+	Change-region operation.
+	Container handling.</pre>
+<p>The Quantum system is currently lacking the following components required for beta-release:</p>
+<pre>	Region database generator (to use output from Riddle).
+	Avatar creation mechanism (i.e., new-user setup stuff).</pre>
+<p>The following components are scheduled for implementation or testing by us in the interim between beta-release and CES:</p>
+<pre>	Additional regions.
+	Seat objects (chairs, couches, etc.).
+	Paper/Books.
+	Oracular interactions.
+	Additional misc. objects.
+	Generic house/building graphics generator.
+	Signs/text object graphics.
+	Sounds.</pre>
+<p>To do this we will require the following components on the Quantum end that are presently unimplemented:</p>
+<pre>	Paper/Book page database.
+	Proper teleport-number lookup database.
+	Oracle system (mechanism to connect system operators to oracles and
+		collect player inputs to oracles).</pre>
+<p>The following are scheduled for implementation or testing by us after CES:</p>
+<pre>	Mail system.
+	Telephone system.
+	Musical objects.
+	More misc. objects.
+	Add lots more regions.
+	Final sounds.
+	Beta-test initiated revisions.
+	Avatar customization and user setup utility.
+	Turf customization utility.
+	Creation of documents, adventures, treasures, quests, magic, and so
+		on to be inserted into the world.</pre>
+<p>To allow these Quantum will have to complete the following at their end:</p>
+<pre>	Mail system.
+	Telephone system.</pre>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/admin/behind.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

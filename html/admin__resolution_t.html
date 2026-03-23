@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Issue Resolution - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/admin/resolution.t" style="font-size:0.85em;">View source</a></div>
+<h1>This is my understanding of the resolution of various items per our</h1>
+<p>This is my understanding of the resolution of various items per our conversation with Quantum last Friday (7/25) and previous conversations with Janet:</p>
+<p>1. Generate the world -- We are forging ahead with design.  Quantum is still working on strategies for data file transfer.  Realms we are currently working on include (but are not limited to):</p>
+<pre>	Populopolis -- The first Avatar village.  Basically generated, needs
+	to be populated with necessary objects and things to do (and
+	Avatars!).</pre>
+<pre>	The Forest Road -- An enchanted pathway through the woods.  Consists
+	of branching path that goes off into the scenery, getting weirder the
+	farther away you travel.  Has a number of surprises embedded in it,
+	notably the False Oracle.  Currently mapped, and the control files for
+	Riddle are set up, but the regions themselves need to be generated.</pre>
+<pre>	D&#x27;nalsi Island -- This is Randy&#x27;s initial adventure.  Is designed and
+	mapped out, but needs to have its data generated.</pre>
+<pre>	The Back Forty -- A generic woods area of relatively little
+	complication.  It&#x27;s most notable feature is the Not-So-Wise Man&#x27;s
+	house, which is required for Randy&#x27;s adventure.  Exists as a map
+	presently.</pre>
+<pre>	The Really Quite Confusing Desert -- This is basically a maze puzzle
+	(it&#x27;s our homage to Crowther and Woods).  Currently just a map.</pre>
+<pre>	The Beach -- Simple social area.  Mapped.</pre>
+<pre>	The Ruins -- The remains of an abandoned city.  Lots of secret
+	passageways and mysterious twists and turns.  Intended as a setting
+	for treasure hunts and games of Assassin.  Currently a map.</pre>
+<p>2. Teleport network -- We have dispensed with personal teleporters as far as general use is concerned.  We still entertain the possibility of transmit-only personal teleporters, but they are not part of the present plan.  Teleport booths will have fixed locations with (up to) 20 character teleport &#x27;numbers&#x27;. Teleport &#x27;numbers&#x27; can be arbitrary alphanumeric strings, enabling them to be mnemonic.  We will add a feature so that you can look at a teleport booth and find out its &#x27;number&#x27;.</p>
+<p>3. Mail system -- Currently we are using Q-Link user id&#x27;s as names and mail addresses.  We have decided to defer the question of allowing Habitat mail get sent to outside (Q-Link) mailboxes via some special delivery mechanism, but everyone agrees that this is a design issue and does not pose any particular technical difficulties.  We are still dissatisfied with the decision to use Q-Link names as Avatar names, but will go along with it for the time being. We propose reconsideration of this question after beta-test is underway and we can collect some real data about how the world actually operates.  The host will add a tag to mail messages indicating the sender and the time of origin.</p>
+<p>4. Messenger -- We will implement something like the Q-Link on-line message system, addressing single-packet messages to remote users.  Recipients to be indicated by user name.  The host will add a tag identifying the sender before passing the message along to its recipient.</p>
+<p>5. Cursor flash -- The cursor will indicate (by flashing) when the command interface is locked out awaiting communications with the host.</p>
+<p>6. Identify avatar function -- We will install an identify-avatar function that will enable players to determine the identity of other players in their region.  For the sake of game play we are going to make identification be reciprocal.  Currently this will just give user name, but in the future may add other (user provided) information.  This also adds to our disgruntlement over the use of Q-Link names as Habitat names.  As mentioned above, we should reexamine this issue once beta testing has started.</p>
+<p>7. Q-3 upgrade -- Will do.</p>
+<p>8. Sex change device -- We will do.</p>
+<p>9. Version update -- We still need to clarify for Janet the mechanism by which we intend this to work.</p>
+<p>10. Sound effects -- Yes, there will be sound effects, likely in the Beta-1 release.</p>
+<p>11. Twiddle upgrade -- Quantum will do.</p>
+<p>12. Gr_state fix in host -- We will do.</p>
+<p>13. Oracle -- Quantum will do.  We need to provide more definition of the operator interface by Beta-1.</p>
+<p>14. New user signup -- We will create a new-user signup and customization dialog program on the C64 that will be run when a person logs in to the Habitat for the first time.  This will let the new user pick his sex, head, and other customization characteristics.  Currently the user will not be choosing his own name but will inherit a name from his Q-Link account. Quantum will implement the mechanism to assign the new user a turf, mailbox, and other wordly possessions off of a list of unassigned real estate.</p>
+<p>15. Chairs -- Will do.</p>
+<p>16. More heads -- We will aim to have 100 or more different possible avatar heads.  We are all agreed that more human-type heads are desirable.  Quantum feels only human-type heads are needed, we politely disagree.  The plan is that all avatars will arrive with default humanoid heads (and the players will initially be given a selection of humanoid heads to choose from) but other choices will be made available inside the world via shops, adventures and magic.</p>
+<p>17. Collision detect/adjacency check in host -- We will do.</p>
+<p>18. Bandwidth reduction -- Will do.</p>
+<p>19. Avatar death -- Avatars are to be reincarnated on their home turf, at a loss of any possessions they were carrying at the time of their demise and a &#x27;fee&#x27; charged by the Oracle for its trouble.</p>
+<p>20. Hole and shovel objects -- We will do.</p>
+<p>21. God -- The set of tools required for a god workstation on the host needs to be defined.</p>
+<p>22. Orientation in change region -- Will do.  Janet will install the &#x27;hook&#x27; to make this possible; we will take it from there.</p>
+<p>23. Improved patterns -- We will do.</p>
+<p>24. Region entry and exit daemons -- Will do.  Again, Janet will install the &#x27;hook&#x27; and we will use it.</p>
+<p>25. Capacity handling -- This is the most significant unresolved technical issue.  We decided to defer it for the time being and get together sometime soon to hammer out a solution.</p>
+<p>26. Hall of records -- We will have a book of records.  The Hall Of Records will be a place where a permanent copy of this book is kept and made publicly available.</p>
+<p>27. Region transition -- We are agreed that some sort of time-filling sequence is necessary.  We are currently working on an audio transition sequence as a first crack at the problem.</p>
+<p>28. Independent object motion -- We will do.</p>
+<p>29. Night and day -- We will do.</p>
+<p>30. Stun gun object -- We will do.</p>
+<p>31. Shouting -- Quantum will do.</p>
+<p>32. Region specific object sets -- We still need to define the protocol for using this feature, but there are no major stumbling blocks.</p>
+<p>33. Music -- We will be installing a music driver in the C64 system software. We will likely have title music during the initial program load time.  Other possibilities, such as jukeboxes, tape players and region transition music, need more discussion.</p>
+<p>34. Grenade timer -- Will do.</p>
+<p>35. Operations procedures -- This will developed as the result of what we learn during beta testing.</p>
+<p>36. Final manual -- We will provide an errata sheet for the present draft in time for beta release and a complete revised draft in time for final release.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/admin/resolution.t" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

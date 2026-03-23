@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistics Plan - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/stats.itr" style="font-size:0.85em;">View source</a></div>
+<h1>Hall of Records</h1>
+<p class="author">by Chip Morningstar</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<p class="date">March 20, 1987</p>
+<p class="doc-number">Habitat Document # 42</p>
+<h2>Introduction</h2>
+<p>This document is adapted from an earlier document about the Hall of Records (Habitat document #32).  While the earlier document described the records to be kept in the Hall of Records, this one describes the manner in which they are to be kept: the text accompanying each in the Book of Records and the method of computing each from the information in the various databases.</p>
+<h2>The Records</h2>
+<p>These are the records which we have defined so far.  In each category we will list the 10 top (or bottom, depending on the nature of the record) Avatars.</p>
+<h2>Wealthiest</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	WEALTHIEST: The 10 Avatars with the
+	largest bank accounts today.
+
+	 1. nnnnnnnnnn $aaaaaaaaaa
+	 2. nnnnnnnnnn $aaaaaaaaaa
+	...
+	 9. nnnnnnnnnn $aaaaaaaaaa
+	10. nnnnnnnnnn $aaaaaaaaaa
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>aaaaaaaaaa</code> is the amount of money (in tokens).</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>avatar.bank_account_balance</code>, take top 10.</p>
+<h2>All-Time Wealthiest</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	ALL-TIME WEALTHIEST: The 10 largest bank
+	account balances ever achieved.
+
+	 1. nnnnnnnnnn $aaaaaaaaaa
+	 2. nnnnnnnnnn $aaaaaaaaaa
+	...
+	 9. nnnnnnnnnn $aaaaaaaaaa
+	10. nnnnnnnnnn $aaaaaaaaaa
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>aaaaaaaaaa</code> is the amount of money (in tokens).</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$max_wealth</code>, take top 10.</p>
+<h2>Longest Lived</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	LONGEST LIVED: The 10 oldest Avatars
+	today.
+
+	 1. nnnnnnnnnn lll days
+	 2. nnnnnnnnnn lll days
+	...
+	 9. nnnnnnnnnn lll days
+	10. nnnnnnnnnn lll days
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>lll</code> is the avatar&#x27;s age (in days).</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$lifetime</code>, take top 10.</p>
+<h2>All-Time Longest Lived</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	ALL-TIME LONGEST LIVED: The 10 oldest
+	Avatars that ever were.
+
+	 1. nnnnnnnnnn lll days
+	 2. nnnnnnnnnn lll days
+	...
+	 9. nnnnnnnnnn lll days
+	10. nnnnnnnnnn lll days
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>lll</code> is the avatar&#x27;s age (in days).</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$max_lifetime</code>, take top 10.</p>
+<h2>Most Times Killed</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST TIMES KILLED: The 10 most killed
+	Avatars.
+
+	 1. nnnnnnnnnn ddd
+	 2. nnnnnnnnnn ddd
+	...
+	 9. nnnnnnnnnn ddd
+	10. nnnnnnnnnn ddd
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>ddd</code> is the number of times the avatar has been killed.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$deaths</code>, take top 10.</p>
+<h2>Most Travelled</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST TRAVELLED: The 10 Avatars alive
+	today who have moved around the most.
+
+	 1. nnnnnnnnnn ttttt
+	 2. nnnnnnnnnn ttttt
+	...
+	 9. nnnnnnnnnn ttttt
+	10. nnnnnnnnnn ttttt
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>ttttt</code> is the number of region transitions.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$travel</code>, take top 10.</p>
+<h2>All-Time Most Travelled</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	ALL-TIME MOST TRAVELLED: The 10 Avatars
+	ever who have moved around the most.
+
+	 1. nnnnnnnnnn ttttt
+	 2. nnnnnnnnnn ttttt
+	...
+	 9. nnnnnnnnnn ttttt
+	10. nnnnnnnnnn ttttt
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>ttttt</code> is the number of region transitions.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$max_travel</code>, take top 10.</p>
+<h2>Most Active TelePorter</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST ACTIVE TELEPORTER: The 10 Avatars
+	alive today who have TelePorted most.
+
+	 1. nnnnnnnnnn ppppp ports
+	 2. nnnnnnnnnn ppppp ports
+	...
+	 9. nnnnnnnnnn ppppp ports
+	10. nnnnnnnnnn ppppp ports
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>ppppp</code> is the number of teleport rides.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$teleports</code>, take top 10.</p>
+<h2>Most Territory Explored</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST TERRITORY EXPLORED: The 10 Avatars
+	who visited the most regions for the
+	first time.
+
+	 1. nnnnnnnnnn rrrrr regions
+	 2. nnnnnnnnnn rrrrr regions
+	...
+	 9. nnnnnnnnnn rrrrr regions
+	10. nnnnnnnnnn rrrrr regions
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>rrrrr</code> is the number of regions explored.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$explored</code>, take top 10.</p>
+<h2>Most Time In Habitat</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST TIME IN HABITAT: The 10 Avatars who
+	have spent the most time here.
+
+	 1. nnnnnnnnnn mmmmmmm minutes
+	 2. nnnnnnnnnn mmmmmmm minutes
+	...
+	 9. nnnnnnnnnn mmmmmmm minutes
+	10. nnnnnnnnnn mmmmmmm minutes
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>mmmmmmm</code> is the number of minutes in Habitat.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$online_time</code>, take top 10.</p>
+<h2>Best Dressed</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	BEST DRESSED: The 10 Avatars most
+	stylishly attired, according to the
+	editors of Avatar&#x27;s Wear Daily.
+
+	 1. nnnnnnnnnn
+	 2. nnnnnnnnnn
+	...
+	 9. nnnnnnnnnn
+	10. nnnnnnnnnn
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar.</p>
+<p><em>Computation:</em></p>
+<p>Choose 10 Avatars at random, with a bias towards the ones already on the list.</p>
+<h2>Most Treasures Found</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST TREASURES FOUND: The 10 Avatars who
+	have found the greatest number of rare
+	and valuable artifacts.
+
+	 1. nnnnnnnnnn ttt items
+	 2. nnnnnnnnnn ttt items
+	...
+	 9. nnnnnnnnnn ttt items
+	10. nnnnnnnnnn ttt items
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>ttt</code> is the number of treasures found.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$treasures</code>, take top 10.</p>
+<h2>Most Outspoken</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST OUTSPOKEN: The 10 most talkative
+	Avatars.
+
+	 1. nnnnnnnnnn tttt
+	 2. nnnnnnnnnn tttt
+	...
+	 9. nnnnnnnnnn tttt
+	10. nnnnnnnnnn tttt
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>tttt</code> is the talk rating.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$talkcount</code>, take top 10, show number divided by 1000.</p>
+<h2>Most Active</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST ACTIVE: The 10 most active Avatars.
+
+	 1. nnnnnnnnnn
+	 2. nnnnnnnnnn
+	...
+	 9. nnnnnnnnnn
+	10. nnnnnnnnnn
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$travel/HS$lifetime</code>, take top 10.</p>
+<h2>Most Sedate</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST SEDATE: The 10 least active
+	Avatars.
+
+	 1. nnnnnnnnnn
+	 2. nnnnnnnnnn
+	...
+	 9. nnnnnnnnnn
+	10. nnnnnnnnnn
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by ascending order of <code>HS$travel/HS$lifetime</code>, take bottom 10.</p>
+<h2>Most Expressive</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST EXPRESSIVE: The 10 Avatars who are
+	the biggest letter writers.
+
+	 1. nnnnnnnnnn
+	 2. nnnnnnnnnn
+	...
+	 9. nnnnnnnnnn
+	10. nnnnnnnnnn
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$mail_send_count</code>, take top 10.</p>
+<h2>Biggest Thief</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	BIGGEST THIEVES: The 10 Avatars who have
+	taken the most items away from other
+	Avatars.
+
+	 1. nnnnnnnnnn tttt thefts
+	 2. nnnnnnnnnn tttt thefts
+	...
+	 9. nnnnnnnnnn tttt thefts
+	10. nnnnnnnnnn tttt thefts
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>tttt</code> is the number of thefts.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$grabs</code>, take top 10.</p>
+<h2>Most Dangerous</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST DANGEROUS: The 10 Avatars who have
+	killed the largest number of their
+	fellow Avatars.
+
+	 1. nnnnnnnnnn kkk kills
+	 2. nnnnnnnnnn kkk kills
+	...
+	 9. nnnnnnnnnn kkk kills
+	10. nnnnnnnnnn kkk kills
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>kkk</code> is the number of kills.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$kills</code>, take top 10.</p>
+<h2>Most Cowardly</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST COWARDLY: The 10 Avatars who have
+	escaped danger by artificial means the
+	greatest number of times.
+
+	 1. nnnnnnnnnn eee escapes
+	 2. nnnnnnnnnn eee escapes
+	...
+	 9. nnnnnnnnnn eee escapes
+	10. nnnnnnnnnn eee escapes
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>eee</code> is the number of escapes.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$escapes</code>, take top 10.</p>
+<h2>Most Ghostlike</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST GHOSTLIKE: The 10 Avatars who spent
+	the greatest part of their time in
+	Habitat as ghosts.
+
+	 1. nnnnnnnnnn pp.pp%
+	 2. nnnnnnnnnn pp.pp%
+	...
+	 9. nnnnnnnnnn pp.pp%
+	10. nnnnnnnnnn pp.pp%
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>pp.pp%</code> is the percentage of time spent as a ghost.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$ghost_time/HS$online_time</code>, take top 10, convert to percentage for printing.</p>
+<h2>Least Ghostlike</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	LEAST GHOSTLIKE: The 10 Avatars who have
+	spent the smallest part of their time in
+	Habitat as ghosts.
+
+	 1. nnnnnnnnnn pp.pp%
+	 2. nnnnnnnnnn pp.pp%
+	...
+	 9. nnnnnnnnnn pp.pp%
+	10. nnnnnnnnnn pp.pp%
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar and <code>pp.pp%</code> is the percentage of time spent as a ghost.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by ascending order of <code>HS$ghost_time/HS$online_time</code>, take bottom 10, convert to percentage for printing.</p>
+<h2>Biggest Chameleon</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	BIGGEST CHAMELEON: The 10 Avatars who
+	change their appearance most often.
+
+	 1. nnnnnnnnnn
+	 2. nnnnnnnnnn
+	...
+	 9. nnnnnnnnnn
+	10. nnnnnnnnnn
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$body_changes/HS$lifetime</code>, take top 10.</p>
+<h2>Most Telepathic</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	MOST TELEPATHIC: The 10 Avatars with the
+	greatest usage of ESP.
+
+	 1. nnnnnnnnnn
+	 2. nnnnnnnnnn
+	...
+	 9. nnnnnnnnnn
+	10. nnnnnnnnnn
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>(HS$esp_send_count + HS$esp_recv_count) / HS$lifetime</code>, take top 10.</p>
+<h2>Busiest</h2>
+<p><em>Text:</em><code></code></p>
+<pre>	BUSIEST: The 10 Avatars doing the most
+	things.
+
+	 1. nnnnnnnnnn
+	 2. nnnnnnnnnn
+	...
+	 9. nnnnnnnnnn
+	10. nnnnnnnnnn
+</pre>
+<p>where: <code>nnnnnnnnnn</code> is the name of the avatar.</p>
+<p><em>Computation:</em></p>
+<p>Sort avatars by descending order of <code>HS$requests/HS$lifetime</code>, take top 10.</p>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/stats.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>

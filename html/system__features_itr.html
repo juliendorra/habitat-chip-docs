@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Components - Habitat Documentation</title>
+<style>
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fafaf8;
+}
+h1 { font-size: 1.8em; border-bottom: 2px solid #8b4513; padding-bottom: 8px; color: #3c2415; }
+h2 { font-size: 1.4em; color: #5a3520; margin-top: 1.5em; border-bottom: 1px solid #d4c4b0; padding-bottom: 4px; }
+h3 { font-size: 1.15em; color: #6b4226; margin-top: 1.2em; }
+h4 { font-size: 1.05em; color: #7a5533; }
+pre {
+    background: #f0ebe4; border: 1px solid #d4c4b0;
+    padding: 12px 16px; overflow-x: auto;
+    font-size: 0.9em; line-height: 1.5; border-radius: 4px;
+}
+code { background: #f0ebe4; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+.author { font-style: italic; color: #666; margin-bottom: 0.5em; }
+.institution { color: #888; margin-bottom: 1em; }
+.date { color: #888; margin-bottom: 2em; }
+.doc-number { color: #8b4513; font-weight: bold; }
+.nav { margin: 20px 0; }
+.nav a { color: #8b4513; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+a { color: #8b4513; }
+ul.bullet { list-style-type: disc; margin-left: 1.5em; }
+ul.bullet li { margin-bottom: 0.5em; }
+.page-break { border-top: 2px dashed #ccc; margin: 2em 0; padding-top: 0.5em; color: #999; font-size: 0.85em; }
+table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+th, td { border: 1px solid #d4c4b0; padding: 6px 10px; text-align: left; }
+th { background: #f0ebe4; }
+.fortune { padding: 8px 12px; margin: 4px 0; background: #f8f5f0; border-left: 3px solid #8b4513; }
+</style>
+</head>
+<body>
+<div class="nav"><a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/features.itr" style="font-size:0.85em;">View source</a></div>
+<h1>MicroCosm™ Features</h1>
+<p class="author">by A “LUCASFILM UNIVERSE” DOCUMENT, the various features and components of the <b>MicroCosm</b> system</p>
+<p class="institution">Lucasfilm Ltd. Games Division</p>
+<h2>Introduction</h2>
+<p>This document describes the various software features and components that make up the complete <b>MicroCosm</b> system.</p>
+<h2>-Test Release Features and Components</h2>
+<p>The -test release of the <b>MicroCosm</b> system, currently scheduled for May 15, 1986 includes preliminary versions of the following features and components:</p>
+<ul class="bullet">
+<li><b>□ <em>Baseline home system</em> —</b> The essential software which resides in the player&#x27;s home computer.  Consists of:</li>
+<li><b>Graphics</b> routines to animate avatars and render backgrounds and objects.</li>
+<li><b>Communications</b> routines to handle the network packet protocols and the <b>MicroCosm</b> object-message protocols.</li>
+<li><b>The player interface</b> that allows a player to control his avatar using the joystick and keyboard.</li>
+<li><b>Disk I/O</b> routines to handle the storage of objects and imagery on the home system&#x27;s disk drive.</li>
+<li><b>Local object</b> database processor to invoke the behavior of the various objects.</li>
+<li><b>□ <em>Baseline host system</em> —</b> The essential software which resides in the network host computer.  Consists of:</li>
+<li><b>Communications</b> routines to handle the <b>MicroCosm</b> object-message protocols.</li>
+<li><b>Message switcher</b> to handle routing of messages between the various players and the internal components of the host system.</li>
+<li><b>Transaction monitor</b> to serialize transactions going into the database.</li>
+<li><b>Database controller</b> to lookup objects in the host database and execute their functionality.</li>
+<li><b>□ <em>Basic object set</em> —</b> The basic collection of 30 to 150 common objects that all players know about and require to exist in this world.  Includes (but is not limited to) the following:</li>
+<li><b>Turf environment objects (walls, doors, windows, etc.)</b> </li>
+<li><b>Clothing</b> </li>
+<li><b>Weapons</b> </li>
+<li><b>Basic transportation devices</b> </li>
+<li><b>Money and other tokens of exchange</b> </li>
+<li>Each object consists of three elements:</li>
+<li><b>Imagery to represent it on the display screen of the home system.</b> </li>
+<li><b>Software to execute its functions in the home system.</b> </li>
+<li><b>Software to execute its functions in the host system.</b> </li>
+</ul>
+<h2>Public Release Features and Components</h2>
+<p>The public release of the <b>MicroCosm</b> system, currently scheduled for July 15, 1986 includes the final versions of the above features and components, plus the following:</p>
+<ul class="bullet">
+<li><b>□ <em>Avatar personalization kit</em> —</b> Interactive package to allow a player to customize the appearance of his avatar:</li>
+<li><b>Alter the</b> proportions of the various body parts with respect to each other.</li>
+<li><b>Change the color and texture of things.</b> </li>
+<li><b>Change clothing.</b> </li>
+<li><b>□ <em>Turf personalization kit</em> —</b> Interactive package to allow a player to customize the appearance and layout of his turf:</li>
+<li><b>Control the</b> placement and selection of scenic objects on the turf (walls, furniture, etc.)</li>
+<li><b>Establish entry</b> and exit points connecting the turf to the rest of the world.</li>
+<li><b>Establish the point of view from which the turf is to be displayed.</b> </li>
+<li><b>□ <em>System managers&#x27; package</em> —</b> An interactive interface to the host system to allow privileged accounts (e.g., system managers) to intervene in the activities of an ongoing universe by such manipulations as:</li>
+<li><b>Altering the properties of existing objects</b> </li>
+<li><b>Adding new objects and new classes of objects</b> </li>
+<li><b>Destroying existing objects</b> </li>
+<li><b>Adding and removing players</b> </li>
+<li><b>Sending messages to players</b> </li>
+</ul>
+<h2>Additional Features and Components</h2>
+<p>These are additional desirable features and components of the <b>MicroCosm</b> system which are not accounted for under the current development plan:</p>
+<ul class="bullet">
+<li><b>□ <em>Advanced object set</em> —</b> An additional collection of 30 to 150 uncommon objects that are not required for the basic operation of the world but which enrich the detail and texture of the experience.  Includes (but is not limited to) the following:</li>
+<li><b>Rare treasures</b> </li>
+<li><b>Specialized tools</b> </li>
+<li><b>Unusual buildings</b> </li>
+<li><b>Exotic vehicles</b> </li>
+<li><b>□ <em>Object construction kit</em> —</b> Software to allow developers to add new objects to the universe.  This is for updating an existing universe by modifying or extending the fantasy elements which are already present in it.  Includes:</li>
+<li><b>A standard interactive paint package for creating imagery.</b> </li>
+<li><b>A utility</b> for converting images into the form used internally inside <b>MicroCosm</b>.</li>
+<li><b>A library</b> of routines for programming the behavior of an object inside the home system.</li>
+<li><b>A library</b> of routines for programming the behavior of an object inside the host system.</li>
+<li><b>A utility for installing objects into the host database.</b> </li>
+<li><b>Documentation</b> on the conventions and procedures for creating objects.</li>
+<li><b>□ <em>Universe construction kit</em> —</b> Software to allow developers to create additional universes.  This builds on top of the <em>object construction kit</em> described above.  Includes:</li>
+<li><b>A map-making utility</b> for indicating the layout and placement of objects in the world and for determining the world&#x27;s geography.</li>
+<li><b>A library of routines for</b> programming the home system graphics for the background elements used to render the world to the player.</li>
+<li><b>A utility</b> for integrating all the various components of a universe into a single <b>MicroCosm</b> universe home system disk.</li>
+<li><b>Documentation</b> on the conventions and procedures for creating universes.</li>
+<li><b>□ <em>Gateway developers&#x27; kit</em> —</b> Software package to allow developers to use the <b>MicroCosm</b> universe as a gateway into software of their own creation.  This consists of a subroutine library and a package of documentation.</li>
+</ul>
+<div class="nav" style="margin-top:3em; border-top:1px solid #ddd; padding-top:1em;">
+<a href="index.html">&larr; Back to Table of Contents</a> &middot; <a href="https://github.com/Museum-of-Art-and-Digital-Entertainment/habitat/blob/b59e2520fd8690bf99a1db43928a679f2fbc875c/chip/habitat/docs/system/features.itr" style="font-size:0.85em;">View source</a>
+</div>
+</body>
+</html>
